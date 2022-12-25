@@ -7,21 +7,21 @@ import { wiretype } from './wiretype';
 export class WriteBuffer {
 	head: number[];
 	body: number[];
-	boff: number;
+	offset: number;
 	varint: VarInt;
 
 	constructor() {
 		this.head = [];
 		this.body = [];
-		this.boff = 0;
+		this.offset = 0;
 		this.varint = new VarInt();
 	}
 
 	public write(w: wiretype, v: Uint8Array): number[] {
-		this.head = this.varint.append(this.head, (this.boff<<4)|w);
+		this.head = this.varint.append(this.head, (this.offset<<4)|w);
 		if(v) {
 			this.body = [...this.body, ...v];
-			this.boff += v.length;
+			this.offset += v.length;
 		}
 
 		return this.bytes();
@@ -29,5 +29,13 @@ export class WriteBuffer {
 
 	public bytes(): number[] {
 		return [...this.head, ...this.body];
+	}
+
+	public load(): number[] {
+		const key: number = this.head.length << 4 | wiretype.WIRE_LOAD;
+		let buf = this.varint.append([], key);
+		buf = [...buf, ...this.head, ...this.body];
+
+		return buf;
 	}
 }
