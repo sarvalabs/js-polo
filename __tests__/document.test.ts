@@ -12,7 +12,7 @@ describe('Test Document', () => {
 		const alias = ["tangerine", "mandarin"]
 		const schema = { kind: 'array', fields: { values: { kind: 'string' } } }
 
-		document.setAs('alias', alias, schema)
+		document.setArray('alias', alias, schema)
 
 		console.log(document.document)
 		console.log(document.bytes())
@@ -246,61 +246,30 @@ describe('Test Document Methods', () => {
 		});
 	})
 
-	test('GetRaw SetRaw', () => {
-		const doc = new Document()
-		// Set some fields into the document
-		doc.setRaw("foo", new Raw(new Uint8Array([1, 0, 1, 0])))
-		doc.setRaw("bar", new Raw(new Uint8Array([2, 1, 2, 1])))
-
-		// Attempt to retrieve some unset keys from the document
-		expect(doc.getRaw("far")).toEqual(new Raw(new Uint8Array()))
-		expect(doc.getRaw("boo")).toEqual(new Raw(new Uint8Array()))
-
-		// Attempt to retrieve some set keys from the document
-		expect(doc.getRaw("foo")).toEqual(new Raw(new Uint8Array([1, 0, 1, 0])))
-		expect(doc.getRaw("bar")).toEqual(new Raw(new Uint8Array([2, 1, 2, 1])))
-	})
-
-	test('Set', () => {
+	test('Get Set', () => {
 		// Create a Document
 		const doc = new Document()
 
 		// Set some objects into the document
-		doc.setInteger("foo", 25)
-		doc.setString("bar", "hello")
-
-		// Get the raw data for the keys from the document
-		expect(doc.getRaw("foo")).toEqual(new Raw(new Uint8Array([3, 25])))
-		expect(doc.getRaw("bar")).toEqual(new Raw(new Uint8Array([
-			6, 104, 101, 108, 108, 111
-		])))
-	})
-
-	test('Get', () => {
-		// Create a Document
-		const doc = new Document()
-
-		// Set some objects into the document
-		doc.setInteger("foo", 25)
-		doc.setString("bar", "hello")
-
-		// Get the raw data for the keys from the document
-		expect(doc.getInteger("foo")).toBe(25)
-		expect(doc.getString("bar")).toBe("hello")
-	})
-
-	test('GetAs SetAs', () => {
-		const document = new Document();
-
-		// Set some fields into the document
-		document.setAs("foo", null, { kind: 'null', fields: {} });
-		document.setAs("boo", true, { kind: 'bool', fields: {} });
-		document.setAs("far", 500000, { kind: 'integer', fields: {} });
-		document.setAs("tar", 12.5789, { kind: 'float', fields: {} });
-		document.setAs("par", new Uint8Array([2, 1, 2, 1]), { kind: 'bytes', fields: {} });
-		document.setAs("dar", 'aar', { kind: 'string', fields: {} });
-		document.setAs("sar", ["foo", "boo"], { kind: 'array', fields: { values: { kind: 'string' } } });
-		document.setAs(
+		doc.setNull("foo")
+		doc.setBool("boo", true)
+		doc.setInteger("far", 500000)
+		doc.setFloat("tar", 12.5789)
+		doc.setString("dar", 'aar')
+		doc.setBytes("par", new Uint8Array([2, 1, 2, 1]))
+		doc.setArray(
+			"sar", 
+			["foo", "boo"], 
+			{ 
+				kind: 'array', 
+				fields: { 
+					values: { 
+						kind: 'string' 
+					} 
+				} 
+			}
+		)
+		doc.setMap(
 			"var", 
 			new Map([["foo", "bar"]]), 
 			{ 
@@ -315,7 +284,7 @@ describe('Test Document Methods', () => {
 				} 
 			}
 		);
-		document.setAs(
+		doc.setStruct(
 			"zar", 
 			{ 
 				foo: 'bar' 
@@ -330,16 +299,26 @@ describe('Test Document Methods', () => {
 			}
 		);
 
+		// Attempt to retrieve some unset keys from the document
+		// TODO: check for errors
+		expect(doc.getString("faa")).toBe("");
+
 		// Attempt to retrieve some set keys from the document and confirm equality
-		expect(document.getAs("foo", { kind: 'null', fields: {} })).toBe(null);
-		expect(document.getAs("boo", { kind: 'bool', fields: {} })).toBe(true);
-		expect(document.getAs("far", { kind: 'integer', fields: {} })).toBe(500000);
-		expect(document.getAs("tar", { kind: 'float', fields: {} })).toBe(12.5789);
-		expect(document.getAs("par", { kind: 'bytes', fields: {} }))
-		.toEqual(new Uint8Array([2, 1, 2, 1]));
-		expect(document.getAs("dar", { kind: 'string', fields: {} })).toBe('aar');
-		expect(document.getAs("sar", { kind: 'array', fields: { values: { kind: 'string' } } })).toEqual(['foo', 'boo']);
-		expect(document.getAs("var", { 
+		expect(doc.getNull("foo")).toBe(null)
+		expect(doc.getBool("boo")).toBe(true);
+		expect(doc.getInteger("far")).toBe(500000);
+		expect(doc.getFloat("tar")).toBe(12.5789);
+		expect(doc.getString("dar")).toBe('aar');
+		expect(doc.getBytes("par")).toEqual(new Uint8Array([2, 1, 2, 1]));
+		expect(doc.getArray("sar", { 
+			kind: 'array', 
+			fields: { 
+				values: { 
+					kind: 'string' 
+				} 
+			} 
+		})).toEqual(['foo', 'boo']);
+		expect(doc.getMap("var", { 
 			kind: 'map', 
 			fields: { 
 				keys: {
@@ -350,7 +329,7 @@ describe('Test Document Methods', () => {
 				} 
 			} 
 		})).toEqual(new Map([["foo", "bar"]]));
-		expect(document.getAs("zar", { 
+		expect(doc.getStruct("zar", { 
 			kind: 'struct', 
 			fields: { 
 				foo: {
@@ -358,37 +337,20 @@ describe('Test Document Methods', () => {
 				}
 			} 
 		})).toEqual({foo: 'bar'});
-	});
+	})
 
-	test('Retrive unset values', () => {
-		const document = new Document();
+	test('GetRaw SetRaw', () => {
+		const doc = new Document()
+		// Set some fields into the document
+		doc.setRaw("foo", new Raw(new Uint8Array([1, 0, 1, 0])))
+		doc.setRaw("bar", new Raw(new Uint8Array([2, 1, 2, 1])))
 
-		// Attempt to retrieve some unset keys from the document and confirm nil
-		expect(document.getAs("coo", { kind: 'null', fields: {} })).toBe(null);
-		expect(document.getAs("cpo", { kind: 'bool', fields: {} })).toBe(false);
-		expect(document.getAs("doo", { kind: 'integer', fields: {} })).toBe(0);
-		expect(document.getAs("dpo", { kind: 'float', fields: {} })).toBe(0);
-		expect(document.getAs("eoo", { kind: 'bytes', fields: {} })).toEqual(new Uint8Array([]));
-		expect(document.getAs("epo", { kind: 'string', fields: {} })).toBe('');
-		expect(document.getAs("fbo", { kind: 'array', fields: { values: { kind: 'string' } }})).toEqual([]);
-		expect(document.getAs("fco", { 
-			kind: 'map', 
-			fields: { 
-				keys: {
-					kind: 'string' 
-				},
-				values: { 
-					kind: 'string' 
-				} 
-			} 
-		})).toEqual(new Map());
-		expect(document.getAs("fpo", { 
-			kind: 'struct', 
-			fields: { 
-				foo: {
-					kind: 'string'
-				}
-			} 
-		})).toEqual({});
-	});
+		// Attempt to retrieve some unset keys from the document
+		expect(doc.getRaw("far")).toEqual(new Raw(new Uint8Array()))
+		expect(doc.getRaw("boo")).toEqual(new Raw(new Uint8Array()))
+
+		// Attempt to retrieve some set keys from the document
+		expect(doc.getRaw("foo")).toEqual(new Raw(new Uint8Array([1, 0, 1, 0])))
+		expect(doc.getRaw("bar")).toEqual(new Raw(new Uint8Array([2, 1, 2, 1])))
+	})
 })

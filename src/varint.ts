@@ -1,10 +1,6 @@
 import BN from 'bn.js';
 import ByteReader from './bytereader';
 
-// const MSB = 0x80;
-// const REST = 0x7F;
-// const MSBALL = ~REST;
-// const INT = Math.pow(2, 31);
 const MaxVarintLen64 = 10;
 
 /**

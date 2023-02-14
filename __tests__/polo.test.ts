@@ -34,7 +34,7 @@ const bigIntToNum = (x: any): unknown => {
 
 const testObject = (x: any, schema: Schema, isBN?: boolean): void => {
 	const polorizer = new Polorizer();
-	polorizer.polorizeAs(x, schema);
+	polorizer.polorize(x, schema);
 	const wire = polorizer.bytes();
 	
 	const depolorizer = new Depolorizer(wire);

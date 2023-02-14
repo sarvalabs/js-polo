@@ -51,13 +51,13 @@ const schema = {
 (() => {  
     const suite = new Benchmark.Suite;  
     const polorizer = new Polorizer();
-    polorizer.polorizeAs(mixedObject, schema)
+    polorizer.polorize(mixedObject, schema)
     const wire = polorizer.bytes();
     
     
     suite.add("Polorize", () => {
         const polorizer = new Polorizer();
-        polorizer.polorizeAs(mixedObject, schema);
+        polorizer.polorize(mixedObject, schema);
     }).add("Depolorize", () => {
         const depolorizer = new Depolorizer(wire);
         depolorizer.depolorizeAs(schema);
