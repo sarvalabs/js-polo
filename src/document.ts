@@ -95,16 +95,16 @@ export class Document {
 		this.set(key, wb.bytes());
 	}
 
-	private setArray(key: string, array: Array<unknown>, schema: Schema): void {
+	public setArray(key: string, array: Array<unknown>, schema: Schema): void {
 		const polorizer = new Polorizer();
 		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
-			array.forEach(arr => polorizer.polorizeAs(arr, schema.fields.values));
+			array.forEach(arr => polorizer.polorize(arr, schema.fields.values));
 		}
 
 		this.set(key, polorizer.bytes());
 	}
 
-	private setMap(key: string, map: Map<unknown, unknown>, schema: Schema): void {
+	public setMap(key: string, map: Map<unknown, unknown>, schema: Schema): void {
 		const polorizer = new Polorizer();
 		if(schema.fields && schema.fields.keys && schema.fields.values &&
 		schema.fields.keys.kind && schema.fields.values.kind) {
@@ -112,53 +112,21 @@ export class Document {
 			keys.sort();
 
 			keys.forEach(key => {
-				polorizer.polorizeAs(key, schema.fields.keys);
-				polorizer.polorizeAs(map.get(key), schema.fields.values);
+				polorizer.polorize(key, schema.fields.keys);
+				polorizer.polorize(map.get(key), schema.fields.values);
 			});
 		}
 
 		this.set(key, polorizer.bytes());
 	}
 
-	private setStruct(key: string, struct: object, schema: Schema): void {
+	public setStruct(key: string, struct: object, schema: Schema): void {
 		const polorizer = new Polorizer();
 		Object.entries(struct).forEach(([key, value]) => {
-			polorizer.polorizeAs(value, schema.fields[key]);
+			polorizer.polorize(value, schema.fields[key]);
 		});
 
 		this.set(key, polorizer.bytes());
-	}
-
-	public  setAs(
-		key: string, 
-		data: null | boolean | number | BN | string | Uint8Array | 
-		Array<unknown> | Map<unknown, unknown> | object, 
-		schema: Schema
-	): void {
-		switch(schema.kind) {
-		case 'null':
-			return this.setNull(key);
-		case 'bool':
-			return this.setBool(key, data as boolean);
-		case 'integer':
-			return this.setInteger(key, data as number | bigint);
-		case 'float':
-			return this.setFloat(key, data as number);
-		case 'string':
-			return this.setString(key, data as string);
-		case 'raw':
-			return this.setRaw(key, data as Raw);
-		case 'bytes':
-			return this.setBytes(key, data as Uint8Array);
-		case 'array':
-			return this.setArray(key, data as Array<unknown>, schema);
-		case 'map':
-			return this.setMap(key, data as Map<unknown, unknown>, schema);
-		case 'struct':
-			return this.setStruct(key, data as object, schema);
-		default:
-			throw Error(schema.kind + ' is unsupported.');
-		}
 	}
 
 	public getNull(key: string): null {
@@ -253,33 +221,6 @@ export class Document {
 
 		return obj;
 	}
-
-	public getAs(key: string, schema: Schema): unknown {
-		switch(schema.kind) {
-		case 'null':
-			return this.getNull(key);
-		case 'bool':
-			return this.getBool(key);
-		case 'integer':
-			return this.getInteger(key);
-		case 'float':
-			return this.getFloat(key);
-		case 'string':
-			return this.getString(key);
-		case 'raw':
-			return this.getRaw(key);
-		case 'bytes':
-			return this.getBytes(key);
-		case 'array':
-			return this.getArray(key, schema);
-		case 'map':
-			return this.getMap(key, schema);
-		case 'struct':
-			return this.getStruct(key, schema);
-		default:
-			throw Error(schema.kind + ' is unsupported.');
-		}
-	}
 }
 
 export const documentEncode = (obj: object | Map<string, unknown>, schema: Schema): Document => {
@@ -288,12 +229,16 @@ export const documentEncode = (obj: object | Map<string, unknown>, schema: Schem
 	case 'map':
 		const data: Map<string, unknown> = obj as Map<string, unknown>;
 		[...data.keys()].forEach(key => {
-			doc.setAs(key, data.get(key), schema.fields.values);
+			const polorizer = new Polorizer()
+			polorizer.polorize(data.get(key), schema.fields.values)
+			doc.setRaw(key, new Raw(polorizer.bytes()));
 		})
 		break;
 	case 'struct':
 		Object.entries(obj).forEach(([key, value]) => {
-			doc.setAs(key, value, schema.fields[key]);
+			const polorizer = new Polorizer()
+			polorizer.polorize(value, schema.fields[key])
+			doc.setRaw(key, new Raw(polorizer.bytes()));
 		});
 		break;
 	default:
