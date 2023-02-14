@@ -77,7 +77,7 @@ export class Polorizer {
 			this.polorizeBool(value);
 			break;
 		case 'integer':
-			this.polorizeInt(value);
+			this.polorizeInteger(value);
 			break;
 		case 'float':
 			this.polorizeFloat(value);
@@ -143,7 +143,7 @@ export class Polorizer {
 	 * with the wire type being WIRE_POSINT or WIRE_NEGINT based on polarity, 
 	 * with zero considered as positive.
 	 */
-	public polorizeInt(value: number | BN): void {
+	public polorizeInteger(value: number | BN): void {
 		this.writeBuffer.writeInt(value);
 	}
 

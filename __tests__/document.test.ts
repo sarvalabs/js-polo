@@ -175,7 +175,7 @@ describe('Test Document', () => {
 
 		const depolorizer = new Depolorizer(wire)
 
-		console.log(depolorizer.depolorizeAs(schema))
+		console.log(depolorizer.depolorize(schema))
 
 		// Output:
 		// { name: 'orange', cost: 300, alias: [ 'tangerine', 'mandarin' ] }

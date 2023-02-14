@@ -60,7 +60,7 @@ const schema = {
         polorizer.polorize(mixedObject, schema);
     }).add("Depolorize", () => {
         const depolorizer = new Depolorizer(wire);
-        depolorizer.depolorizeAs(schema);
+        depolorizer.depolorize(schema);
     }).on("cycle", (event) => {
         console.log(String(event.target));
     }).run({ 'async': true });
@@ -78,7 +78,7 @@ const schema = {
         deplorizer.depolorizeDocument()
     }).add("Decode To Struct", () => {
         const deplorizer = new Depolorizer(docWire)
-        deplorizer.depolorizeAs(schema)
+        deplorizer.depolorize(schema)
     }).on("cycle", (event) => {
         console.log(String(event.target));
     }).run({ 'async': true });

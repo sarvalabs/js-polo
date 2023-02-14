@@ -59,7 +59,7 @@ export class Depolorizer {
 		return new Depolorizer(null, load);
 	}
 
-	public depolorizeAs(schema: Schema): unknown {
+	public depolorize(schema: Schema): unknown {
 		switch(schema.kind) {
 		case 'null':
 			return this.depolorizeNull();
@@ -126,7 +126,7 @@ export class Depolorizer {
 			// Iterate until loadreader is done
 			while(!pack.isDone()) {
 				// Depolorize the element into the element type
-				const element = pack.depolorizeAs(schema.fields.values);
+				const element = pack.depolorize(schema.fields.values);
 				if(element) {
 					// const ele = pack.unpack(schema.fields.values, element);
 					arr.push(element);
@@ -184,8 +184,8 @@ export class Depolorizer {
 				// Iterate until loadreader is done
 				while(!pack.isDone()) {
 					// Get the next element from the load (key)
-					const key = pack.depolorizeAs(schema.fields.keys);
-					const value = pack.depolorizeAs(schema.fields.values);
+					const key = pack.depolorize(schema.fields.keys);
+					const value = pack.depolorize(schema.fields.values);
 					map.set(key, value);
 				}
 		
@@ -216,7 +216,7 @@ export class Depolorizer {
 			// Iterate until loadreader is done
 			while(!pack.isDone()) {
 				// Get the next element from the load (key)
-				const value = pack.depolorizeAs(entries[index][1]);
+				const value = pack.depolorize(entries[index][1]);
 				obj[entries[index][0]] = value;
 				index++;
 			}
@@ -230,7 +230,7 @@ export class Depolorizer {
 			Object.entries(schema.fields).forEach(([key, value]) =>{
 				const data = doc.getRaw(key)
 				const depolorizer = new Depolorizer(new Uint8Array(data.bytes))
-				obj[key] = depolorizer.depolorizeAs(value)
+				obj[key] = depolorizer.depolorize(value)
 			})
 
 			return obj

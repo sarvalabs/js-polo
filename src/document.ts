@@ -13,7 +13,7 @@ export class Document {
 	constructor(data?: Uint8Array, schema?: Schema) {
 		if(data && schema) {
 			const depolorizer = new Depolorizer(data);
-			const obj = depolorizer.depolorizeAs(schema);
+			const obj = depolorizer.depolorize(schema);
 			this.document = obj as object;
 			return;
 		}
@@ -194,7 +194,7 @@ export class Document {
 	public getArray(key: string, schema: Schema): Array<unknown> {
 		if(this.document[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
-			return depolorizer.depolorizeAs(schema) as Array<unknown>;
+			return depolorizer.depolorize(schema) as Array<unknown>;
 		}
 
 		return [];
@@ -203,7 +203,7 @@ export class Document {
 	public getMap(key: string, schema: Schema): Map<unknown, unknown> {
 		if(this.document[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
-			return depolorizer.depolorizeAs(schema) as Map<unknown, unknown>;
+			return depolorizer.depolorize(schema) as Map<unknown, unknown>;
 		}
 
 		return new Map();
@@ -215,7 +215,7 @@ export class Document {
 		if(this.document[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			Object.keys(schema.fields).forEach((key) => {
-				obj[key] = depolorizer.depolorizeAs(schema.fields[key])
+				obj[key] = depolorizer.depolorize(schema.fields[key])
 			});
 		}
 
