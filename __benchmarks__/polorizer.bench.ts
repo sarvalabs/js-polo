@@ -1,7 +1,7 @@
 import Benchmark from 'benchmark';
 import { Depolorizer } from '../src/depolorizer.js';
 import { Polorizer } from '../src/polorizer.js';
-import { documentEncode, documentDecode } from '../src/document.js';
+import { documentEncode } from '../src/document.js';
 
 const mixedObject = {
     a: "Sins & Virtues",
@@ -71,10 +71,14 @@ const schema = {
     const doc = documentEncode(mixedObject, schema);
     const docWire = doc.bytes();
 
-    suite.add("Doc Encode", () => {
+    suite.add("Document Encode", () => {
         documentEncode(mixedObject, schema);
-    }).add("Doc Decode", () => {
-        documentDecode(docWire, schema);
+    }).add("Decode To Document", () => {
+        const deplorizer = new Depolorizer(docWire)
+        deplorizer.depolorizeDocument()
+    }).add("Decode To Struct", () => {
+        const deplorizer = new Depolorizer(docWire)
+        deplorizer.depolorizeAs(schema)
     }).on("cycle", (event) => {
         console.log(String(event.target));
     }).run({ 'async': true });
