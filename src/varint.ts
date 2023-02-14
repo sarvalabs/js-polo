@@ -1,124 +1,106 @@
-const MSB = 0x80
-	, REST = 0x7F
-	, MSBALL = ~REST
-	, INT = Math.pow(2, 31);
+import BN from 'bn.js';
+import ByteReader from './bytereader';
 
-export class VarInt {
-	public encode(num: number): number[] {
-		if (num > Number.MAX_SAFE_INTEGER) {
-			throw new RangeError('Could not encode varint');
-		}
+// const MSB = 0x80;
+// const REST = 0x7F;
+// const MSBALL = ~REST;
+// const INT = Math.pow(2, 31);
+const MaxVarintLen64 = 10;
 
-		const output:number[] = [];
-		let offset = 0;
-
-		while(num >= INT) {
-			output[offset++] = (num & 0xFF) | MSB;
-			num /= 128;
+/**
+ * Class for encoding and decoding variable-length integers (varints).
+ * 
+ * @class
+ */
+class Varint {
+	public static encode(num: number): Uint8Array {
+		const result = [];
+		while (num >= 0x80) {
+			result.push(num & 0x7f | 0x80);
+			num = num >>> 7;
 		}
-		while(num & MSBALL) {
-			output[offset++] = (num & 0xFF) | MSB;
-			num >>>= 7;
-		}
-		output[offset] = num | 0;
-        
-		return output;
+		result.push(num);
+		return new Uint8Array(result);
 	}
 
-	public append(buffer: number[], v: number): number[] {
-		switch(true) {
-		case v < 1 << 7:
-			return [...buffer, v];
-		case v < 1 << 14:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				v>>7
-			];
-		case v < 1 << 21:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				v>>14
-			];
-		case v < 1 << 28:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				v>>21
-			];
-		case v < 1 << 35:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				v>>28
-			];
-		case v < 1 << 42:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				(v>>28)&0x7f|0x80,
-				v>>35
-			];
-		case v < 1 << 49:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				(v>>28)&0x7f|0x80,
-				(v>>35)&0x7f|0x80,
-				v>>42
-			];
-		case v < 1 << 56:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				(v>>28)&0x7f|0x80,
-				(v>>35)&0x7f|0x80,
-				(v>>42)&0x7f|0x80,
-				v>>49
-			];
-		case v < 1 << 63:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				(v>>28)&0x7f|0x80,
-				(v>>35)&0x7f|0x80,
-				(v>>42)&0x7f|0x80,
-				(v>>49)&0x7f|0x80,
-				v>>56
-			];
-		default:
-			return [
-				...buffer, 
-				(v>>0)&0x7f|0x80, 
-				(v>>7)&0x7f|0x80, 
-				(v>>14)&0x7f|0x80, 
-				(v>>21)&0x7f|0x80, 
-				(v>>28)&0x7f|0x80,
-				(v>>35)&0x7f|0x80,
-				(v>>42)&0x7f|0x80,
-				(v>>49)&0x7f|0x80,
-				(v>>56)&0x7f|0x80,
-				1
-			];
+	public static size(v: number | BN): number {
+		v = Number(v);
+		let count = 0;
+		while (v >= 128) {
+		  count++;
+		  v = Math.floor(v / 128);
+		}
+		return count + 1;
+	}
+
+	/**
+	 * Appends a given number to a given byte array as a varint-encoded value.
+	 * 
+	 * @param {Uint8Array} bytes - The byte array to which the varint 
+	 * should be appended.
+	 * @param {number} v - The number value to be appended as a varint.
+	 * @returns {Uint8Array} A new byte array containing the original array and 
+	 * the varint-encoded value.
+	 */
+	public static append(b: Uint8Array, v: number | BN): Uint8Array {
+		let num = new BN(v);
+		const result: number[] = [];
+	
+		if(num.isZero()) {
+			return new Uint8Array([...b, 0]);
+		}
+
+		while (num.gtn(0)) {
+			let byte = num.and(new BN(0x7f));
+			num = num.ushrn(7);
+			if (!num.isZero()) {
+				byte = byte.or(new BN(0x80));
+			}
+			result.push(byte.toNumber());
+		}
+
+		return new Uint8Array([...b, ...result]);
+	}
+
+	/**
+	 * This method reads a varint-encoded value from a given byte reader and 
+	 * returns the decoded value and number of bytes consumed
+	 *
+	 * @param {ByteReader} br - The byte reader object from which the 
+	 * varint should be read.
+	 * @returns {[number, number]} A tuple containing the decoded varint value 
+	 * and the number of bytes consumed from the reader.
+	 * @throws {Error} If an invalid varint is encountered in the reader or 
+	 * the varint overflows 64-bit integer or varint terminated prematurely.
+	 */
+	public static consume(br: ByteReader): [number, number] {
+		try {
+			let x = 0;
+			let s = 0;
+			let b = 0;
+	
+			for(let i = 0; i < MaxVarintLen64; i++) {
+				b = br.readByte();
+	
+				if(b < 0x80) {
+					if(i == MaxVarintLen64 && b > 1) {
+						throw new Error('varint overflows 64-bit integer');
+					}
+	
+					x |= b << s;
+	
+					return [x, i+1];
+				}
+	
+				x |= (b&0x7f) << s;
+				s += 7;
+			}
+	
+			throw new Error('varint overflows 64-bit integer');
+		} catch(err) {
+			throw new Error('varint terminated prematurely');
 		}
 	}
 }
+
+export default Varint;
