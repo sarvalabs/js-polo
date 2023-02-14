@@ -191,26 +191,6 @@ export class Depolorizer {
 		
 				return map;
 			}
-			// case WireType.WIRE_DOC: {
-			// 	const obj: any = {};
-			// 	// Iterate until loadreader is done
-			// 	while(!pack.load.done()) {
-			// 		// Get the next element from the load (key)
-			// 		const keyElement = pack.load.next();
-			// 		const value = pack.load.next();
-			// 		if(keyElement && value) {
-			// 			const key = pack.unpack({
-			// 				kind: 'string',
-			// 				fields: undefined
-			// 			}, keyElement);
-			// 			if(typeof key == 'string') {
-			// 				obj[key] = Uint8Array.from(value.data.subarray(0,));
-			// 			}
-			// 		}
-			// 	}
-
-			// 	return obj;
-			// }
 			default:
 				throw new Error('Incompatible wire type');
 			}
