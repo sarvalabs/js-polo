@@ -10,7 +10,7 @@
         "esnext",
         "dom"
       ],
-      "module": "commonjs",
+      "module": "ESNext",
       "target": "esnext",
       "moduleResolution": "node",
       "outDir": "./lib",
@@ -23,7 +23,10 @@
       "noImplicitAny": false,
       "noImplicitReturns": true,
       "experimentalDecorators": true,
-      "noUnusedLocals": true
+      "noUnusedLocals": true,
+    },
+    "ts-node": {
+      "esm": true
     },
     "files": ["src/index.ts"]
   }
