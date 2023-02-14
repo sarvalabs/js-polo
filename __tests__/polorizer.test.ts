@@ -15,7 +15,7 @@ describe('Test Polorizer', () => {
         // Encode the Name field as a string
         polorizer.polorizeString(orange.name)
         // Encode the Cost field as an integer
-        polorizer.polorizeInt(orange.cost)
+        polorizer.polorizeInteger(orange.cost)
     
     
         // Create a new Polorizer to serialize the Alias field (slice)
@@ -109,7 +109,7 @@ describe('Test Polorizer', () => {
     test('Uint', () => {
         const polorizer = new Polorizer()
 
-        polorizer.polorizeInt(300)
+        polorizer.polorizeInteger(300)
         expect(polorizer.bytes()).toEqual(new Uint8Array([
             3, 1, 44
         ]))
@@ -117,7 +117,7 @@ describe('Test Polorizer', () => {
             14, 31, 3, 1, 44
         ]))
 
-        polorizer.polorizeInt(250)
+        polorizer.polorizeInteger(250)
         expect(polorizer.bytes()).toEqual(new Uint8Array([
             14, 47, 3, 35, 1, 44, 250
         ]))
@@ -129,7 +129,7 @@ describe('Test Polorizer', () => {
     test('Int', () => {
         const polorizer = new Polorizer()
 
-        polorizer.polorizeInt(300)
+        polorizer.polorizeInteger(300)
         expect(polorizer.bytes()).toEqual(new Uint8Array([
             3, 1, 44
         ]))
@@ -137,7 +137,7 @@ describe('Test Polorizer', () => {
             14, 31, 3, 1, 44
         ]))
 
-        polorizer.polorizeInt(-250)
+        polorizer.polorizeInteger(-250)
         expect(polorizer.bytes()).toEqual(new Uint8Array([
             14, 47, 3, 36, 1, 44, 250
         ]))
@@ -171,7 +171,7 @@ describe('Test Polorizer', () => {
     // test('BigInt', () => {
     //     const polorizer = new Polorizer()
 
-    //     polorizer.polorizeInt(9223372036854775807n)
+    //     polorizer.polorizeInteger(9223372036854775807n)
     //     expect(polorizer.bytes()).toEqual(new Uint8Array([
     //         3, 127, 255, 255, 255, 255, 255, 255, 255
     //     ]))
@@ -179,7 +179,7 @@ describe('Test Polorizer', () => {
     //         14, 31, 3, 127, 255, 255, 255, 255, 255, 255, 255
     //     ]))
 
-	// 	polorizer.polorizeInt(-9223372036854775808n)
+	// 	polorizer.polorizeInteger(-9223372036854775808n)
     //     expect(polorizer.bytes()).toEqual(new Uint8Array([
     //         14, 63, 3, 132, 1, 127, 255, 255, 255, 255, 255, 255, 255, 128, 
 	// 		0, 0, 0, 0, 0, 0, 0
@@ -247,7 +247,7 @@ describe('Test Polorizer', () => {
 	test('Inner', () => {
 		const polorizer = new Polorizer()
 
-		polorizer.polorizeInt(5)
+		polorizer.polorizeInteger(5)
 		expect(polorizer.bytes()).toEqual(new Uint8Array([
             3, 5
         ]))
@@ -266,7 +266,7 @@ describe('Test Polorizer', () => {
             14, 47, 3, 22, 5, 102, 111, 111
         ]))
 
-		another.polorizeInt(250)
+		another.polorizeInteger(250)
 		polorizer.polorizeInner(another)
 		expect(polorizer.bytes()).toEqual(new Uint8Array([
             14, 63, 3, 22, 78, 5, 102, 111, 111, 47, 6, 51, 102, 111, 111, 250

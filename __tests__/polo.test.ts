@@ -38,7 +38,7 @@ const testObject = (x: any, schema: Schema, isBN?: boolean): void => {
 	const wire = polorizer.bytes();
 	
 	const depolorizer = new Depolorizer(wire);
-	const y = depolorizer.depolorizeAs(schema);
+	const y = depolorizer.depolorize(schema);
 
 	if(isBN) {
 		x = bigIntToNum(x);
