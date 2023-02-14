@@ -122,16 +122,16 @@ export class WriteBuffer {
 	}
 
 	/**
-	 * Returns the write buffer wrapped with a WireLoad tag as bytes.
+	 * Returns the write buffer wrapped with a WIRE_LOAD tag as bytes.
 	 * This method takes the current length of the head buffer and 
-	 * wire type 'WireLoad' and combine them to form a new buffer, and 
+	 * wire type 'WIRE_LOAD' and combine them to form a new buffer, and 
 	 * then concatenates the new buffer with the head and 
 	 * body of the write buffer.
 	 *
 	 * @public
 	 * @returns {Uint8Array} The concatenated array of bytes formed by 
 	 * concatenating the key buffer, head and body of the write buffer, 
-	 * with the key buffer wrapped with a WireLoad tag.
+	 * with the key buffer wrapped with a WIRE_LOAD tag.
 	 */ 
 	public load(): Uint8Array {
 		const key: number = this.head.length << 4 | WireType.WIRE_LOAD;
@@ -142,7 +142,7 @@ export class WriteBuffer {
 	}
 
 	/**
-	 * Writes the null value to the buffer using the WireNull tag.
+	 * Writes the null value to the buffer using the WIRE_NULL tag.
 	 *
 	 * @public
 	 */ 
@@ -151,7 +151,7 @@ export class WriteBuffer {
 	}
 
 	/**
-	 * Writes the raw bytes to the buffer with WireRaw tag.
+	 * Writes the raw bytes to the buffer with WIRE_RAW tag.
 	 *
 	 * @public
 	 * @param {Raw} value - The raw bytes to be written to the buffer.
@@ -162,7 +162,7 @@ export class WriteBuffer {
 
 	/**
 	 * Writes the given boolean value to the write buffer with the 
-	 * WireTrue or WireFalse tag.
+	 * WIRE_TRUE or WIRE_FALSE tag.
 	 *
 	 * @param {boolean} value - the boolean value that needs to be 
 	 * written to the buffer.
@@ -178,7 +178,7 @@ export class WriteBuffer {
 
 	/**
 	 * Writes the given integer value to the write buffer with the 
-	 * WirePosInt or WireNegInt tag.
+	 * WIRE_POSINT or WIRE_NEGINT tag.
 	 *
 	 * @param {number | BN} value - the integer value (either number or 
 	 * big integer) that needs to be written to the buffer.
@@ -208,7 +208,7 @@ export class WriteBuffer {
 	}
 
 	/**
-	 * Writes the given float value to the write buffer with the WireFloat tag.
+	 * Writes the given float value to the write buffer with the WIRE_FLOAT tag.
 	 *
 	 * @param {number} value - the float value that needs to be written to the buffer
 	 * @throws {Error} An error if the input value is an integer
@@ -228,7 +228,7 @@ export class WriteBuffer {
 
 	/**
 	 * Writes the given string value to the write buffer with 
-	 * the WireWord tag.
+	 * the WIRE_WORD tag.
 	 *
 	 * @param {string} value - the string that needs to be written 
 	 * to the buffer.
@@ -239,7 +239,7 @@ export class WriteBuffer {
 
 	/**
 	 * Writes the bytes from the given value to the write buffer with 
-	 * the WireWord tag.
+	 * the WIRE_WORD tag.
 	 *
 	 * @param {Uint8Array} value - the byte array that needs to 
 	 * be written to the buffer.
