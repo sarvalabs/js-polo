@@ -10,7 +10,7 @@ export enum WireType {
 	// WIRENEGINT represents a Binary encoded -ve Integer in BigEndian Order.
 	// The number is encoded as its absolute value and must be multiplied with -1 to get its actual value.
 	WIRE_NEGINT = 4,
-	// WIREBIGINT represents a polo encoded bytes
+	// WIRERAW represents a polo encoded bytes
 	WIRE_RAW = 5,
 	// WIREWORD represents UTF-8 encoded string/bytes
 	WIRE_WORD = 6,
