@@ -144,6 +144,11 @@ export class Polorizer {
 	 * with zero considered as positive.
 	 */
 	public polorizeInteger(value: number | BN): void {
+		if(!value) {
+			this.polorizeNull();
+			return;
+		}
+
 		this.writeBuffer.writeInt(value);
 	}
 
@@ -157,6 +162,11 @@ export class Polorizer {
 	 * with the wire type being WIRE_FLOAT.
 	 */
 	public polorizeFloat(value: number): void {
+		if(!value) {
+			this.polorizeNull();
+			return;
+		}
+
 		this.writeBuffer.writeFloat(value);
 	}
 
@@ -170,6 +180,11 @@ export class Polorizer {
 	 * wire type being WIRE_WORD.
 	 */
 	public polorizeString(value: string): void {
+		if(!value) {
+			this.writeBuffer.writeString("");
+			return
+		}
+
 		this.writeBuffer.writeString(value);
 	}
 
@@ -183,6 +198,11 @@ export class Polorizer {
 	 * A nil Raw is encoded as WIRE_NULL.
 	 */
 	public polorizeRaw(value: Raw): void {
+		if(!value) {
+			this.polorizeNull();
+			return;
+		}
+
 		this.writeBuffer.writeRaw(value);
 	}
 
@@ -195,6 +215,11 @@ export class Polorizer {
 	 * @description Encodes the bytes as is with the wire type being WireWord.
 	 */
 	public polorizeBytes(value: Uint8Array): void {
+		if(!value) {
+			this.polorizeNull();
+			return;
+		}
+
 		this.writeBuffer.writeBytes(value);
 	}
 
@@ -209,6 +234,11 @@ export class Polorizer {
 	 * a WIRE_NULL is encoded instead.
 	 */
 	public polorizePacked(pack: Polorizer): void {
+		if(!pack) {
+			this.polorizeNull();
+			return;
+		}
+
 		this.writeBuffer.write(WireType.WIRE_PACK, pack.writeBuffer.load());
 	}
 
@@ -223,6 +253,11 @@ export class Polorizer {
 	 * If the given Polorizer is nil, a WireNull is encoded.
 	 */
 	public polorizeInner(inner: Polorizer): void {
+		if(!inner) {
+			this.polorizeNull();
+			return;
+		}
+
 		const readBuffer = new ReadBuffer(inner.bytes())
 
 		this.writeBuffer.write(readBuffer.wire, readBuffer.data)
@@ -239,6 +274,11 @@ export class Polorizer {
 	 * @description It is encoded as element pack encoded data.
 	 */
 	private polorizeArray(array: Array<unknown>, schema: Schema): void {
+		if(!array) {
+			this.polorizeNull();
+			return;
+		}
+
 		const polorizer = new Polorizer();
 
 		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
@@ -260,6 +300,11 @@ export class Polorizer {
 	 * are sorted before being sequentially encoded.
 	 */
 	private polorizeMap(map: Map<unknown, unknown>, schema: Schema): void {
+		if(!map) {
+			this.polorizeNull();
+			return;
+		}
+
 		const polorizer = new Polorizer();
 
 		if(schema.fields && schema.fields.keys && schema.fields.values &&
@@ -287,6 +332,11 @@ export class Polorizer {
 	 * @description It is encoded as field ordered pack encoded data.
 	 */
 	private polorizeStruct(struct: object, schema: Schema): void {
+		if(!struct) {
+			this.polorizeNull();
+			return;
+		}
+
 		const polorizer = new Polorizer();
 
 		Object.entries(schema.fields).forEach(([key, value]) => {
@@ -307,6 +357,11 @@ export class Polorizer {
 	 * If the Document is nil, it is encoded as a WIRE_NULL.
 	 */
 	public polorizeDocument(document: object): void {
+		if(!document) {
+			this.polorizeNull();
+			return;
+		}
+
 		const keys = Object.keys(document);
 		keys.sort();
 
