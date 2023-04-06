@@ -13,7 +13,7 @@
       "module": "ESNext",
       "target": "esnext",
       "moduleResolution": "node",
-      "outDir": "./lib",
+      "outDir": "./dist",
       "declaration": true,
       "preserveSymlinks": true,
       "preserveWatchOutput": true,
@@ -28,5 +28,9 @@
     "ts-node": {
       "esm": true
     },
-    "files": ["src/index.ts"]
+    "exclude": [
+      "node_modules", 
+      "__tests__",
+      "__benchmarks__"
+    ],
   }
