@@ -1,0 +1,36 @@
+import BN from 'bn.js';
+import { ReadBuffer } from './readbuffer';
+import { Raw } from './raw';
+import { Schema } from '../types/schema';
+import { WireType } from './wiretype';
+export declare class Document {
+    document: object;
+    constructor(data?: Uint8Array, schema?: Schema);
+    size(): number;
+    bytes(): Uint8Array;
+    private get;
+    private set;
+    is(key: string, kind: WireType): boolean;
+    setNull(key: string): void;
+    setBool(key: string, data: boolean): void;
+    setInteger(key: string, data: number | BN): void;
+    setFloat(key: string, data: number): void;
+    setString(key: string, data: string): void;
+    setRaw(key: string, data: Raw): void;
+    setBytes(key: string, data: Uint8Array): void;
+    setArray(key: string, array: Array<unknown>, schema: Schema): void;
+    setMap(key: string, map: Map<unknown, unknown>, schema: Schema): void;
+    setStruct(key: string, struct: object, schema: Schema): void;
+    getNull(key: string): null;
+    getBool(key: string): boolean;
+    getInteger(key: string): number | bigint;
+    getFloat(key: string): number;
+    getString(key: string): string;
+    getRaw(key: string): Raw;
+    getBytes(key: string): Uint8Array;
+    getArray(key: string, schema: Schema): Array<unknown>;
+    getMap(key: string, schema: Schema): Map<unknown, unknown>;
+    getStruct(key: string, schema: Schema): object;
+}
+export declare const documentEncode: (obj: object | Map<string, unknown>, schema: Schema) => Document;
+export declare const documentDecode: (data: ReadBuffer) => Document;

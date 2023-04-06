@@ -3,10 +3,12 @@
   "version": "0.0.1",
   "description": "js-polo is the TS implementation of the POLO Serialization Format.",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest --env=node --colors --coverage --collectCoverageFrom='src/**/*.ts'",
     "lint": "eslint src/**/*.ts __tests__/**/*.ts",
+    "build": "tsc -p tsconfig.json",
     "benchmark": "node --experimental-specifier-resolution=node --loader ts-node/esm __benchmarks__/*.ts"
   },
   "keywords": [

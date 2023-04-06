@@ -1,6 +1,6 @@
 import { WriteBuffer } from './writebuffer';
 import { WireType } from './wiretype';
-import Schema from '../types/schema';
+import { Schema } from '../types/schema';
 import BN from 'bn.js';
 import { Raw } from './raw';
 import { ReadBuffer } from './readbuffer';

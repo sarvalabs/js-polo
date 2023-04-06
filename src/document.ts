@@ -3,7 +3,7 @@ import { WriteBuffer } from './writebuffer';
 import { ReadBuffer } from './readbuffer';
 import { Raw } from './raw';
 import { Polorizer } from './polorizer';
-import Schema from '../types/schema';
+import { Schema } from '../types/schema';
 import { Depolorizer } from './depolorizer';
 import { WireType } from './wiretype';
 
