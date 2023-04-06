@@ -1,5 +1,5 @@
 import LoadReader from './loadreader';
-import Schema from './schema.d';
+import Schema from '../types/schema';
 import { Raw } from './raw';
 import { ReadBuffer } from './readbuffer';
 import { WireType } from './wiretype';
