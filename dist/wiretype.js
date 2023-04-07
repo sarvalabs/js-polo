@@ -1,4 +1,7 @@
-export var WireType;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Wire = exports.WireType = void 0;
+var WireType;
 (function (WireType) {
     // WIRENULL represents a null wire. Used for consuming field orders without data.
     WireType[WireType["WIRE_NULL"] = 0] = "WIRE_NULL";
@@ -23,8 +26,8 @@ export var WireType;
     WireType[WireType["WIRE_PACK"] = 14] = "WIRE_PACK";
     // WIRELOAD represents a load tag for compound wire type
     WireType[WireType["WIRE_LOAD"] = 15] = "WIRE_LOAD";
-})(WireType || (WireType = {}));
-export class Wire {
+})(WireType = exports.WireType || (exports.WireType = {}));
+class Wire {
     // isNull method returns whether a given wiretype is null.
     // A wiretype is null if it is WireNull, has a value greater than 15 or is between 8 and 12 (reserved)
     static isNull(wt) {
@@ -35,3 +38,4 @@ export class Wire {
         return wt == WireType.WIRE_PACK || wt == WireType.WIRE_DOC;
     }
 }
+exports.Wire = Wire;

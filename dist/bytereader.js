@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * ByteReader is a class for reading bytes from a buffer.
  * This class provides an efficient way to read byte-by-byte from a buffer.
@@ -54,4 +56,4 @@ class ByteReader {
         return this.buffer.length - this.position;
     }
 }
-export default ByteReader;
+exports.default = ByteReader;

@@ -1,14 +1,17 @@
-import { ReadBuffer } from './readbuffer';
-import { WireType } from './wiretype';
-import { documentDecode } from './document';
-export class Depolorizer {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Depolorizer = void 0;
+const readbuffer_1 = require("./readbuffer");
+const wiretype_1 = require("./wiretype");
+const document_1 = require("./document");
+class Depolorizer {
     done;
     packed;
     data;
     load;
     constructor(data, load) {
         if (!load) {
-            this.data = new ReadBuffer(data);
+            this.data = new readbuffer_1.ReadBuffer(data);
             this.packed = false;
         }
         else {
@@ -116,16 +119,16 @@ export class Depolorizer {
     depolorizeDocument() {
         // Read the next element
         const data = this.read();
-        return documentDecode(data);
+        return (0, document_1.documentDecode)(data);
     }
     depolorizePacked() {
         // Read the next element
         const data = this.read();
         switch (data.wire) {
-            case WireType.WIRE_PACK:
-            case WireType.WIRE_DOC:
+            case wiretype_1.WireType.WIRE_PACK:
+            case wiretype_1.WireType.WIRE_DOC:
                 return this.newLoadDepolorizer(data);
-            case WireType.WIRE_NULL:
+            case wiretype_1.WireType.WIRE_NULL:
                 throw new Error('null pack element');
             default:
                 throw new Error('incompatible wire type');
@@ -145,7 +148,7 @@ export class Depolorizer {
             // depolorizer with the slice elements
             const pack = this.newLoadDepolorizer(data);
             switch (data.wire) {
-                case WireType.WIRE_PACK: {
+                case wiretype_1.WireType.WIRE_PACK: {
                     const map = new Map();
                     // Iterate until loadreader is done
                     while (!pack.isDone()) {
@@ -169,7 +172,7 @@ export class Depolorizer {
         // depolorizer with the slice elements
         const pack = this.newLoadDepolorizer(data);
         switch (data.wire) {
-            case WireType.WIRE_PACK: {
+            case wiretype_1.WireType.WIRE_PACK: {
                 const obj = {};
                 const entries = Object.entries(schema.fields);
                 let index = 0;
@@ -182,8 +185,8 @@ export class Depolorizer {
                 }
                 return obj;
             }
-            case WireType.WIRE_DOC: {
-                const doc = documentDecode(data);
+            case wiretype_1.WireType.WIRE_DOC: {
+                const doc = (0, document_1.documentDecode)(data);
                 const obj = {};
                 Object.entries(schema.fields).forEach(([key, value]) => {
                     const data = doc.getRaw(key);
@@ -197,3 +200,4 @@ export class Depolorizer {
         }
     }
 }
+exports.Depolorizer = Depolorizer;

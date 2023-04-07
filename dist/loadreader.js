@@ -1,7 +1,12 @@
-import ByteReader from './bytereader';
-import { ReadBuffer } from './readbuffer';
-import Varint from './varint';
-import { WireType } from './wiretype';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const bytereader_1 = __importDefault(require("./bytereader"));
+const readbuffer_1 = require("./readbuffer");
+const varint_1 = __importDefault(require("./varint"));
+const wiretype_1 = require("./wiretype");
 /**
  * LoadReader is a read-only buffer that is obtained from a
  * compound wire (pack). Iteration over the loadreader will return
@@ -19,7 +24,7 @@ class LoadReader {
     cw;
     nw;
     constructor(head, body) {
-        this.head = new ByteReader(head);
+        this.head = new bytereader_1.default(head);
         this.body = body;
         // Seed the offset values of the loadreader by iterating once
         this.next();
@@ -38,7 +43,7 @@ class LoadReader {
     }
     peek() {
         if (this.done()) {
-            return [WireType.WIRE_NULL, false];
+            return [wiretype_1.WireType.WIRE_NULL, false];
         }
         return [this.nw, true];
     }
@@ -63,20 +68,20 @@ class LoadReader {
             this.cw = this.nw;
             // Update next values to nulls. -1 means the loadreader is set as done
             this.noff = -1;
-            this.nw = WireType.WIRE_NULL;
+            this.nw = wiretype_1.WireType.WIRE_NULL;
             // Create a readbuffer from the current wiretype and 
             // the rest of data in the body and return it
-            return new ReadBuffer(Uint8Array.from(this.body.subarray(this.coff)), this.cw);
+            return new readbuffer_1.ReadBuffer(Uint8Array.from(this.body.subarray(this.coff)), this.cw);
         }
         // Update the current values from the next values
         this.coff = this.noff;
         this.cw = this.nw;
-        const [tag] = Varint.consume(this.head);
+        const [tag] = varint_1.default.consume(this.head);
         // Set the next values based on the tag data (first 4 bits 
         // represent wiretype, rest the offset position of the dats)
         this.noff = tag >> 4;
         this.nw = tag & 15;
-        return new ReadBuffer(Uint8Array.from(this.body.subarray(this.coff, this.noff)), this.cw);
+        return new readbuffer_1.ReadBuffer(Uint8Array.from(this.body.subarray(this.coff, this.noff)), this.cw);
     }
 }
-export default LoadReader;
+exports.default = LoadReader;

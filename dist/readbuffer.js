@@ -1,9 +1,15 @@
-import BN from 'bn.js';
-import ByteReader from './bytereader';
-import Varint from './varint';
-import LoadReader from './loadreader';
-import { Wire, WireType } from './wiretype';
-import { Raw } from './raw';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReadBuffer = void 0;
+const bn_js_1 = __importDefault(require("bn.js"));
+const bytereader_1 = __importDefault(require("./bytereader"));
+const varint_1 = __importDefault(require("./varint"));
+const loadreader_1 = __importDefault(require("./loadreader"));
+const wiretype_1 = require("./wiretype");
+const raw_1 = require("./raw");
 // const MaxInt64 = 1 << 63 - 1;
 /**
  * Class representing a ReadBuffer. ReadBuffer is a is a read-only buffer
@@ -13,7 +19,7 @@ import { Raw } from './raw';
  * @param {Buffer} data - An buffer that needs to be read.
  * @param {WireType} wire - The wire type of the data in buffer.
  */
-export class ReadBuffer {
+class ReadBuffer {
     wire;
     data;
     constructor(data, wiretype) {
@@ -22,9 +28,9 @@ export class ReadBuffer {
             this.data = Buffer.from(data);
         }
         else {
-            const byteReader = new ByteReader(Buffer.from(data));
+            const byteReader = new bytereader_1.default(Buffer.from(data));
             // Attempt to consume a varint from the buffer
-            const [tag, consumed] = Varint.consume(byteReader);
+            const [tag, consumed] = varint_1.default.consume(byteReader);
             this.wire = tag & 15;
             this.data = Buffer.from(data).subarray(consumed);
         }
@@ -38,20 +44,20 @@ export class ReadBuffer {
      */
     load() {
         // Check that readbuffer has a compound wiretype
-        if (!Wire.isCompound(this.wire)) {
+        if (!wiretype_1.Wire.isCompound(this.wire)) {
             throw 'load convert fail: not a compound wire';
         }
-        const byteReader = new ByteReader(this.data);
+        const byteReader = new bytereader_1.default(this.data);
         // Attempt to consume a varint from the buffer
-        const [tag] = Varint.consume(byteReader);
+        const [tag] = varint_1.default.consume(byteReader);
         // Check that the tag has a type of WireLoad
-        if ((tag & 15) != WireType.WIRE_LOAD) {
+        if ((tag & 15) != wiretype_1.WireType.WIRE_LOAD) {
             throw 'load convert fail: missing load tag';
         }
         // Read the number of bytes specified by the load for the header
         const head = this.read(byteReader, tag >> 4);
         const body = this.read(byteReader, byteReader.len());
-        return new LoadReader(head, body);
+        return new loadreader_1.default(head, body);
     }
     /**
      * Returns a buffer by consuming n number of bytes from the bytereader.
@@ -92,14 +98,14 @@ export class ReadBuffer {
     }
     // Reads the data in the read buffer into raw bytes
     readRaw() {
-        return new Raw(this.data);
+        return new raw_1.Raw(this.data);
     }
     // Reads the data in the read buffer into a boolean
     readBool() {
         switch (this.wire) {
-            case WireType.WIRE_TRUE:
+            case wiretype_1.WireType.WIRE_TRUE:
                 return true;
-            case WireType.WIRE_FALSE:
+            case wiretype_1.WireType.WIRE_FALSE:
                 return false;
             default:
                 throw new Error('Invalid wire type');
@@ -113,18 +119,18 @@ export class ReadBuffer {
         if (data.length > 8) {
             throw new Error('excess data for 64-bit integer');
         }
-        return Number(new BN(data, 'be'));
+        return Number(new bn_js_1.default(data, 'be'));
     }
     // Reads the data in the read buffer into an integer
     readInteger() {
         switch (this.wire) {
-            case WireType.WIRE_POSINT:
-            case WireType.WIRE_NEGINT: {
+            case wiretype_1.WireType.WIRE_POSINT:
+            case wiretype_1.WireType.WIRE_NEGINT: {
                 const value = this.readUInt(this.data);
                 // if(value > MaxInt64) {
                 // 	throw 'overflow for signed integer';
                 // }
-                if (this.wire == WireType.WIRE_NEGINT) {
+                if (this.wire == wiretype_1.WireType.WIRE_NEGINT) {
                     return -value;
                 }
                 return value;
@@ -142,3 +148,4 @@ export class ReadBuffer {
         return Uint8Array.from(this.data.subarray(0));
     }
 }
+exports.ReadBuffer = ReadBuffer;

@@ -1,14 +1,20 @@
-import BN from 'bn.js';
-import Varint from './varint';
-import { WireType } from './wiretype';
-import { DataRange } from './datarange';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WriteBuffer = void 0;
+const bn_js_1 = __importDefault(require("bn.js"));
+const varint_1 = __importDefault(require("./varint"));
+const wiretype_1 = require("./wiretype");
+const datarange_1 = require("./datarange");
 /**
  * WriteBuffer is a write-only byte buffer that appends to a head and body.
  * It provides methods to write various wire types like INT, RAW, BOOL etc.
  *
  * @class
  */
-export class WriteBuffer {
+class WriteBuffer {
     head;
     body;
     offset;
@@ -75,8 +81,8 @@ export class WriteBuffer {
     sign(value) {
         // check if the input value is a number or big integer within the 
         // range of 53-bit integers
-        if (this.isInt(value) && (DataRange.inUInt53(value) ||
-            DataRange.inInt53(value))) {
+        if (this.isInt(value) && (datarange_1.DataRange.inUInt53(value) ||
+            datarange_1.DataRange.inInt53(value))) {
             return Math.sign(value);
         }
         // if the input value is out of the range of 53-bit integers or 
@@ -93,7 +99,7 @@ export class WriteBuffer {
      * @param {Uint8Array} v - Array of bytes.
      */
     write(w, v) {
-        this.head = Varint.append(this.head, (this.offset << 4) | w);
+        this.head = varint_1.default.append(this.head, (this.offset << 4) | w);
         if (v) {
             this.body = new Uint8Array([...this.body, ...v]);
             this.offset += v.length;
@@ -123,8 +129,8 @@ export class WriteBuffer {
      * with the key buffer wrapped with a WIRE_LOAD tag.
      */
     load() {
-        const key = this.head.length << 4 | WireType.WIRE_LOAD;
-        let buf = Varint.append(new Uint8Array(), key);
+        const key = this.head.length << 4 | wiretype_1.WireType.WIRE_LOAD;
+        let buf = varint_1.default.append(new Uint8Array(), key);
         buf = new Uint8Array([...buf, ...this.head, ...this.body]);
         return buf;
     }
@@ -134,7 +140,7 @@ export class WriteBuffer {
      * @public
      */
     writeNull() {
-        this.write(WireType.WIRE_NULL, null);
+        this.write(wiretype_1.WireType.WIRE_NULL, null);
     }
     /**
      * Writes the raw bytes to the buffer with WIRE_RAW tag.
@@ -143,7 +149,7 @@ export class WriteBuffer {
      * @param {Raw} value - The raw bytes to be written to the buffer.
      */
     writeRaw(value) {
-        this.write(WireType.WIRE_RAW, value.bytes);
+        this.write(wiretype_1.WireType.WIRE_RAW, value.bytes);
     }
     /**
      * Writes the given boolean value to the write buffer with the
@@ -154,10 +160,10 @@ export class WriteBuffer {
      */
     writeBool(value) {
         if (value) {
-            this.write(WireType.WIRE_TRUE, null);
+            this.write(wiretype_1.WireType.WIRE_TRUE, null);
             return;
         }
-        this.write(WireType.WIRE_FALSE, null);
+        this.write(wiretype_1.WireType.WIRE_FALSE, null);
     }
     /**
      * Writes the given integer value to the write buffer with the
@@ -171,17 +177,17 @@ export class WriteBuffer {
         let wiretype, buffer;
         switch (this.sign(value)) {
             case 0:
-                wiretype = WireType.WIRE_POSINT;
+                wiretype = wiretype_1.WireType.WIRE_POSINT;
                 buffer = null;
                 break;
             case 1:
-                wiretype = WireType.WIRE_POSINT;
-                buffer = Buffer.from(new BN(value).toArray('be', 8));
+                wiretype = wiretype_1.WireType.WIRE_POSINT;
+                buffer = Buffer.from(new bn_js_1.default(value).toArray('be', 8));
                 buffer = Buffer.from(buffer.subarray((8 - this.intSize(value))));
                 break;
             default:
-                wiretype = WireType.WIRE_NEGINT;
-                buffer = Buffer.from(new BN(-value).toArray('be', 8));
+                wiretype = wiretype_1.WireType.WIRE_NEGINT;
+                buffer = Buffer.from(new bn_js_1.default(-value).toArray('be', 8));
                 buffer = Buffer.from(buffer.subarray((8 - this.intSize(-value))));
                 break;
         }
@@ -197,7 +203,7 @@ export class WriteBuffer {
         if (this.isFloat(value)) {
             const buffer = Buffer.alloc(8);
             buffer.writeDoubleBE(value, 0);
-            this.write(WireType.WIRE_FLOAT, buffer);
+            this.write(wiretype_1.WireType.WIRE_FLOAT, buffer);
             return;
         }
         throw new Error('Expected float value but received an integer');
@@ -210,7 +216,7 @@ export class WriteBuffer {
      * to the buffer.
      */
     writeString(value) {
-        this.write(WireType.WIRE_WORD, Buffer.from(value, 'utf8'));
+        this.write(wiretype_1.WireType.WIRE_WORD, Buffer.from(value, 'utf8'));
     }
     /**
      * Writes the bytes from the given value to the write buffer with
@@ -220,6 +226,7 @@ export class WriteBuffer {
      * be written to the buffer.
      */
     writeBytes(value) {
-        this.write(WireType.WIRE_WORD, value);
+        this.write(wiretype_1.WireType.WIRE_WORD, value);
     }
 }
+exports.WriteBuffer = WriteBuffer;
