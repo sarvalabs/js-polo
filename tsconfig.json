@@ -10,7 +10,7 @@
       "esnext",
       "dom"
     ],
-    "module": "ESNext",
+    "module": "commonjs",
     "target": "esnext",
     "moduleResolution": "node",
     "outDir": "./dist",

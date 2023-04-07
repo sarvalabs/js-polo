@@ -1,4 +1,9 @@
-import BN from 'bn.js';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const bn_js_1 = __importDefault(require("bn.js"));
 const MaxVarintLen64 = 10;
 /**
  * Class for encoding and decoding variable-length integers (varints).
@@ -34,16 +39,16 @@ class Varint {
      * the varint-encoded value.
      */
     static append(b, v) {
-        let num = new BN(v);
+        let num = new bn_js_1.default(v);
         const result = [];
         if (num.isZero()) {
             return new Uint8Array([...b, 0]);
         }
         while (num.gtn(0)) {
-            let byte = num.and(new BN(0x7f));
+            let byte = num.and(new bn_js_1.default(0x7f));
             num = num.ushrn(7);
             if (!num.isZero()) {
-                byte = byte.or(new BN(0x80));
+                byte = byte.or(new bn_js_1.default(0x80));
             }
             result.push(byte.toNumber());
         }
@@ -84,4 +89,4 @@ class Varint {
         }
     }
 }
-export default Varint;
+exports.default = Varint;

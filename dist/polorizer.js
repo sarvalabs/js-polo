@@ -1,16 +1,19 @@
-import { WriteBuffer } from './writebuffer';
-import { WireType } from './wiretype';
-import { ReadBuffer } from './readbuffer';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Polorizer = void 0;
+const writebuffer_1 = require("./writebuffer");
+const wiretype_1 = require("./wiretype");
+const readbuffer_1 = require("./readbuffer");
 /**
  * Polorizer is an encoding buffer that can sequentially polorize objects
  * into it. It can be collapsed into its bytes with Bytes() or Packed().
  *
  * @class
  */
-export class Polorizer {
+class Polorizer {
     writeBuffer;
     constructor() {
-        this.writeBuffer = new WriteBuffer();
+        this.writeBuffer = new writebuffer_1.WriteBuffer();
     }
     /**
      * Returns the contents of the Polorizer as bytes.
@@ -40,8 +43,8 @@ export class Polorizer {
      * @returns {Uint8Array} The packed contents of the Polorizer as bytes.
      */
     packed() {
-        const wb = new WriteBuffer();
-        wb.write(WireType.WIRE_PACK, this.writeBuffer.load());
+        const wb = new writebuffer_1.WriteBuffer();
+        wb.write(wiretype_1.WireType.WIRE_PACK, this.writeBuffer.load());
         return wb.bytes();
     }
     /**
@@ -213,7 +216,7 @@ export class Polorizer {
             this.polorizeNull();
             return;
         }
-        this.writeBuffer.write(WireType.WIRE_PACK, pack.writeBuffer.load());
+        this.writeBuffer.write(wiretype_1.WireType.WIRE_PACK, pack.writeBuffer.load());
     }
     /**
      * Encodes another Polorizer directly into the Polorizer.
@@ -230,7 +233,7 @@ export class Polorizer {
             this.polorizeNull();
             return;
         }
-        const readBuffer = new ReadBuffer(inner.bytes());
+        const readBuffer = new readbuffer_1.ReadBuffer(inner.bytes());
         this.writeBuffer.write(readBuffer.wire, readBuffer.data);
     }
     /**
@@ -325,6 +328,7 @@ export class Polorizer {
             polorizer.polorizeString(key);
             polorizer.polorizeRaw(document[key]);
         });
-        this.writeBuffer.write(WireType.WIRE_DOC, polorizer.writeBuffer.load());
+        this.writeBuffer.write(wiretype_1.WireType.WIRE_DOC, polorizer.writeBuffer.load());
     }
 }
+exports.Polorizer = Polorizer;

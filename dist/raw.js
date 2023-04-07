@@ -1,4 +1,7 @@
-export class Raw {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Raw = void 0;
+class Raw {
     bytes;
     constructor(bytes) {
         this.bytes = bytes;
@@ -7,3 +10,4 @@ export class Raw {
         return this.bytes[0] == kind;
     }
 }
+exports.Raw = Raw;
