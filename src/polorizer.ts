@@ -198,7 +198,7 @@ export class Polorizer {
 	 * A nil Raw is encoded as WIRE_NULL.
 	 */
 	public polorizeRaw(value: Raw): void {
-		if(!value) {
+		if(!value.length) {
 			this.polorizeNull();
 			return;
 		}

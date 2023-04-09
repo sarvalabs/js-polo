@@ -193,7 +193,7 @@ describe('Test Document Methods', () => {
 			},
 			{
 				data: {
-					foo: new Raw(new Uint8Array([6, 1, 0, 1, 0]))
+					foo: new Raw([6, 1, 0, 1, 0])
 				},
 				wire: new Uint8Array([
 					13, 47, 6, 53, 102, 111, 111, 6, 1, 0, 1, 0
@@ -201,8 +201,8 @@ describe('Test Document Methods', () => {
 			},
 			{
 				data: {
-					foo: new Raw(new Uint8Array([3, 1, 0, 1, 0])),
-					bar: new Raw(new Uint8Array([6, 2, 1, 2, 1]))
+					foo: new Raw([3, 1, 0, 1, 0]),
+					bar: new Raw([6, 2, 1, 2, 1])
 				},
 				wire: new Uint8Array([
 					13, 111, 6, 53, 134, 1, 181, 1, 98, 97, 114, 6, 2, 1, 2, 1, 
@@ -226,14 +226,14 @@ describe('Test Document Methods', () => {
 			},
 			{
 				data: {
-					foo: new Raw(new Uint8Array([1, 0, 1, 0]))
+					foo: new Raw([1, 0, 1, 0])
 				},
 				size: 1
 			},
 			{
 				data: {
-					foo: new Raw(new Uint8Array([1, 0, 1, 0])),
-					bar: new Raw(new Uint8Array())
+					foo: new Raw([1, 0, 1, 0]),
+					bar: new Raw()
 				},
 				size: 2
 			},
@@ -342,15 +342,15 @@ describe('Test Document Methods', () => {
 	test('GetRaw SetRaw', () => {
 		const doc = new Document();
 		// Set some fields into the document
-		doc.setRaw('foo', new Raw(new Uint8Array([1, 0, 1, 0])));
-		doc.setRaw('bar', new Raw(new Uint8Array([2, 1, 2, 1])));
+		doc.setRaw('foo', new Raw([1, 0, 1, 0]));
+		doc.setRaw('bar', new Raw([2, 1, 2, 1]));
 
 		// Attempt to retrieve some unset keys from the document
-		expect(doc.getRaw('far')).toEqual(new Raw(new Uint8Array()));
-		expect(doc.getRaw('boo')).toEqual(new Raw(new Uint8Array()));
+		expect(doc.getRaw('far')).toEqual(new Raw());
+		expect(doc.getRaw('boo')).toEqual(new Raw());
 
 		// Attempt to retrieve some set keys from the document
-		expect(doc.getRaw('foo')).toEqual(new Raw(new Uint8Array([1, 0, 1, 0])));
-		expect(doc.getRaw('bar')).toEqual(new Raw(new Uint8Array([2, 1, 2, 1])));
+		expect(doc.getRaw('foo')).toEqual(new Raw([1, 0, 1, 0]));
+		expect(doc.getRaw('bar')).toEqual(new Raw([2, 1, 2, 1]));
 	});
 });
