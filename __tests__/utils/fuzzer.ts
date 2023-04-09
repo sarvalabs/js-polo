@@ -1,6 +1,6 @@
 import Chance from 'chance';
 import Crypto from 'crypto';
-import Schema from '../../src/schema.d';
+import { Schema } from '../../types/schema';
 
 
 const MIN_INT32 = -2147483648;
@@ -49,7 +49,7 @@ export class Fuzzer {
 
 		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
 			return Array(length).fill(null).map(() => 
-				this.fuzz(schema.fields.values)
+				this.fuzz(schema.fields?.values)
 			);
 		}
 
@@ -76,9 +76,12 @@ export class Fuzzer {
 
 	private randStruct(schema: Schema): object {
 		const obj = {};
-		Object.entries(schema.fields).forEach(([key, value]) => {
-			obj[key] = this.fuzz(value);
-		});
+
+		if(schema.fields) {
+			Object.entries(schema.fields).forEach(([key, value]) => {
+				obj[key] = this.fuzz(value);
+			});
+		}
 
 		return obj;
 	}

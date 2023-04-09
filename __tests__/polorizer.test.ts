@@ -168,27 +168,27 @@ describe('Test Polorizer', () => {
         ]))
     })
 
-    // test('BigInt', () => {
-    //     const polorizer = new Polorizer()
+    test('BigInt', () => {
+        const polorizer = new Polorizer()
 
-    //     polorizer.polorizeInteger(9223372036854775807n)
-    //     expect(polorizer.bytes()).toEqual(new Uint8Array([
-    //         3, 127, 255, 255, 255, 255, 255, 255, 255
-    //     ]))
-    //     expect(polorizer.packed()).toEqual(new Uint8Array([
-    //         14, 31, 3, 127, 255, 255, 255, 255, 255, 255, 255
-    //     ]))
+        polorizer.polorizeInteger(9223372036854775807n)
+        expect(polorizer.bytes()).toEqual(new Uint8Array([
+            3, 127, 255, 255, 255, 255, 255, 255, 255
+        ]))
+        expect(polorizer.packed()).toEqual(new Uint8Array([
+            14, 31, 3, 127, 255, 255, 255, 255, 255, 255, 255
+        ]))
 
-	// 	polorizer.polorizeInteger(-9223372036854775808n)
-    //     expect(polorizer.bytes()).toEqual(new Uint8Array([
-    //         14, 63, 3, 132, 1, 127, 255, 255, 255, 255, 255, 255, 255, 128, 
-	// 		0, 0, 0, 0, 0, 0, 0
-    //     ]))
-    //     expect(polorizer.packed()).toEqual(new Uint8Array([
-    //         14, 63, 3, 132, 1, 127, 255, 255, 255, 255, 255, 255, 255, 128, 
-	// 		0, 0, 0, 0, 0, 0, 0
-    //     ]))
-    // })
+		polorizer.polorizeInteger(-9223372036854775808n)
+        expect(polorizer.bytes()).toEqual(new Uint8Array([
+            14, 63, 3, 132, 1, 127, 255, 255, 255, 255, 255, 255, 255, 128, 
+			0, 0, 0, 0, 0, 0, 0
+        ]))
+        expect(polorizer.packed()).toEqual(new Uint8Array([
+            14, 63, 3, 132, 1, 127, 255, 255, 255, 255, 255, 255, 255, 128, 
+			0, 0, 0, 0, 0, 0, 0
+        ]))
+    })
 
 	test('Raw', () => {
 		const polorizer = new Polorizer()

@@ -134,28 +134,31 @@ describe('consume varint', () => {
                 value: 1,
                 consumed: 2
             },
-            // {
-            //     input: new Uint8Array([
-            //         255, 128, 128, 128, 128, 128, 128, 128, 128, 127
-            //     ]),
-            //     value: 127,
-            //     consumed: 10
-            // },
-            // {
-            //     input: new Uint8Array([
-            //         128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 127
-            //     ]),
-            //     value: 0,
-            //     consumed: 11
-            // },
+            // value: 127, consumed: 10
+            {
+                input: new Uint8Array([
+                    255, 128, 128, 128, 128, 128, 128, 128, 128, 127
+                ]),
+                expectedErr: new Error("varint terminated prematurely")
+            },
+            // value: 0, consumed: 11
+            {
+                input: new Uint8Array([
+                    128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 127
+                ]),
+                expectedErr: new Error("varint terminated prematurely")
+            },
         ]
 
         tests.forEach(test => {
             const reader = new ByteReader(Buffer.from(test.input))
-            const [tag, consumed] = Varint.consume(reader)
-            
-            expect(tag).toBe(test.value)
-            expect(consumed).toBe(test.consumed)
+            if (test.expectedErr) {
+                expect(() => Varint.consume(reader)).toThrow(test.expectedErr);
+            } else {
+                const [tag, consumed] = Varint.consume(reader);
+                expect(tag).toBe(test.value);
+                expect(consumed).toBe(test.consumed);
+            }
         })
     })
 })

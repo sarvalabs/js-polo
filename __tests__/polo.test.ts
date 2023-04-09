@@ -1,5 +1,5 @@
 import { Depolorizer, Polorizer } from '../src';
-import Schema from '../src/schema.d';
+import { Schema } from '../types/schema';
 import { Fuzzer } from './utils/fuzzer';
 
 
@@ -51,8 +51,7 @@ describe('Test Bool', () => {
 	test('Bool', () => {
 		for(let i = 0; i < 1000; i++) {
 			const schema: Schema = {
-				kind: 'bool',
-				fields: {}
+				kind: 'bool'
 			};
 			const value = fuzzer.fuzz(schema);
 			testObject(value, schema);
@@ -84,8 +83,7 @@ describe('Test integer', () => {
 	test('Int', () => {
 		for(let i = 0; i < 1000; i++) {
 			const schema: Schema = {
-				kind: 'integer',
-				fields: {}
+				kind: 'integer'
 			};
 			const value = fuzzer.fuzz(schema);
 
@@ -98,8 +96,7 @@ describe('Test Word', () => {
 	test('String', () => {
 		for(let i = 0; i < 1000; i++) {
 			const schema: Schema = {
-				kind: 'string',
-				fields: {}
+				kind: 'string'
 			};
 			const value = fuzzer.fuzz(schema);
 
@@ -110,8 +107,7 @@ describe('Test Word', () => {
 	test('Bytes', () => {
 		for(let i = 0; i < 1000; i++) {
 			const schema: Schema = {
-				kind: 'bytes',
-				fields: {}
+				kind: 'bytes'
 			};
 			const value = fuzzer.fuzz(schema);
 
@@ -141,8 +137,7 @@ describe('Test float', () => {
 	test('Float', () => {
 		for(let i = 0; i < 1000; i++) {
 			const schema: Schema = {
-				kind: 'float',
-				fields: {}
+				kind: 'float'
 			};
 			const value = fuzzer.fuzz(schema);
 
@@ -678,8 +673,7 @@ describe('Test BigInt', () => {
 	test('BigInt', () => {
 		for(let i = 0; i < 1000; i++) {
 			let schema: Schema = {
-				kind: 'bigint',
-				fields: {}
+				kind: 'bigint'
 			};
 			const value = fuzzer.fuzz(schema);
 			schema = JSON.parse(JSON.stringify(schema).replace(/bigint/g, 'integer'));

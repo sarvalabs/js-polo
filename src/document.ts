@@ -242,7 +242,7 @@ export const documentEncode = (obj: object | Map<string, unknown>, schema: Schem
 		});
 		break;
 	default:
-		throw 'unsupported kind';
+		throw new Error('unsupported kind');
 	}
 
 	return doc;
@@ -265,6 +265,6 @@ export const documentDecode = (data: ReadBuffer): Document => {
 		return doc
 	}
 	default:
-		throw 'unsupported kind';
+		throw new Error('unsupported kind');
 	}
 };
