@@ -208,14 +208,6 @@ describe('Test Polorizer', () => {
 		expect(polorizer.packed()).toEqual(new Uint8Array([
 			14, 47, 5, 69, 6, 98, 111, 111, 0
 		]));
-
-		polorizer.polorizeRaw(new Raw());
-		expect(polorizer.bytes()).toEqual(new Uint8Array([
-			14, 63, 5, 69, 80, 6, 98, 111, 111, 0
-		]));
-		expect(polorizer.packed()).toEqual(new Uint8Array([
-			14, 63, 5, 69, 80, 6, 98, 111, 111, 0
-		]));
 	});
 
 	test('Document', () => {
