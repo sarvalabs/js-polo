@@ -25,9 +25,6 @@
     "experimentalDecorators": true,
     "noUnusedLocals": true,
   },
-  "ts-node": {
-    "esm": true
-  },
   "exclude": [
     "node_modules", 
     "__tests__",

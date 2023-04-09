@@ -158,7 +158,7 @@ export class ReadBuffer {
 
 	// Reads the data in the read buffer into an float
 	public readFloat(): number {
-		return this.data.readDoubleBE()
+		return this.data.readDoubleBE();
 	}
 
 	// Reads the data in the read buffer into bytes
