@@ -4,18 +4,18 @@ import { Raw } from '../src/raw';
 
 describe('Test Document', () => {
 	test('Example Document', () => {
-		const document = new Document()
+		const document = new Document();
 
-		document.setString('name', 'orange')
-		document.setInteger('cost', 300)
+		document.setString('name', 'orange');
+		document.setInteger('cost', 300);
 
-		const alias = ["tangerine", "mandarin"]
-		const schema = { kind: 'array', fields: { values: { kind: 'string' } } }
+		const alias = ['tangerine', 'mandarin'];
+		const schema = { kind: 'array', fields: { values: { kind: 'string' } } };
 
-		document.setArray('alias', alias, schema)
+		document.setArray('alias', alias, schema);
 
-		console.log(document.document)
-		console.log(document.bytes())
+		console.log(document.document);
+		console.log(document.bytes());
 
 		// Output:
 		/*
@@ -47,15 +47,15 @@ describe('Test Document', () => {
 				110, 103, 101
 			]
 		*/
-	})
+	});
 
 	test('Document Encode', () => {
 		// Create a Fruit object
 		const orange = {
 			name: 'orange',
 			cost: 300,
-			alias: ["tangerine", "mandarin"]
-		}
+			alias: ['tangerine', 'mandarin']
+		};
 
 		const schema = {
 			kind: 'struct',
@@ -69,13 +69,13 @@ describe('Test Document', () => {
 					} 
 				}
 			}
-		}
+		};
 
 		// Encode the object into a Document
-		const document = documentEncode(orange, schema)
+		const document = documentEncode(orange, schema);
 
-		console.log(document.document)
-		console.log(document.bytes())
+		console.log(document.document);
+		console.log(document.bytes());
 
 		// Output:
 		/*
@@ -107,15 +107,15 @@ describe('Test Document', () => {
 				110, 103, 101
 			]
 		*/
-	})
+	});
 
-	test("Decode To Document", () => {
+	test('Decode To Document', () => {
 		const wire = new Uint8Array([
 			13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 
 			97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 
 			101, 109, 97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116,
 			3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
-		])
+		]);
 
 		const schema = {
 			kind: 'struct',
@@ -129,11 +129,11 @@ describe('Test Document', () => {
 					} 
 				}
 			}
-		}
+		};
 
-		const document = new Document(wire, schema)
+		const document = new Document(wire, schema);
 
-		console.log(document.document)
+		console.log(document.document);
 
 		// Output:
 		// {
@@ -149,15 +149,15 @@ describe('Test Document', () => {
 		// 		97, 114, 105, 110
 		// 	 ],
 		// }
-	})
+	});
 
-	test("Decode To Struct", () => {
+	test('Decode To Struct', () => {
 		const wire = new Uint8Array([
 			13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 
 			97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 
 			101, 109, 97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116,
 			3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
-		])
+		]);
 
 		const schema = {
 			kind: 'struct',
@@ -171,15 +171,15 @@ describe('Test Document', () => {
 					} 
 				}
 			}
-		}
+		};
 
-		const depolorizer = new Depolorizer(wire)
+		const depolorizer = new Depolorizer(wire);
 
-		console.log(depolorizer.depolorize(schema))
+		console.log(depolorizer.depolorize(schema));
 
 		// Output:
 		// { name: 'orange', cost: 300, alias: [ 'tangerine', 'mandarin' ] }
-	})
+	});
 });
 
 describe('Test Document Methods', () => {
@@ -209,14 +209,14 @@ describe('Test Document Methods', () => {
 					102, 111, 111, 3, 1, 0, 1, 0
 				])
 			},
-		]
+		];
 
 		tests.forEach(test => {
 			const doc = new Document();
 			doc.document = test.data;
 			expect(doc.bytes()).toEqual(test.wire);
 		});
-	})
+	});
 
 	test('Size', () => {
 		const tests = [
@@ -237,29 +237,29 @@ describe('Test Document Methods', () => {
 				},
 				size: 2
 			},
-		]
+		];
 
 		tests.forEach(test => {
 			const doc = new Document();
-			doc.document = test.data
+			doc.document = test.data;
 			expect(doc.size()).toEqual(test.size);
 		});
-	})
+	});
 
 	test('Get Set', () => {
 		// Create a Document
-		const doc = new Document()
+		const doc = new Document();
 
 		// Set some objects into the document
-		doc.setNull("foo")
-		doc.setBool("boo", true)
-		doc.setInteger("far", 500000)
-		doc.setFloat("tar", 12.5789)
-		doc.setString("dar", 'aar')
-		doc.setBytes("par", new Uint8Array([2, 1, 2, 1]))
+		doc.setNull('foo');
+		doc.setBool('boo', true);
+		doc.setInteger('far', 500000);
+		doc.setFloat('tar', 12.5789);
+		doc.setString('dar', 'aar');
+		doc.setBytes('par', new Uint8Array([2, 1, 2, 1]));
 		doc.setArray(
-			"sar", 
-			["foo", "boo"], 
+			'sar', 
+			['foo', 'boo'], 
 			{ 
 				kind: 'array', 
 				fields: { 
@@ -268,10 +268,10 @@ describe('Test Document Methods', () => {
 					} 
 				} 
 			}
-		)
+		);
 		doc.setMap(
-			"var", 
-			new Map([["foo", "bar"]]), 
+			'var', 
+			new Map([['foo', 'bar']]), 
 			{ 
 				kind: 'map', 
 				fields: { 
@@ -285,7 +285,7 @@ describe('Test Document Methods', () => {
 			}
 		);
 		doc.setStruct(
-			"zar", 
+			'zar', 
 			{ 
 				foo: 'bar' 
 			},
@@ -301,16 +301,16 @@ describe('Test Document Methods', () => {
 
 		// Attempt to retrieve some unset keys from the document
 		// TODO: check for errors
-		expect(doc.getString("faa")).toBe("");
+		expect(doc.getString('faa')).toBe('');
 
 		// Attempt to retrieve some set keys from the document and confirm equality
-		expect(doc.getNull("foo")).toBe(null)
-		expect(doc.getBool("boo")).toBe(true);
-		expect(doc.getInteger("far")).toBe(500000);
-		expect(doc.getFloat("tar")).toBe(12.5789);
-		expect(doc.getString("dar")).toBe('aar');
-		expect(doc.getBytes("par")).toEqual(new Uint8Array([2, 1, 2, 1]));
-		expect(doc.getArray("sar", { 
+		expect(doc.getNull('foo')).toBe(null);
+		expect(doc.getBool('boo')).toBe(true);
+		expect(doc.getInteger('far')).toBe(500000);
+		expect(doc.getFloat('tar')).toBe(12.5789);
+		expect(doc.getString('dar')).toBe('aar');
+		expect(doc.getBytes('par')).toEqual(new Uint8Array([2, 1, 2, 1]));
+		expect(doc.getArray('sar', { 
 			kind: 'array', 
 			fields: { 
 				values: { 
@@ -318,7 +318,7 @@ describe('Test Document Methods', () => {
 				} 
 			} 
 		})).toEqual(['foo', 'boo']);
-		expect(doc.getMap("var", { 
+		expect(doc.getMap('var', { 
 			kind: 'map', 
 			fields: { 
 				keys: {
@@ -328,8 +328,8 @@ describe('Test Document Methods', () => {
 					kind: 'string' 
 				} 
 			} 
-		})).toEqual(new Map([["foo", "bar"]]));
-		expect(doc.getStruct("zar", { 
+		})).toEqual(new Map([['foo', 'bar']]));
+		expect(doc.getStruct('zar', { 
 			kind: 'struct', 
 			fields: { 
 				foo: {
@@ -337,20 +337,20 @@ describe('Test Document Methods', () => {
 				}
 			} 
 		})).toEqual({foo: 'bar'});
-	})
+	});
 
 	test('GetRaw SetRaw', () => {
-		const doc = new Document()
+		const doc = new Document();
 		// Set some fields into the document
-		doc.setRaw("foo", new Raw(new Uint8Array([1, 0, 1, 0])))
-		doc.setRaw("bar", new Raw(new Uint8Array([2, 1, 2, 1])))
+		doc.setRaw('foo', new Raw(new Uint8Array([1, 0, 1, 0])));
+		doc.setRaw('bar', new Raw(new Uint8Array([2, 1, 2, 1])));
 
 		// Attempt to retrieve some unset keys from the document
-		expect(doc.getRaw("far")).toEqual(new Raw(new Uint8Array()))
-		expect(doc.getRaw("boo")).toEqual(new Raw(new Uint8Array()))
+		expect(doc.getRaw('far')).toEqual(new Raw(new Uint8Array()));
+		expect(doc.getRaw('boo')).toEqual(new Raw(new Uint8Array()));
 
 		// Attempt to retrieve some set keys from the document
-		expect(doc.getRaw("foo")).toEqual(new Raw(new Uint8Array([1, 0, 1, 0])))
-		expect(doc.getRaw("bar")).toEqual(new Raw(new Uint8Array([2, 1, 2, 1])))
-	})
-})
+		expect(doc.getRaw('foo')).toEqual(new Raw(new Uint8Array([1, 0, 1, 0])));
+		expect(doc.getRaw('bar')).toEqual(new Raw(new Uint8Array([2, 1, 2, 1])));
+	});
+});
