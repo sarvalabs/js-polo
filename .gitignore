@@ -1,5 +1,8 @@
 # Dependency directories
 node_modules/
 
+# Lock file
+package-lock.json
+
 # Test coverage directory
 coverage/
