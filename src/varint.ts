@@ -79,7 +79,7 @@ class Varint {
 				b = br.readByte();
 	
 				if(b < 0x80) {
-					if(i == MaxVarintLen64 && b > 1) {
+					if(i == MaxVarintLen64 - 1 && b > 1) {
 						throw new Error('varint overflows 64-bit integer');
 					}
 	
