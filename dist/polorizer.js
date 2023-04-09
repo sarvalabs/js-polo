@@ -165,7 +165,7 @@ class Polorizer {
      */
     polorizeString(value) {
         if (!value) {
-            this.writeBuffer.writeString("");
+            this.writeBuffer.writeString('');
             return;
         }
         this.writeBuffer.writeString(value);

@@ -45,14 +45,14 @@ class ReadBuffer {
     load() {
         // Check that readbuffer has a compound wiretype
         if (!wiretype_1.Wire.isCompound(this.wire)) {
-            throw 'load convert fail: not a compound wire';
+            throw new Error('load convert fail: not a compound wire');
         }
         const byteReader = new bytereader_1.default(this.data);
         // Attempt to consume a varint from the buffer
         const [tag] = varint_1.default.consume(byteReader);
         // Check that the tag has a type of WireLoad
         if ((tag & 15) != wiretype_1.WireType.WIRE_LOAD) {
-            throw 'load convert fail: missing load tag';
+            throw new Error('load convert fail: missing load tag');
         }
         // Read the number of bytes specified by the load for the header
         const head = this.read(byteReader, tag >> 4);
@@ -77,7 +77,7 @@ class ReadBuffer {
         const buffer = Buffer.alloc(n);
         const rn = br.read(buffer);
         if (rn != n) {
-            throw 'insufficient data in reader';
+            throw new Error('insufficient data in reader');
         }
         return buffer;
     }
@@ -127,16 +127,13 @@ class ReadBuffer {
             case wiretype_1.WireType.WIRE_POSINT:
             case wiretype_1.WireType.WIRE_NEGINT: {
                 const value = this.readUInt(this.data);
-                // if(value > MaxInt64) {
-                // 	throw 'overflow for signed integer';
-                // }
                 if (this.wire == wiretype_1.WireType.WIRE_NEGINT) {
                     return -value;
                 }
                 return value;
             }
             default:
-                throw 'invalid wire type';
+                throw new Error('invalid wire type');
         }
     }
     // Reads the data in the read buffer into an float

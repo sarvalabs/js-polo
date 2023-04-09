@@ -132,7 +132,7 @@ class Document {
             const rb = new readbuffer_1.ReadBuffer(this.get(key));
             return rb.readString();
         }
-        return "";
+        return '';
     }
     getRaw(key) {
         if (this.document[key]) {
@@ -176,7 +176,7 @@ exports.Document = Document;
 const documentEncode = (obj, schema) => {
     const doc = new Document();
     switch (schema.kind) {
-        case 'map':
+        case 'map': {
             const data = obj;
             [...data.keys()].forEach(key => {
                 const polorizer = new polorizer_1.Polorizer();
@@ -184,6 +184,7 @@ const documentEncode = (obj, schema) => {
                 doc.setRaw(key, new raw_1.Raw(polorizer.bytes()));
             });
             break;
+        }
         case 'struct':
             Object.entries(obj).forEach(([key, value]) => {
                 const polorizer = new polorizer_1.Polorizer();
@@ -192,7 +193,7 @@ const documentEncode = (obj, schema) => {
             });
             break;
         default:
-            throw 'unsupported kind';
+            throw new Error('unsupported kind');
     }
     return doc;
 };
@@ -212,7 +213,7 @@ const documentDecode = (data) => {
             return doc;
         }
         default:
-            throw 'unsupported kind';
+            throw new Error('unsupported kind');
     }
 };
 exports.documentDecode = documentDecode;
