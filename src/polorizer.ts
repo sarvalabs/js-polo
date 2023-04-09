@@ -181,8 +181,8 @@ export class Polorizer {
 	 */
 	public polorizeString(value: string): void {
 		if(!value) {
-			this.writeBuffer.writeString("");
-			return
+			this.writeBuffer.writeString('');
+			return;
 		}
 
 		this.writeBuffer.writeString(value);
@@ -258,9 +258,9 @@ export class Polorizer {
 			return;
 		}
 
-		const readBuffer = new ReadBuffer(inner.bytes())
+		const readBuffer = new ReadBuffer(inner.bytes());
 
-		this.writeBuffer.write(readBuffer.wire, readBuffer.data)
+		this.writeBuffer.write(readBuffer.wire, readBuffer.data);
 	}
 
 	/**

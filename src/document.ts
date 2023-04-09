@@ -28,7 +28,7 @@ export class Document {
 	public bytes(): Uint8Array {
 		const polorizer = new Polorizer();
 		polorizer.polorizeDocument(this.document);
-		return polorizer.bytes()
+		return polorizer.bytes();
 	}
 
 	private get(key: string): Uint8Array {
@@ -36,7 +36,7 @@ export class Document {
 	}
 
 	private set(key: string, val: Uint8Array): void {
-		this.setRaw(key, new Raw(val))
+		this.setRaw(key, new Raw(val));
 	}
 
 	public is(key: string, kind: WireType): boolean {
@@ -85,7 +85,7 @@ export class Document {
 	}
 
 	public setRaw(key: string, data: Raw): void {
-		this.document[key] = data
+		this.document[key] = data;
 	}
 
 	public setBytes(key: string, data: Uint8Array): void {
@@ -171,7 +171,7 @@ export class Document {
 			return rb.readString();
 		}
 
-		return "";
+		return '';
 	}
 
 	public getRaw(key: string): Raw {
@@ -215,7 +215,7 @@ export class Document {
 		if(this.document[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			Object.keys(schema.fields).forEach((key) => {
-				obj[key] = depolorizer.depolorize(schema.fields[key])
+				obj[key] = depolorizer.depolorize(schema.fields[key]);
 			});
 		}
 
@@ -226,18 +226,19 @@ export class Document {
 export const documentEncode = (obj: object | Map<string, unknown>, schema: Schema): Document => {
 	const doc = new Document();
 	switch(schema.kind){
-	case 'map':
+	case 'map':{
 		const data: Map<string, unknown> = obj as Map<string, unknown>;
 		[...data.keys()].forEach(key => {
-			const polorizer = new Polorizer()
-			polorizer.polorize(data.get(key), schema.fields.values)
+			const polorizer = new Polorizer();
+			polorizer.polorize(data.get(key), schema.fields.values);
 			doc.setRaw(key, new Raw(polorizer.bytes()));
-		})
+		});
 		break;
+	}
 	case 'struct':
 		Object.entries(obj).forEach(([key, value]) => {
-			const polorizer = new Polorizer()
-			polorizer.polorize(value, schema.fields[key])
+			const polorizer = new Polorizer();
+			polorizer.polorize(value, schema.fields[key]);
 			doc.setRaw(key, new Raw(polorizer.bytes()));
 		});
 		break;
@@ -249,20 +250,20 @@ export const documentEncode = (obj: object | Map<string, unknown>, schema: Schem
 };
 
 export const documentDecode = (data: ReadBuffer): Document => {
-	const doc = new Document()
+	const doc = new Document();
 	switch(data.wire){
 	case WireType.WIRE_DOC:{
 		// Convert the element into a loadreader
 		const load = data.load();
-		const pack = new Depolorizer(null, load)
+		const pack = new Depolorizer(null, load);
 
 		while(!pack.isDone()) {
-			const docKey = pack.depolorizeString()
-			const val = pack.read()
-			doc.setRaw(docKey, new Raw(new Uint8Array(val.data)))
+			const docKey = pack.depolorizeString();
+			const val = pack.read();
+			doc.setRaw(docKey, new Raw(new Uint8Array(val.data)));
 		}
 
-		return doc
+		return doc;
 	}
 	default:
 		throw new Error('unsupported kind');

@@ -45,7 +45,7 @@ export class Depolorizer {
 		}
 
 		// Set the atomic read flag to done
-		this.done = true
+		this.done = true;
 
 		// Return the data from the atomic buffer
 		return this.data;
@@ -143,7 +143,7 @@ export class Depolorizer {
 		// Read the next element
 		const data = this.read();
 
-		return documentDecode(data)
+		return documentDecode(data);
 	}
 
 	public depolorizePacked(): Depolorizer {
@@ -151,13 +151,13 @@ export class Depolorizer {
 		const data = this.read();
 
 		switch(data.wire) {
-			case WireType.WIRE_PACK:
-			case WireType.WIRE_DOC:
-				return this.newLoadDepolorizer(data)
-			case WireType.WIRE_NULL:
-				throw new Error('null pack element')
-			default:
-				throw new Error('incompatible wire type')
+		case WireType.WIRE_PACK:
+		case WireType.WIRE_DOC:
+			return this.newLoadDepolorizer(data);
+		case WireType.WIRE_NULL:
+			throw new Error('null pack element');
+		default:
+			throw new Error('incompatible wire type');
 		}
 	}
 
@@ -165,7 +165,7 @@ export class Depolorizer {
 		// Read the next element
 		const data = this.read();
 
-		return new Depolorizer(data.bytes())
+		return new Depolorizer(data.bytes());
 	}
 
 	private depolorizeMap(schema: Schema): Map<unknown, unknown> {
@@ -224,16 +224,16 @@ export class Depolorizer {
 			return obj;
 		}
 		case WireType.WIRE_DOC:{
-			const doc = documentDecode(data)
-			const obj = {}
+			const doc = documentDecode(data);
+			const obj = {};
 
 			Object.entries(schema.fields).forEach(([key, value]) =>{
-				const data = doc.getRaw(key)
-				const depolorizer = new Depolorizer(new Uint8Array(data.bytes))
-				obj[key] = depolorizer.depolorize(value)
-			})
+				const data = doc.getRaw(key);
+				const depolorizer = new Depolorizer(new Uint8Array(data.bytes));
+				obj[key] = depolorizer.depolorize(value);
+			});
 
-			return obj
+			return obj;
 		}
 		default:
 			throw new Error('Incompatible wire type');

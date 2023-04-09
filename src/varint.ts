@@ -22,9 +22,9 @@ class Varint {
 	public static size(v: number | BN): number {
 		v = Number(v);
 		let count = 0;
-		while (v >= 128) {
-		  count++;
-		  v = Math.floor(v / 128);
+		while(v >= 128) {
+			count++;
+			v = Math.floor(v / 128);
 		}
 		return count + 1;
 	}

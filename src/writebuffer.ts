@@ -82,7 +82,7 @@ export class WriteBuffer {
 	 */
 	private sign(value: number | BN): number {
 		// check if the input value is a number or big integer within the 
-    	// range of 53-bit integers
+		// range of 53-bit integers
 		if(this.isInt(value) && (DataRange.inUInt53(value) || 
 		DataRange.inInt53(value))) {
 			return Math.sign(value);
