@@ -1,13 +1,14 @@
 import { WireType } from './wiretype';
 
-export class Raw {
-	public bytes: Uint8Array;
+// Raw is a container for raw POLO encoded data
+export class Raw extends Uint8Array {
 
-	constructor(bytes: Uint8Array) {
-		this.bytes = bytes;
-	}
-
+	// Is returns whether the raw POLO data is of a certain wire type
 	public is(kind: WireType): boolean {
-		return this.bytes[0] == kind;
+		if (this.length === 0) {
+			return kind === WireType.WIRE_NULL;
+		}
+
+		return this[0] == kind;
 	}
 }

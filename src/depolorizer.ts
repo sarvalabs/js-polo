@@ -229,7 +229,7 @@ export class Depolorizer {
 
 			Object.entries(schema.fields).forEach(([key, value]) =>{
 				const data = doc.getRaw(key);
-				const depolorizer = new Depolorizer(new Uint8Array(data.bytes));
+				const depolorizer = new Depolorizer(data);
 				obj[key] = depolorizer.depolorize(value);
 			});
 

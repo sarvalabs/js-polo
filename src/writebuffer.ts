@@ -157,7 +157,7 @@ export class WriteBuffer {
 	 * @param {Raw} value - The raw bytes to be written to the buffer.
 	 */ 
 	public writeRaw(value: Raw): void {
-		this.write(WireType.WIRE_RAW, value.bytes);
+		this.write(WireType.WIRE_RAW, value);
 	}
 
 	/**

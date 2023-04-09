@@ -32,7 +32,7 @@ export class Document {
 	}
 
 	private get(key: string): Uint8Array {
-		return this.document[key].bytes;
+		return this.document[key];
 	}
 
 	private set(key: string, val: Uint8Array): void {
@@ -179,7 +179,7 @@ export class Document {
 			return this.document[key];
 		}
 
-		return new Raw(new Uint8Array());
+		return new Raw();
 	}
 
 	public getBytes(key: string): Uint8Array {
@@ -260,7 +260,7 @@ export const documentDecode = (data: ReadBuffer): Document => {
 		while(!pack.isDone()) {
 			const docKey = pack.depolorizeString();
 			const val = pack.read();
-			doc.setRaw(docKey, new Raw(new Uint8Array(val.data)));
+			doc.setRaw(docKey, new Raw(val.data));
 		}
 
 		return doc;
