@@ -1,0 +1,37 @@
+name: Publish to registry
+
+permissions:
+  packages: write
+  contents: read
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - implement/polo-v0.1.0
+
+  repository_dispatch:
+    types: [publish]
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+      - name: Nodejs Setup & Push
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c
+        with:
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: @sarvalabs
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+       
