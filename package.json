@@ -1,5 +1,5 @@
 {
-  "name": "js-polo",
+  "name": "@sarvalabs/js-polo",
   "version": "0.0.1",
   "description": "js-polo is the TS implementation of the POLO Serialization Format.",
   "repository": {
