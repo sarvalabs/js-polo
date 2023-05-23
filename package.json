@@ -2,6 +2,10 @@
   "name": "js-polo",
   "version": "0.0.1",
   "description": "js-polo is the TS implementation of the POLO Serialization Format.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sarvalabs/js-polo.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
