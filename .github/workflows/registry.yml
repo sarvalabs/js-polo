@@ -1,9 +1,5 @@
 name: Publish to registry
 
-permissions:
-  packages: write
-  contents: read
-
 on:
   pull_request:
     branches:
@@ -18,6 +14,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
