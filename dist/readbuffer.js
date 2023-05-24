@@ -105,6 +105,7 @@ class ReadBuffer {
         switch (this.wire) {
             case wiretype_1.WireType.WIRE_TRUE:
                 return true;
+            case wiretype_1.WireType.WIRE_NULL:
             case wiretype_1.WireType.WIRE_FALSE:
                 return false;
             default:
@@ -124,6 +125,7 @@ class ReadBuffer {
     // Reads the data in the read buffer into an integer
     readInteger() {
         switch (this.wire) {
+            case wiretype_1.WireType.WIRE_NULL:
             case wiretype_1.WireType.WIRE_POSINT:
             case wiretype_1.WireType.WIRE_NEGINT: {
                 const value = this.readUInt(this.data);
