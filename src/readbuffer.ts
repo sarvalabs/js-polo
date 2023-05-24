@@ -118,6 +118,7 @@ export class ReadBuffer {
 		switch(this.wire) {
 		case WireType.WIRE_TRUE:
 			return true;
+		case WireType.WIRE_NULL:
 		case WireType.WIRE_FALSE:
 			return false;
 		default: 
@@ -141,6 +142,7 @@ export class ReadBuffer {
 	// Reads the data in the read buffer into an integer
 	public readInteger(): number | bigint {
 		switch(this.wire){
+		case WireType.WIRE_NULL:
 		case WireType.WIRE_POSINT:
 		case WireType.WIRE_NEGINT: {
 			const value = this.readUInt(this.data);
