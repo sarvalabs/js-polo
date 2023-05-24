@@ -94,6 +94,10 @@ class Polorizer {
             case 'struct':
                 this.polorizeStruct(value, schema);
                 break;
+            // Document Value (Document Encoded. Sorted Keys)
+            case 'document':
+                this.polorizeDocument(value);
+                break;
             default:
                 throw Error(schema.kind + ' is unsupported.');
         }

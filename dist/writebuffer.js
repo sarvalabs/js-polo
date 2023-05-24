@@ -149,7 +149,7 @@ class WriteBuffer {
      * @param {Raw} value - The raw bytes to be written to the buffer.
      */
     writeRaw(value) {
-        this.write(wiretype_1.WireType.WIRE_RAW, value.bytes);
+        this.write(wiretype_1.WireType.WIRE_RAW, value);
     }
     /**
      * Writes the given boolean value to the write buffer with the
