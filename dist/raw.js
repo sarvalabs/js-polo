@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Raw = void 0;
-class Raw {
-    bytes;
-    constructor(bytes) {
-        this.bytes = bytes;
-    }
+const wiretype_1 = require("./wiretype");
+// Raw is a container for raw POLO encoded data
+class Raw extends Uint8Array {
+    // Is returns whether the raw POLO data is of a certain wire type
     is(kind) {
-        return this.bytes[0] == kind;
+        if (this.length === 0) {
+            return kind === wiretype_1.WireType.WIRE_NULL;
+        }
+        return this[0] == kind;
     }
 }
 exports.Raw = Raw;

@@ -27,7 +27,7 @@ class Document {
         return polorizer.bytes();
     }
     get(key) {
-        return this.document[key].bytes;
+        return this.document[key];
     }
     set(key, val) {
         this.setRaw(key, new raw_1.Raw(val));
@@ -138,7 +138,7 @@ class Document {
         if (this.document[key]) {
             return this.document[key];
         }
-        return new raw_1.Raw(new Uint8Array());
+        return new raw_1.Raw();
     }
     getBytes(key) {
         if (this.document[key]) {
@@ -208,7 +208,7 @@ const documentDecode = (data) => {
             while (!pack.isDone()) {
                 const docKey = pack.depolorizeString();
                 const val = pack.read();
-                doc.setRaw(docKey, new raw_1.Raw(new Uint8Array(val.data)));
+                doc.setRaw(docKey, new raw_1.Raw(val.data));
             }
             return doc;
         }
