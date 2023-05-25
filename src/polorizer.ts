@@ -148,11 +148,6 @@ export class Polorizer {
 	 * with zero considered as positive.
 	 */
 	public polorizeInteger(value: number | BN): void {
-		if(!value) {
-			this.polorizeNull();
-			return;
-		}
-
 		this.writeBuffer.writeInt(value);
 	}
 
@@ -166,11 +161,6 @@ export class Polorizer {
 	 * with the wire type being WIRE_FLOAT.
 	 */
 	public polorizeFloat(value: number): void {
-		if(!value) {
-			this.polorizeNull();
-			return;
-		}
-
 		this.writeBuffer.writeFloat(value);
 	}
 
