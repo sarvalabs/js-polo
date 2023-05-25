@@ -136,10 +136,6 @@ class Polorizer {
      * with zero considered as positive.
      */
     polorizeInteger(value) {
-        if (!value) {
-            this.polorizeNull();
-            return;
-        }
         this.writeBuffer.writeInt(value);
     }
     /**
@@ -152,10 +148,6 @@ class Polorizer {
      * with the wire type being WIRE_FLOAT.
      */
     polorizeFloat(value) {
-        if (!value) {
-            this.polorizeNull();
-            return;
-        }
         this.writeBuffer.writeFloat(value);
     }
     /**
