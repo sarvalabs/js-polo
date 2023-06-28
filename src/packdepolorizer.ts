@@ -1,6 +1,11 @@
 import { Depolorizer } from './depolorizer';
 import { ReadBuffer } from './readbuffer';
 
+/**
+ * Represents a PackDepolorizer used for depolarizing encoded data.
+ * 
+ * @class
+ */
 export class PackDepolorizer {
 	public depolorizer: Depolorizer;
 
