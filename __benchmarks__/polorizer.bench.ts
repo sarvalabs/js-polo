@@ -1,7 +1,7 @@
 import Benchmark from 'benchmark';
-import { Depolorizer } from '../src/depolorizer.js';
-import { Polorizer } from '../src/polorizer.js';
-import { documentEncode } from '../src/document.js';
+import { Depolorizer } from '../src/depolorizer';
+import { Polorizer } from '../src/polorizer';
+import { documentEncode } from '../src/document';
 
 const mixedObject = {
 	a: 'Sins & Virtues',
