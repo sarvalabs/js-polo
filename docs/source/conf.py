@@ -29,10 +29,12 @@ primary_domain = 'js'
 templates_path = ['_templates']
 exclude_patterns = []
 
-
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ["css/custom.css"]
+
+# Path to the favicon file relative to the conf.py file
+html_favicon = '_static/img/favicon.svg'
