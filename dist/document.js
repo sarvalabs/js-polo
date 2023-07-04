@@ -41,6 +41,13 @@ class Document {
         return polorizer.bytes();
     }
     /**
+     * Retrieves the entire data object stored in the Document.
+     * @returns {object} The data object stored in the Document.
+     */
+    getData() {
+        return this.data;
+    }
+    /**
      * Retrieves the encoded data associated with the specified key from the Document.
      * @param key - The key of the data to retrieve.
      * @returns {Uint8Array} The encoded data associated with the specified key,

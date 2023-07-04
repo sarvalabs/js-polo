@@ -10,7 +10,7 @@ import { WireType } from './wiretype';
  * @class
  */
 export declare class Document {
-    data: object;
+    private data;
     constructor(data?: Uint8Array, schema?: Schema);
     /**
      * Returns the number of key-value pairs in the Document.
@@ -22,6 +22,11 @@ export declare class Document {
      * @returns {Uint8Array} The encoded data of the Document.
      */
     bytes(): Uint8Array;
+    /**
+     * Retrieves the entire data object stored in the Document.
+     * @returns {object} The data object stored in the Document.
+     */
+    getData(): object;
     /**
      * Retrieves the encoded data associated with the specified key from the Document.
      * @param key - The key of the data to retrieve.

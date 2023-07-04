@@ -14,7 +14,7 @@ import { WireType } from './wiretype';
  * @class
  */
 export class Document {
-	public data: object;
+	private data: object;
 
 	constructor(data?: Uint8Array, schema?: Schema) {
 		if(data && schema) {
@@ -45,6 +45,13 @@ export class Document {
 		return polorizer.bytes();
 	}
 
+	/**
+	 * Retrieves the entire data object stored in the Document.
+	 * @returns {object} The data object stored in the Document.
+	 */
+	public getData(): object {
+		return this.data;
+	}
 
 	/**
 	 * Retrieves the encoded data associated with the specified key from the Document.

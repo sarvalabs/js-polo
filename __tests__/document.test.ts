@@ -14,7 +14,7 @@ describe('Test Document', () => {
 
 		document.setArray('alias', alias, schema);
 
-		console.log(document.data);
+		console.log(document.getData());
 		console.log(document.bytes());
 
 		// Output:
@@ -74,7 +74,7 @@ describe('Test Document', () => {
 		// Encode the object into a Document
 		const document = documentEncode(orange, schema);
 
-		console.log(document.data);
+		console.log(document.getData());
 		console.log(document.bytes());
 
 		// Output:
@@ -133,7 +133,7 @@ describe('Test Document', () => {
 
 		const document = new Document(wire, schema);
 
-		console.log(document.data);
+		console.log(document.getData());
 
 		// Output:
 		// {
@@ -187,13 +187,24 @@ describe('Test Document Methods', () => {
 		const tests = [
 			{
 				data: {},
+				schema: {
+					kind: 'struct'
+				},
 				wire: new Uint8Array([
 					13, 15
 				])
 			},
 			{
 				data: {
-					foo: new Raw([6, 1, 0, 1, 0])
+					foo: new Uint8Array([1, 0, 1, 0])
+				},
+				schema: {
+					kind: 'struct',
+					fields: {
+						foo: {
+							kind: 'bytes'
+						}
+					}
 				},
 				wire: new Uint8Array([
 					13, 47, 6, 53, 102, 111, 111, 6, 1, 0, 1, 0
@@ -201,8 +212,19 @@ describe('Test Document Methods', () => {
 			},
 			{
 				data: {
-					foo: new Raw([3, 1, 0, 1, 0]),
-					bar: new Raw([6, 2, 1, 2, 1])
+					foo: 16777472,
+					bar: new Uint8Array([2, 1, 2, 1])
+				},
+				schema: {
+					kind: 'struct',
+					fields: {
+						foo: {
+							kind: 'integer'
+						},
+						bar: {
+							kind: 'bytes'
+						}
+					}
 				},
 				wire: new Uint8Array([
 					13, 111, 6, 53, 134, 1, 181, 1, 98, 97, 114, 6, 2, 1, 2, 1, 
@@ -212,8 +234,7 @@ describe('Test Document Methods', () => {
 		];
 
 		tests.forEach(test => {
-			const doc = new Document();
-			doc.data = test.data;
+			const doc = documentEncode(test.data, test.schema);
 			expect(doc.bytes()).toEqual(test.wire);
 		});
 	});
@@ -222,26 +243,47 @@ describe('Test Document Methods', () => {
 		const tests = [
 			{
 				data: {},
+				schema: {
+					kind: 'struct'
+				},
 				size: 0
 			},
 			{
 				data: {
-					foo: new Raw([1, 0, 1, 0])
+					foo: new Uint8Array([1, 0, 1, 0])
+				},
+				schema: {
+					kind: 'struct',
+					fields: {
+						foo: {
+							kind: 'bytes'
+						}
+					}
 				},
 				size: 1
 			},
 			{
 				data: {
-					foo: new Raw([1, 0, 1, 0]),
-					bar: new Raw()
+					foo: new Uint8Array([1, 0, 1, 0]),
+					bar: new Uint8Array()
+				},
+				schema: {
+					kind: 'struct',
+					fields: {
+						foo: {
+							kind: 'bytes'
+						},
+						bar: {
+							kind: 'bytes'
+						}
+					}
 				},
 				size: 2
 			},
 		];
 
 		tests.forEach(test => {
-			const doc = new Document();
-			doc.data = test.data;
+			const doc = documentEncode(test.data, test.schema);
 			expect(doc.size()).toEqual(test.size);
 		});
 	});
