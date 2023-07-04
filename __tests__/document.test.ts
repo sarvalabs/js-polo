@@ -14,7 +14,7 @@ describe('Test Document', () => {
 
 		document.setArray('alias', alias, schema);
 
-		console.log(document.document);
+		console.log(document.data);
 		console.log(document.bytes());
 
 		// Output:
@@ -74,7 +74,7 @@ describe('Test Document', () => {
 		// Encode the object into a Document
 		const document = documentEncode(orange, schema);
 
-		console.log(document.document);
+		console.log(document.data);
 		console.log(document.bytes());
 
 		// Output:
@@ -133,7 +133,7 @@ describe('Test Document', () => {
 
 		const document = new Document(wire, schema);
 
-		console.log(document.document);
+		console.log(document.data);
 
 		// Output:
 		// {
@@ -213,7 +213,7 @@ describe('Test Document Methods', () => {
 
 		tests.forEach(test => {
 			const doc = new Document();
-			doc.document = test.data;
+			doc.data = test.data;
 			expect(doc.bytes()).toEqual(test.wire);
 		});
 	});
@@ -241,7 +241,7 @@ describe('Test Document Methods', () => {
 
 		tests.forEach(test => {
 			const doc = new Document();
-			doc.document = test.data;
+			doc.data = test.data;
 			expect(doc.size()).toEqual(test.size);
 		});
 	});

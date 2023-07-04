@@ -217,7 +217,7 @@ describe('Test Polorizer', () => {
 
 		const polorizer = new Polorizer();
 		
-		polorizer.polorizeDocument(doc.document);
+		polorizer.polorizeDocument(doc.data);
 		expect(polorizer.bytes()).toEqual(new Uint8Array([
 			13, 95, 6, 53, 86, 133, 1, 102, 97, 114, 3, 123, 102, 111, 111, 
 			6, 98, 97, 114

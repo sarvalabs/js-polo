@@ -10,7 +10,7 @@ import { WireType } from './wiretype';
  * @class
  */
 export declare class Document {
-    document: object;
+    data: object;
     constructor(data?: Uint8Array, schema?: Schema);
     /**
      * Returns the number of key-value pairs in the Document.

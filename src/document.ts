@@ -14,17 +14,17 @@ import { WireType } from './wiretype';
  * @class
  */
 export class Document {
-	public document: object;
+	public data: object;
 
 	constructor(data?: Uint8Array, schema?: Schema) {
 		if(data && schema) {
 			const depolorizer = new Depolorizer(data);
 			const obj = depolorizer.depolorize(schema);
-			this.document = obj as object;
+			this.data = obj as object;
 			return;
 		}
 
-		this.document = {};
+		this.data = {};
 	}
 
 	/**
@@ -32,7 +32,7 @@ export class Document {
 	 * @returns {number} The number of key-value pairs in the Document.
 	 */
 	public size(): number {
-		return Object.keys(this.document).length;
+		return Object.keys(this.data).length;
 	}
 
 	/**
@@ -41,7 +41,7 @@ export class Document {
 	 */
 	public bytes(): Uint8Array {
 		const polorizer = new Polorizer();
-		polorizer.polorizeDocument(this.document);
+		polorizer.polorizeDocument(this.data);
 		return polorizer.bytes();
 	}
 
@@ -53,7 +53,7 @@ export class Document {
 	 * or undefined if the key does not exist.
 	 */
 	private get(key: string): Uint8Array {
-		return this.document[key];
+		return this.data[key];
 	}
 
 	/**
@@ -160,7 +160,7 @@ export class Document {
 	 * @param data - The raw value to set.
 	 */
 	public setRaw(key: string, data: Raw): void {
-		this.document[key] = data;
+		this.data[key] = data;
 	}
 
 	/**
@@ -243,7 +243,7 @@ export class Document {
 	 * if the key does not exist.
 	 */
 	public getNull(key: string): null {
-		if(this.document[key]){
+		if(this.data[key]){
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readNull();
 		}
@@ -259,7 +259,7 @@ export class Document {
 	 * if the key does not exist.
 	 */
 	public getBool(key: string): boolean {
-		if(this.document[key]){
+		if(this.data[key]){
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readBool();
 		}
@@ -275,7 +275,7 @@ export class Document {
 	 * key, or 0 if the key does not exist.
 	 */
 	public getInteger(key: string): number | bigint {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readInteger();
 		}
@@ -291,7 +291,7 @@ export class Document {
 	 * or 0 if the key does not exist.
 	 */
 	public getFloat(key: string): number {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readFloat();
 		}
@@ -307,7 +307,7 @@ export class Document {
 	 * or an empty string if the key does not exist.
 	 */
 	public getString(key: string): string {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readString();
 		}
@@ -323,8 +323,8 @@ export class Document {
 	 * null if the key does not exist.
 	 */
 	public getRaw(key: string): Raw {
-		if(this.document[key]) {
-			return this.document[key];
+		if(this.data[key]) {
+			return this.data[key];
 		}
 
 		return new Raw();
@@ -339,7 +339,7 @@ export class Document {
 	 * key, or an empty Uint8Array if the key does not exist.
 	 */
 	public getBytes(key: string): Uint8Array {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readBytes();
 		}
@@ -356,7 +356,7 @@ export class Document {
 	 * key, or an empty array if the key does not exist.
 	 */
 	public getArray(key: string, schema: Schema): Array<unknown> {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			return depolorizer.depolorize(schema) as Array<unknown>;
 		}
@@ -373,7 +373,7 @@ export class Document {
 	 * specified key, or an empty map if the key does not exist.
 	 */
 	public getMap(key: string, schema: Schema): Map<unknown, unknown> {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			return depolorizer.depolorize(schema) as Map<unknown, unknown>;
 		}
@@ -392,7 +392,7 @@ export class Document {
 	public getStruct(key: string, schema: Schema): object {
 		const obj = {};
 
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			Object.keys(schema.fields).forEach((key) => {
 				obj[key] = depolorizer.depolorize(schema.fields[key]);
