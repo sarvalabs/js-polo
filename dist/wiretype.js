@@ -6,50 +6,28 @@ exports.Wire = exports.WireType = void 0;
  */
 var WireType;
 (function (WireType) {
-    /**
-     * WIRE_NULL represents a null wire. Used for consuming field orders without data.
-     */
+    // WIRE_NULL represents a null wire. Used for consuming field orders without data.
     WireType[WireType["WIRE_NULL"] = 0] = "WIRE_NULL";
-    /**
-     * WIRE_FALSE represents a Boolean False.
-     */
+    // WIRE_FALSE represents a Boolean False.
     WireType[WireType["WIRE_FALSE"] = 1] = "WIRE_FALSE";
-    /**
-     * WIRE_TRUE represents a Boolean True.
-     */
+    // WIRE_TRUE represents a Boolean True.
     WireType[WireType["WIRE_TRUE"] = 2] = "WIRE_TRUE";
-    /**
-     * WIRE_POSINT represents a Binary encoded positive Integer in BigEndian Order.
-     */
+    // WIRE_POSINT represents a Binary encoded positive Integer in BigEndian Order.
     WireType[WireType["WIRE_POSINT"] = 3] = "WIRE_POSINT";
-    /**
-     * WIRE_NEGINT represents a Binary encoded negative Integer in BigEndian Order.
-     * The number is encoded as its absolute value and must be multiplied with -1 to get its actual value.
-     */
+    // WIRE_NEGINT represents a Binary encoded negative Integer in BigEndian Order.
+    // The number is encoded as its absolute value and must be multiplied with -1 to get its actual value.
     WireType[WireType["WIRE_NEGINT"] = 4] = "WIRE_NEGINT";
-    /**
-     * WIRE_RAW represents a polo encoded bytes.
-     */
+    // WIRE_RAW represents a polo encoded bytes.
     WireType[WireType["WIRE_RAW"] = 5] = "WIRE_RAW";
-    /**
-     * WIRE_WORD represents UTF-8 encoded string/bytes.
-     */
+    // WIRE_WORD represents UTF-8 encoded string/bytes.
     WireType[WireType["WIRE_WORD"] = 6] = "WIRE_WORD";
-    /**
-     * WIRE_FLOAT represents some floating point data encoded in the IEEE754 standard (floats).
-     */
+    // WIRE_FLOAT represents some floating point data encoded in the IEEE754 standard (floats).
     WireType[WireType["WIRE_FLOAT"] = 7] = "WIRE_FLOAT";
-    /**
-     * WireDoc represents some doc encoded data (string keyed maps, tagged structs, and Document objects).
-     */
+    // WireDoc represents some doc encoded data (string keyed maps, tagged structs, and Document objects).
     WireType[WireType["WIRE_DOC"] = 13] = "WIRE_DOC";
-    /**
-     * WIRE_PACK represents some pack encoded data (slices, arrays, maps, structs).
-     */
+    // WIRE_PACK represents some pack encoded data (slices, arrays, maps, structs).
     WireType[WireType["WIRE_PACK"] = 14] = "WIRE_PACK";
-    /**
-     * WIRE_LOAD represents a load tag for compound wire type.
-     */
+    // WIRE_LOAD represents a load tag for compound wire type.
     WireType[WireType["WIRE_LOAD"] = 15] = "WIRE_LOAD";
 })(WireType = exports.WireType || (exports.WireType = {}));
 /**
