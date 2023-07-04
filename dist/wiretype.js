@@ -1,41 +1,78 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wire = exports.WireType = void 0;
+/**
+ * Enum representing various wire types used for data encoding.
+ */
 var WireType;
 (function (WireType) {
-    // WIRENULL represents a null wire. Used for consuming field orders without data.
+    /**
+     * WIRE_NULL represents a null wire. Used for consuming field orders without data.
+     */
     WireType[WireType["WIRE_NULL"] = 0] = "WIRE_NULL";
-    // WIREFALSE represents a Boolean False
+    /**
+     * WIRE_FALSE represents a Boolean False.
+     */
     WireType[WireType["WIRE_FALSE"] = 1] = "WIRE_FALSE";
-    // WIRETRUE represents a Boolean True
+    /**
+     * WIRE_TRUE represents a Boolean True.
+     */
     WireType[WireType["WIRE_TRUE"] = 2] = "WIRE_TRUE";
-    // WIREPOSINT represents a Binary encoded +ve Integer in BigEndian Order.
+    /**
+     * WIRE_POSINT represents a Binary encoded positive Integer in BigEndian Order.
+     */
     WireType[WireType["WIRE_POSINT"] = 3] = "WIRE_POSINT";
-    // WIRENEGINT represents a Binary encoded -ve Integer in BigEndian Order.
-    // The number is encoded as its absolute value and must be multiplied with -1 to get its actual value.
+    /**
+     * WIRE_NEGINT represents a Binary encoded negative Integer in BigEndian Order.
+     * The number is encoded as its absolute value and must be multiplied with -1 to get its actual value.
+     */
     WireType[WireType["WIRE_NEGINT"] = 4] = "WIRE_NEGINT";
-    // WIRERAW represents a polo encoded bytes
+    /**
+     * WIRE_RAW represents a polo encoded bytes.
+     */
     WireType[WireType["WIRE_RAW"] = 5] = "WIRE_RAW";
-    // WIREWORD represents UTF-8 encoded string/bytes
+    /**
+     * WIRE_WORD represents UTF-8 encoded string/bytes.
+     */
     WireType[WireType["WIRE_WORD"] = 6] = "WIRE_WORD";
-    // WIREFLOAT represents some floating point data encoded in the IEEE754 standard. (floats)
+    /**
+     * WIRE_FLOAT represents some floating point data encoded in the IEEE754 standard (floats).
+     */
     WireType[WireType["WIRE_FLOAT"] = 7] = "WIRE_FLOAT";
-    // WireDoc represents some doc encoded data (string keyed maps, tagged structs and Document objects)
+    /**
+     * WireDoc represents some doc encoded data (string keyed maps, tagged structs, and Document objects).
+     */
     WireType[WireType["WIRE_DOC"] = 13] = "WIRE_DOC";
-    // WIREPACK represents some pack encoded data (slices, arrays, maps, structs)
+    /**
+     * WIRE_PACK represents some pack encoded data (slices, arrays, maps, structs).
+     */
     WireType[WireType["WIRE_PACK"] = 14] = "WIRE_PACK";
-    // WIRELOAD represents a load tag for compound wire type
+    /**
+     * WIRE_LOAD represents a load tag for compound wire type.
+     */
     WireType[WireType["WIRE_LOAD"] = 15] = "WIRE_LOAD";
 })(WireType = exports.WireType || (exports.WireType = {}));
+/**
+ * Utility class for working with wire types.
+ */
 class Wire {
-    // isNull method returns whether a given wiretype is null.
-    // A wiretype is null if it is WireNull, has a value greater than 15 or is between 8 and 12 (reserved)
+    /**
+     * Checks if a given wire type is null.
+     * A wire type is null if it is WireNull, has a value greater than 15, or is between 8 and 12 (reserved).
+     * @param wt The wire type to check.
+     * @returns True if the wire type is null, false otherwise.
+     */
     static isNull(wt) {
-        return (wt > 15) || (wt == WireType.WIRE_NULL) || (wt >= 8 && wt <= 12);
+        return wt > 15 || wt === WireType.WIRE_NULL || (wt >= 8 && wt <= 12);
     }
-    // isCompound method returns whether a given wiretype is a compound type. (contains a load inside it)
+    /**
+     * Checks if a given wire type is a compound type.
+     * A compound type contains a load inside it.
+     * @param wt The wire type to check.
+     * @returns True if the wire type is a compound type, false otherwise.
+     */
     static isCompound(wt) {
-        return wt == WireType.WIRE_PACK || wt == WireType.WIRE_DOC;
+        return wt === WireType.WIRE_PACK || wt === WireType.WIRE_DOC;
     }
 }
 exports.Wire = Wire;
