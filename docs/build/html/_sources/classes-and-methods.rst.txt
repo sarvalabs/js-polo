@@ -319,14 +319,6 @@ methods
 
 .. autofunction:: depolorize
 
-.. code-block:: javascript
-
-    // Example
-    depolorizer.depolorize()
-    >> Document
-
-.. autofunction:: depolorizeDocument
-
 **depolorize array**
 
 .. code-block:: javascript
@@ -386,6 +378,14 @@ methods
 
     polorizer.depolorize(schema)
     >> { name: 'orange', cost: 300 }
+
+.. autofunction:: depolorizeDocument
+
+.. code-block:: javascript
+
+    // Example
+    depolorizer.depolorize()
+    >> Document
 
 .. autofunction:: isDone
 

@@ -181,11 +181,6 @@ into it. It can be collapsed into its bytes with bytes() or packed().</p>
 <span class="sig-name descname"><span class="n"><span class="pre">polorizeNull</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polorizeNull" title="Permalink to this definition"></a></dt>
 <dd><p>Encodes a WIRE_NULL into the head, consuming a
 position on the wire.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>void</strong> –</p>
-</dd>
-</dl>
 </dd></dl>
 
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
@@ -202,9 +197,6 @@ depending on its value.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>boolean</em>) – The boolean value to encode.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -225,9 +217,6 @@ with zero considered as positive.</p>
 <li><p><strong>value</strong> (<em>number|BN</em>) – The integer or BN value to encode.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -245,9 +234,6 @@ with the wire type being WIRE_FLOAT.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>number</em>) – The float value to encode.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -267,9 +253,6 @@ wire type being WIRE_WORD.</p>
 <li><p><strong>value</strong> (<em>string</em>) – The string value to encode.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -288,9 +271,6 @@ A nil Raw is encoded as WIRE_NULL.</p>
 <li><p><strong>value</strong> (<em>RAW</em>) – The raw value to encode.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -307,9 +287,6 @@ A nil Raw is encoded as WIRE_NULL.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> (<em>Uint8Array</em>) – The bytes value to encode.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -329,9 +306,6 @@ a WIRE_NULL is encoded instead.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pack</strong> (<em>Polorizer</em>) – The Polorizer instance to encode.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -366,9 +340,6 @@ If the given Polorizer is nil, a WireNull is encoded.</p>
 <li><p><strong>inner</strong> (<em>Polorizer</em>) – The Polorizer instance to encode.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -397,9 +368,6 @@ null, bool, integer, float, string, raw, bytes, array, map, and struct.</p>
 </dd>
 <dt class="field-even">Throws<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Error</strong> – If the kind of the schema is not one of the supported kinds.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -473,9 +441,6 @@ If the Document is nil, it is encoded as a WIRE_NULL.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>document</strong> (<em>object</em>) – The document object to encode.</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>void</strong> –</p>
 </dd>
 </dl>
 </dd></dl>
@@ -728,13 +693,10 @@ Returns the decoded <cite>Uint8Array</cite> (bytes) value.</p>
 consuming one wire element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>Error</strong> – <ul class="simple">
-<li><p>If there are no elements left, if the element is not WirePack or WireDoc, or if it is a WireNull.</p></li>
-</ul>
-</p>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left, if the element is not WirePack or WireDoc, or if it is a WireNull.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Depolorizer</strong> – - The depolorized packed Depolorizer.</p>
+<dd class="field-even"><p><strong>Depolorizer</strong> – The depolorized packed Depolorizer.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -753,13 +715,10 @@ into a packed Depolorizer.
 DepolorizeInner returns the atomic element as an atomic Depolorizer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>Error</strong> – <ul class="simple">
-<li><p>If there are no elements left or if the element is not a valid wire element.</p></li>
-</ul>
-</p>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not a valid wire element.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Depolorizer</strong> – - The depolorized inner Depolorizer.</p>
+<dd class="field-even"><p><strong>Depolorizer</strong> – The depolorized inner Depolorizer.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -784,31 +743,6 @@ DepolorizeInner returns the atomic element as an atomic Depolorizer.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>unknown</strong> – The decoded value.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
-<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">()</span>
-<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">Document</span>
-</pre></div>
-</div>
-<dl class="js function">
-<dt class="sig sig-object js" id="depolorizeDocument">
-<span class="sig-name descname"><span class="n"><span class="pre">depolorizeDocument</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeDocument" title="Permalink to this definition"></a></dt>
-<dd><p>Depolorizes a Document from the Depolorizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Throws<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>Error</strong> – <ul class="simple">
-<li><p>If there are no elements left or if the element is not WireDoc.</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Document</strong> – - The depolorized Document.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>null</strong> – - If the element is a WireNull.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -865,6 +799,25 @@ DepolorizeInner returns the atomic element as an atomic Depolorizer.</p>
 
 <span class="nx">polorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">(</span><span class="nx">schema</span><span class="p">)</span>
 <span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeDocument">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeDocument</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeDocument" title="Permalink to this definition"></a></dt>
+<dd><p>Depolorizes a Document from the Depolorizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not WireDoc.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Document</strong> – The depolorized Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">Document</span>
 </pre></div>
 </div>
 <dl class="js function">
@@ -1171,7 +1124,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The null value associated with the specified key, or null if the key does not exist.</p>
+<dd class="field-even"><p><strong>null</strong> – The null value associated with the specified key, or null if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1192,7 +1145,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The boolean value associated with the specified key, or false if the key does not exist.</p>
+<dd class="field-even"><p><strong>boolean</strong> – The boolean value associated with the specified key, or false if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1213,7 +1166,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The integer value associated with the specified key, or 0 if the key does not exist.</p>
+<dd class="field-even"><p><strong>number|bigint</strong> – The integer value associated with the specified key, or 0 if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1234,7 +1187,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The float value associated with the specified key, or 0 if the key does not exist.</p>
+<dd class="field-even"><p><strong>number</strong> – The float value associated with the specified key, or 0 if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1255,7 +1208,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The string value associated with the specified key, or an empty string if the key does not exist.</p>
+<dd class="field-even"><p><strong>string</strong> – The string value associated with the specified key, or an empty string if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1276,7 +1229,7 @@ a struct value.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The raw value associated with the specified key, or null if the key does not exist.</p>
+<dd class="field-even"><p><strong>Raw</strong> – The raw value associated with the specified key, or null if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1298,7 +1251,7 @@ from the Document.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The byte array value associated with the specified key, or an empty Uint8Array if the key does not exist.</p>
+<dd class="field-even"><p><strong>Uint8Array</strong> – The byte array value associated with the specified key, or an empty Uint8Array if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1320,7 +1273,7 @@ from the Document.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The array value associated with the specified key, or an empty array if the key does not exist.</p>
+<dd class="field-even"><p><strong>Array</strong> – The array value associated with the specified key, or an empty array if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1351,7 +1304,7 @@ from the Document.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The map value associated with the specified key, or an empty map if the key does not exist.</p>
+<dd class="field-even"><p><strong>Map</strong> – The map value associated with the specified key, or an empty map if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1388,7 +1341,7 @@ from the Document.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The struct value associated with the specified key, or an empty object if the key does not exist.</p>
+<dd class="field-even"><p><strong>object</strong> – The struct value associated with the specified key, or an empty object if the key does not exist.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1423,7 +1376,7 @@ Document has the specified WireType.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the encoded data has the specified WireType, false otherwise.</p>
+<dd class="field-even"><p><strong>boolean</strong> – True if the encoded data has the specified WireType, false otherwise.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1439,7 +1392,7 @@ Document has the specified WireType.</p>
 <dd><p>Returns the number of key-value pairs in the Document.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of key-value pairs in the Document.</p>
+<dd class="field-odd"><p><strong>number</strong> – The number of key-value pairs in the Document.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1455,7 +1408,7 @@ Document has the specified WireType.</p>
 <dd><p>Returns the encoded data of the Document as a Uint8Array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The encoded data of the Document.</p>
+<dd class="field-odd"><p><strong>Uint8Array</strong> – The encoded data of the Document.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1484,7 +1437,7 @@ Document has the specified WireType.</p>
 <dd class="field-even"><p><strong>Error</strong> – If the provided schema kind is unsupported.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The encoded Document.</p>
+<dd class="field-odd"><p><strong>Document</strong> – The encoded Document.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1562,7 +1515,7 @@ Document has the specified WireType.</p>
 <dd class="field-even"><p><strong>Error</strong> – If the provided wire type is unsupported.</p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The decoded Document.</p>
+<dd class="field-odd"><p><strong>Document</strong> – The decoded Document.</p>
 </dd>
 </dl>
 </dd></dl>
