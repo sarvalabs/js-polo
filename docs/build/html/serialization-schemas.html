@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serialization Schemas &mdash; js-polo v0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Classes and Methods" href="classes-and-methods.html" />
+    <link rel="prev" title="Serialization Formats" href="serialization-formats.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            js-polo
+          </a>
+              <div class="version">
+                v0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-formats.html">Serialization Formats</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Serialization Schemas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#null-schema">Null Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#boolean-schema">Boolean Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integer-schema">Integer Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#float-schema">Float Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#string-schema">String Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raw-schema">Raw Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bytes-schema">Bytes Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#array-schema">Array Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#map-schema">Map Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#struct-schema">Struct Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#document-schema">Document Schema</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classes-and-methods.html">Classes and Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license-and-copyright.html">License and Copyright</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">js-polo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Serialization Schemas</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/serialization-schemas.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="serialization-schemas">
+<h1>Serialization Schemas<a class="headerlink" href="#serialization-schemas" title="Permalink to this heading"></a></h1>
+<hr class="docutils" />
+<p>Serialization schemas are a vital part of a JavaScript implementation. These
+schemas are responsible for encoding and decoding elements in a defined order
+and format, ensuring data consistency and interoperability.</p>
+<p>By using serialization schemas, we establish a structure that determines how
+data should be represented and organized during the serialization and
+deserialization processes. This structure enables data to be encoded into a
+format that can be easily transmitted or stored, and then decoded back into
+its original form.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Creating a new Polorizer</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">polorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following are the listed schemas for serialization, each representing
+a specific format:</p>
+<section id="null-schema">
+<h2>Null Schema<a class="headerlink" href="#null-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a null value.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;null&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="boolean-schema">
+<h2>Boolean Schema<a class="headerlink" href="#boolean-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a boolean value.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;bool&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="integer-schema">
+<h2>Integer Schema<a class="headerlink" href="#integer-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents an integer value.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="mf">300</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="float-schema">
+<h2>Float Schema<a class="headerlink" href="#float-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a floating-point value.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;float&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="mf">123.456</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="string-schema">
+<h2>String Schema<a class="headerlink" href="#string-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a string value.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="raw-schema">
+<h2>Raw Schema<a class="headerlink" href="#raw-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a polo encoded raw data.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;raw&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">Raw</span><span class="p">([</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">98</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">]),</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="bytes-schema">
+<h2>Bytes Schema<a class="headerlink" href="#bytes-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a byte array.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;bytes&quot;</span>
+<span class="p">}</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">]),</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="array-schema">
+<h2>Array Schema<a class="headerlink" href="#array-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents an array of values.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="map-schema">
+<h2>Map Schema<a class="headerlink" href="#map-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a map of key-value pairs.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Map</span><span class="p">()</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">keys</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="struct-schema">
+<h2>Struct Schema<a class="headerlink" href="#struct-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a structured object with named fields.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">struct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">struct</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="document-schema">
+<h2>Document Schema<a class="headerlink" href="#document-schema" title="Permalink to this heading"></a></h2>
+<p>This schema represents a polo document.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Document</span><span class="p">()</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setInteger</span><span class="p">(</span><span class="s1">&#39;far&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">123</span><span class="p">)</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setString</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;document&#39;</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">doc</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="serialization-formats.html" class="btn btn-neutral float-left" title="Serialization Formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="classes-and-methods.html" class="btn btn-neutral float-right" title="Classes and Methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Sarva Labs Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
