@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'js-polo'
-copyright = '2023, Sarva Labs Inc'
+copyright = '2023, Sarva Labs Inc. & MOI Protocol Developers'
 author = 'Sarva Labs Inc'
 
 # The version info for the project you're documenting, acts as replacement for
