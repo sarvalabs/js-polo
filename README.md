@@ -1,7 +1,6 @@
 ![image](./banner.png)
 
 ![license](https://img.shields.io/badge/license-MIT%2FApache--2.0-informational)
-[![Project license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 # js-polo
 
@@ -10,7 +9,7 @@
 It is intended for use in projects that prioritize deterministic serialization, minimal wire sizes and serialization safety. POLO follows a very strict specification that is optimized for partial decoding and differential messaging. This implementation is compliant with the [POLO Specification](https://github.com/sarvalabs/polo) that describes both the encoding (wire) format as well as implementation guidelines for several languages.
 
 ## Installation
-Install the latest [release](https://github.com/sarvalabs/jo-polo/releases) using the following command.
+Install the latest [release](https://github.com/sarvalabs/js-polo/releases) using the following command.
 
 ```sh
 npm install js-polo

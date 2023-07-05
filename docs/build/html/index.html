@@ -137,19 +137,6 @@ unrequired fields by capturing their raw wire instead of decoding them.</p>
 can be extended to support field order based access/write for regular
 POLO encoded wires in the future.</p>
 </section>
-<section id="custom-encoding-decoding-buffers">
-<h3>Custom Encoding/Decoding Buffers<a class="headerlink" href="#custom-encoding-decoding-buffers" title="Permalink to this heading"></a></h3>
-<p>POLO describes two buffers, <code class="docutils literal notranslate"><span class="pre">Polorizer</span></code> and <code class="docutils literal notranslate"><span class="pre">Depolorizer</span></code> which are
-write-only and read-only respectively, allowing sequential encoding/decoding of
-objects and wire elements into them. This capability can be leveraged to
-implement the <code class="docutils literal notranslate"><span class="pre">Polorizable</span></code> and <code class="docutils literal notranslate"><span class="pre">Depolorizable</span></code> interfaces which describe
-the custom serialization form for an object.</p>
-<p>Note: This capability can be dangerous if not implemented correctly, it
-generally recommended that both interfaces be implemented and are evenly capable
-of encoding/decoding the same contents to avoid inconsistency. It is intended to
-be used for object such as Go Interfaces which are not supported by default when
-using the reflection based <code class="docutils literal notranslate"><span class="pre">Polorize</span></code> and <code class="docutils literal notranslate"><span class="pre">Depolorize</span></code> functions.</p>
-</section>
 <section id="differential-messaging-coming-soon">
 <h3>Differential Messaging (Coming Soon)<a class="headerlink" href="#differential-messaging-coming-soon" title="Permalink to this heading"></a></h3>
 <p>POLO’s partially encoding and field order based indexing (and string based

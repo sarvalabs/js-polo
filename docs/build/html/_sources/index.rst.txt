@@ -66,20 +66,6 @@ Partial encodign/decoding capabilities for this implementation are unfinished
 can be extended to support field order based access/write for regular 
 POLO encoded wires in the future.
 
-Custom Encoding/Decoding Buffers
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-POLO describes two buffers, ``Polorizer`` and ``Depolorizer`` which are 
-write-only and read-only respectively, allowing sequential encoding/decoding of 
-objects and wire elements into them. This capability can be leveraged to 
-implement the ``Polorizable`` and ``Depolorizable`` interfaces which describe 
-the custom serialization form for an object.
-
-Note: This capability can be dangerous if not implemented correctly, it 
-generally recommended that both interfaces be implemented and are evenly capable 
-of encoding/decoding the same contents to avoid inconsistency. It is intended to 
-be used for object such as Go Interfaces which are not supported by default when 
-using the reflection based ``Polorize`` and ``Depolorize`` functions.
-
 Differential Messaging (Coming Soon)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 POLO's partially encoding and field order based indexing (and string based 

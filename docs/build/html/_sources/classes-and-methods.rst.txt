@@ -708,7 +708,7 @@ functions
     // Encode the object into a Document
     const document = documentEncode(orange, schema)
 
-    console.log(document.document)
+    console.log(document.data)
     console.log(document.bytes())
 
     // Output:
@@ -771,7 +771,7 @@ functions
     const depolorizer = new Depolorizer(wire)
     const readBuffer = depolorizer.read()
     const doc = documentDecode(readBuffer)
-    console.log(doc.document)
+    console.log(doc.data)
 
     // Output:
     // {

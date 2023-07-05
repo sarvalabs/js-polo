@@ -1466,7 +1466,7 @@ Document has the specified WireType.</p>
 <span class="c1">// Encode the object into a Document</span>
 <span class="kd">const</span><span class="w"> </span><span class="nb">document</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentEncode</span><span class="p">(</span><span class="nx">orange</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nb">document</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">bytes</span><span class="p">())</span>
 
 <span class="c1">// Output:</span>
@@ -1545,7 +1545,7 @@ Document has the specified WireType.</p>
 <span class="kd">const</span><span class="w"> </span><span class="nx">depolorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Depolorizer</span><span class="p">(</span><span class="nx">wire</span><span class="p">)</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">readBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">depolorizer</span><span class="p">.</span><span class="nx">read</span><span class="p">()</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentDecode</span><span class="p">(</span><span class="nx">readBuffer</span><span class="p">)</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nb">document</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
 
 <span class="c1">// Output:</span>
 <span class="c1">// {</span>
