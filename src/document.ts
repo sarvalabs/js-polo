@@ -14,46 +14,53 @@ import { WireType } from './wiretype';
  * @class
  */
 export class Document {
-	public document: object;
+	private data: object;
 
 	constructor(data?: Uint8Array, schema?: Schema) {
 		if(data && schema) {
 			const depolorizer = new Depolorizer(data);
 			const obj = depolorizer.depolorize(schema);
-			this.document = obj as object;
+			this.data = obj as object;
 			return;
 		}
 
-		this.document = {};
+		this.data = {};
 	}
 
 	/**
 	 * Returns the number of key-value pairs in the Document.
-	 * @returns The number of key-value pairs in the Document.
+	 * @returns {number} The number of key-value pairs in the Document.
 	 */
 	public size(): number {
-		return Object.keys(this.document).length;
+		return Object.keys(this.data).length;
 	}
 
 	/**
 	 * Returns the encoded data of the Document as a Uint8Array.
-	 * @returns The encoded data of the Document.
+	 * @returns {Uint8Array} The encoded data of the Document.
 	 */
 	public bytes(): Uint8Array {
 		const polorizer = new Polorizer();
-		polorizer.polorizeDocument(this.document);
+		polorizer.polorizeDocument(this.data);
 		return polorizer.bytes();
 	}
 
+	/**
+	 * Retrieves the entire data object stored in the Document.
+	 * @returns {object} The data object stored in the Document.
+	 */
+	public getData(): object {
+		return this.data;
+	}
 
 	/**
 	 * Retrieves the encoded data associated with the specified key from the Document.
 	 * @param key - The key of the data to retrieve.
-	 * @returns The encoded data associated with the specified key, or undefined 
-	 * if the key does not exist.
+	 * @returns {Uint8Array} The encoded data associated with the specified key, 
+	 * or undefined if the key does not exist.
 	 */
 	private get(key: string): Uint8Array {
-		return this.document[key];
+		return this.data[key];
 	}
 
 	/**
@@ -70,7 +77,8 @@ export class Document {
 	 * Document has the specified WireType.
 	 * @param key - The key to check.
 	 * @param kind - The WireType to compare against.
-	 * @returns True if the encoded data has the specified WireType, false otherwise.
+	 * @returns {boolean} True if the encoded data has the specified WireType, 
+	 * false otherwise.
 	 */
 	public is(key: string, kind: WireType): boolean {
 		const data = this.get(key);
@@ -159,7 +167,7 @@ export class Document {
 	 * @param data - The raw value to set.
 	 */
 	public setRaw(key: string, data: Raw): void {
-		this.document[key] = data;
+		this.data[key] = data;
 	}
 
 	/**
@@ -238,11 +246,11 @@ export class Document {
 	 * Retrieves a null value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the null value to retrieve.
-	 * @returns The null value associated with the specified key, or null 
+	 * @returns {null} The null value associated with the specified key, or null 
 	 * if the key does not exist.
 	 */
 	public getNull(key: string): null {
-		if(this.document[key]){
+		if(this.data[key]){
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readNull();
 		}
@@ -254,11 +262,11 @@ export class Document {
 	 * Retrieves a boolean value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the boolean value to retrieve.
-	 * @returns The boolean value associated with the specified key, or false 
+	 * @returns {boolean} The boolean value associated with the specified key, or false 
 	 * if the key does not exist.
 	 */
 	public getBool(key: string): boolean {
-		if(this.document[key]){
+		if(this.data[key]){
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readBool();
 		}
@@ -270,11 +278,11 @@ export class Document {
 	 * Retrieves an integer value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the integer value to retrieve.
-	 * @returns The integer value associated with the specified key, or 0 if 
-	 * the key does not exist.
+	 * @returns {number | bigint} The integer value associated with the specified 
+	 * key, or 0 if the key does not exist.
 	 */
 	public getInteger(key: string): number | bigint {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readInteger();
 		}
@@ -286,11 +294,11 @@ export class Document {
 	 * Retrieves a float value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the float value to retrieve.
-	 * @returns The float value associated with the specified key, or 0 if 
-	 * the key does not exist.
+	 * @returns {number} The float value associated with the specified key, 
+	 * or 0 if the key does not exist.
 	 */
 	public getFloat(key: string): number {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readFloat();
 		}
@@ -302,11 +310,11 @@ export class Document {
 	 * Retrieves a string value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the string value to retrieve.
-	 * @returns The string value associated with the specified key, or an empty 
-	 * string if the key does not exist.
+	 * @returns {string} The string value associated with the specified key, 
+	 * or an empty string if the key does not exist.
 	 */
 	public getString(key: string): string {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readString();
 		}
@@ -318,12 +326,12 @@ export class Document {
 	 * Retrieves a raw value associated with the specified key from the Document.
 	 * 
 	 * @param key - The key of the raw value to retrieve.
-	 * @returns The raw value associated with the specified key, or null if 
-	 * the key does not exist.
+	 * @returns {Raw} The raw value associated with the specified key, or 
+	 * null if the key does not exist.
 	 */
 	public getRaw(key: string): Raw {
-		if(this.document[key]) {
-			return this.document[key];
+		if(this.data[key]) {
+			return this.data[key];
 		}
 
 		return new Raw();
@@ -334,11 +342,11 @@ export class Document {
 	 * from the Document.
 	 * 
 	 * @param key - The key of the byte array value to retrieve.
-	 * @returns The byte array value associated with the specified key, or an 
-	 * empty Uint8Array if the key does not exist.
+	 * @returns {Uint8Array} The byte array value associated with the specified 
+	 * key, or an empty Uint8Array if the key does not exist.
 	 */
 	public getBytes(key: string): Uint8Array {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const rb: ReadBuffer = new ReadBuffer(this.get(key));
 			return rb.readBytes();
 		}
@@ -351,11 +359,11 @@ export class Document {
 	 * 
 	 * @param key - The key of the array value to retrieve.
 	 * @param schema - The schema used to decode the array elements.
-	 * @returns The array value associated with the specified key, or an 
-	 * empty array if the key does not exist.
+	 * @returns {Array} The array value associated with the specified 
+	 * key, or an empty array if the key does not exist.
 	 */
 	public getArray(key: string, schema: Schema): Array<unknown> {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			return depolorizer.depolorize(schema) as Array<unknown>;
 		}
@@ -368,11 +376,11 @@ export class Document {
 	 * 
 	 * @param key - The key of the map value to retrieve.
 	 * @param schema - The schema used to decode the map keys and values.
-	 * @returns The map value associated with the specified key, or an empty 
-	 * map if the key does not exist.
+	 * @returns {Map} The map value associated with the 
+	 * specified key, or an empty map if the key does not exist.
 	 */
 	public getMap(key: string, schema: Schema): Map<unknown, unknown> {
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			return depolorizer.depolorize(schema) as Map<unknown, unknown>;
 		}
@@ -385,13 +393,13 @@ export class Document {
 	 * 
 	 * @param key - The key of the struct value to retrieve.
 	 * @param schema - The schema used to decode the struct fields.
-	 * @returns The struct value associated with the specified key, or an empty 
-	 * object if the key does not exist.
+	 * @returns {object} The struct value associated with the specified key, 
+	 * or an empty object if the key does not exist.
 	 */
 	public getStruct(key: string, schema: Schema): object {
 		const obj = {};
 
-		if(this.document[key]) {
+		if(this.data[key]) {
 			const depolorizer = new Depolorizer(this.get(key));
 			Object.keys(schema.fields).forEach((key) => {
 				obj[key] = depolorizer.depolorize(schema.fields[key]);
@@ -407,7 +415,7 @@ export class Document {
  * 
  * @param obj - The object or map to encode.
  * @param schema - The schema used for encoding.
- * @returns The encoded Document.
+ * @returns {Document} The encoded Document.
  * @throws {Error} If the provided schema kind is unsupported.
  */
 export const documentEncode = (obj: object | Map<string, unknown>, schema: Schema): Document => {
@@ -440,7 +448,7 @@ export const documentEncode = (obj: object | Map<string, unknown>, schema: Schem
  * Decodes a Document from the provided ReadBuffer.
  * 
  * @param data - The ReadBuffer containing the encoded Document data.
- * @returns The decoded Document.
+ * @returns {Document} The decoded Document.
  * @throws {Error} If the provided wire type is unsupported.
  */
 export const documentDecode = (data: ReadBuffer): Document => {

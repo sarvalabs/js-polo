@@ -53,7 +53,6 @@ class Polorizer {
      * @param {(null|boolean|number|BN|string|Uint8Array|Array<unknown>|Map<unknown, unknown>|object)} value
      *        - The value to be encoded into the Polorizer.
      * @param {Schema} schema - The schema that describes the value and its encoding.
-     * @returns {void}
      * @throws {Error} If the kind of the schema is not one of the supported kinds.
      * @description Depending on the kind of the schema, the appropriate
      * encoding method is called to encode the value. The supported kinds are
@@ -106,7 +105,6 @@ class Polorizer {
      * Encodes a null value into the Polorizer.
      *
      * @public
-     * @returns {void}
      * @description Encodes a WIRE_NULL into the head, consuming a
      * position on the wire.
      */
@@ -118,7 +116,6 @@ class Polorizer {
      *
      * @param {boolean} value - The boolean value to encode.
      * @public
-     * @returns {void}
      * @description  Encodes the boolean as either WIRE_TRUE or WIRE_FALSE,
      * depending on its value.
      */
@@ -130,7 +127,6 @@ class Polorizer {
      *
      * @public
      * @param {number | BN} value - The integer or BN value to encode.
-     * @returns {void}
      * @description Encodes the integer as the binary form of its absolute value
      * with the wire type being WIRE_POSINT or WIRE_NEGINT based on polarity,
      * with zero considered as positive.
@@ -143,7 +139,6 @@ class Polorizer {
      *
      * @public
      * @param {number} value - The float value to encode.
-     * @returns {void}
      * @description Encodes the float as its IEEE754 binary form (big-endian)
      * with the wire type being WIRE_FLOAT.
      */
@@ -155,7 +150,6 @@ class Polorizer {
      *
      * @public
      * @param {string} value - The string value to encode.
-     * @returns {void}
      * @description Encodes the string as its UTF-8 encoded bytes with the
      * wire type being WIRE_WORD.
      */
@@ -171,7 +165,6 @@ class Polorizer {
      *
      * @public
      * @param {RAW} value - The raw value to encode.
-     * @returns {void}
      * @description Encodes the Raw directly with the wire type being WIRE_RAW.
      * A nil Raw is encoded as WIRE_NULL.
      */
@@ -187,7 +180,6 @@ class Polorizer {
      *
      * @public
      * @param {Uint8Array} value - The bytes value to encode.
-     * @returns {void}
      * @description Encodes the bytes as is with the wire type being WireWord.
      */
     polorizeBytes(value) {
@@ -202,7 +194,6 @@ class Polorizer {
      *
      * @public
      * @param {Polorizer} pack - The Polorizer instance to encode.
-     * @returns {void}
      * @description The contents are packed into a WIRE_LOAD message and
      * tagged with the WIRE_PACK wire type. If the given Polorizer is nil,
      * a WIRE_NULL is encoded instead.
@@ -219,7 +210,6 @@ class Polorizer {
      *
      * @public
      * @param {Polorizer} inner - The Polorizer instance to encode.
-     * @returns {void}
      * @description Unlike PolorizePacked which will always write it as a
      * packed wire while polorizeInner will write an atomic as is.
      * If the given Polorizer is nil, a WireNull is encoded.
@@ -239,7 +229,6 @@ class Polorizer {
      * @param {Array<unknown>} array - The array to encode.
      * @param {Schema} schema - The schema that describes the value and
      * its encoding.
-     * @returns {void}
      * @description It is encoded as element pack encoded data.
      */
     polorizeArray(array, schema) {
@@ -260,7 +249,6 @@ class Polorizer {
      * @param {Map<unknown, unknown>} map - The map to encode.
      * @param {Schema} schema - The schema that describes the key, value and
      * its encoding.
-     * @returns {void}
      * @description It is encoded as key-value pack encoded data. Map keys
      * are sorted before being sequentially encoded.
      */
@@ -288,7 +276,6 @@ class Polorizer {
      * @param {object} struct - The object to encode.
      * @param {Schema} schema - The schema that describes the fields and
      * its encoding.
-     * @returns {void}
      * @description It is encoded as field ordered pack encoded data.
      */
     polorizeStruct(struct, schema) {
@@ -307,7 +294,6 @@ class Polorizer {
      *
      * @public
      * @param {object} document - The document object to encode.
-     * @returns {void}
      * @description Encodes the Document keys and raw values as POLO
      * doc-encoded data with the wire type being WIRE_DOC.
      * If the Document is nil, it is encoded as a WIRE_NULL.

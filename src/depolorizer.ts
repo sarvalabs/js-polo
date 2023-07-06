@@ -225,8 +225,8 @@ export class Depolorizer {
 	 * Depolorizes an array value from the Depolorizer.
 	 * 
 	 * @param {Schema} schema - The schema definition for the array.
-	 * @returns {Array<unknown>} - The depolorized array.
-	 * @throws {Error} - If the the schema is invalid.
+	 * @returns {Array<unknown>} The depolorized array.
+	 * @throws {Error} If the the schema is invalid.
 	 */
 	private depolorizeArray(schema: Schema): Array<unknown> {
 		// Peek the wire type of the next element
@@ -256,9 +256,8 @@ export class Depolorizer {
 	/**
 	 * Depolorizes a Document from the Depolorizer.
 	 * 
-	 * @returns {Document} - The depolorized Document.
-	 * @throws {Error} - If there are no elements left or if the element is not WireDoc.
-	 * @returns {null} - If the element is a WireNull.
+	 * @throws {Error} If there are no elements left or if the element is not WireDoc.
+	 * @returns {Document} The depolorized Document.
 	 */
 	public depolorizeDocument(): Document {
 		// Read the next element
@@ -271,8 +270,8 @@ export class Depolorizer {
 	 * DepolorizePacked Decodes another Depolorizer from the Depolorizer, 
 	 * consuming one wire element.
 	 * 
-	 * @returns {Depolorizer} - The depolorized packed Depolorizer.
-	 * @throws {Error} - If there are no elements left, if the element is not 
+	 * @returns {Depolorizer} The depolorized packed Depolorizer.
+	 * @throws {Error} If there are no elements left, if the element is not 
 	 * WirePack or WireDoc, or if it is a WireNull.
 	 */
 	public depolorizePacked(): Depolorizer {
@@ -297,8 +296,8 @@ export class Depolorizer {
 	 * into a packed Depolorizer.
 	 * DepolorizeInner returns the atomic element as an atomic Depolorizer.
 	 * 
-	 * @returns {Depolorizer} - The depolorized inner Depolorizer.
-	 * @throws {Error} - If there are no elements left or if the element is not 
+	 * @returns {Depolorizer} The depolorized inner Depolorizer.
+	 * @throws {Error} If there are no elements left or if the element is not 
 	 * a valid wire element.
 	 */
 	public depolorizeInner(): Depolorizer {
@@ -313,8 +312,8 @@ export class Depolorizer {
 	 * The target type must be a map and the next wire element must be WirePack.
 	 * 
 	 * @param {Schema} schema - The schema representing the map structure.
-	 * @returns {Map<unknown, unknown>} - The depolorized map.
-	 * @throws {Error} - If the schema or wire element is invalid.
+	 * @returns {Map<unknown, unknown>} The depolorized map.
+	 * @throws {Error} If the schema or wire element is invalid.
 	 */
 	private depolorizeMap(schema: Schema): Map<unknown, unknown> {
 		// Peek the wire type of the next element
@@ -352,8 +351,8 @@ export class Depolorizer {
 	 * The target type must be a object and the next wire element must be WirePack or WireDoc.
 	 * 
 	 * @param {Schema} schema - The schema representing the object structure.
-	 * @returns {object} - The depolorized object.
-	 * @throws {Error} - If the wire type is incompatible or the schema is invalid.
+	 * @returns {object} The depolorized object.
+	 * @throws {Error} If the wire type is incompatible or the schema is invalid.
 	 */
 	private depolorizeStruct(schema: Schema): object {
 		// Peek the wire type of the next element
