@@ -4,7 +4,7 @@
 
 # js-polo
 
-**js-polo** is a JS implementation of the POLO encoding and object serialization scheme. [**POLO**](https://github.com/sarvalabs/polo) stands for Prefix Ordered Lookup Offsets.
+**js-polo** is a JS/TS implementation of the POLO encoding and object serialization scheme. [**POLO**](https://github.com/sarvalabs/polo) stands for Prefix Ordered Lookup Offsets.
 
 It is intended for use in projects that prioritize deterministic serialization, minimal wire sizes and serialization safety. POLO follows a very strict specification that is optimized for partial decoding and differential messaging. This implementation is compliant with the [POLO Specification](https://github.com/sarvalabs/polo) that describes both the encoding (wire) format as well as implementation guidelines for several languages.
 
@@ -55,7 +55,7 @@ const schema = {
             kind: 'integer'
         },
         alias: {
-            kind: 'array'
+            kind: 'array',
             fields: {
                 values: {
                     kind: 'string',
@@ -70,12 +70,16 @@ polorizer.polorize(fruit, schema);
 console.log(polorizer.bytes())
 
 // Output:
-// [14 79 6 99 142 1 111 114 97 110 103 101 1 44 63 6 150 1 116 97 110 103 101 114 105 110 101 109 97 110 100 97 114 105 110]
+/* 
+    [
+        14, 79, 6, 99, 142, 1, 111, 114, 97, 110, 103, 101, 1, 44, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109,  97, 110, 100,  97, 114, 105, 110
+    ]
+*/
 ```
 
 ### Depolorizer
 ```javascript
-const wire = new Uint8Array([14 79 6 99 142 1 111 114 97 110 103 101 1 44 63 6 150 1 116 97 110 103 101 114 105 110 101 109 97 110 100 97 114 105 110])
+const wire = new Uint8Array([14, 79, 6, 99, 142, 1, 111, 114, 97, 110, 103, 101, 1, 44, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109, 97, 110, 100, 97, 114, 105, 110])
 const schema = {
     kind: 'struct',
     fields: {
@@ -86,7 +90,7 @@ const schema = {
             kind: 'integer'
         },
         alias: {
-            kind: 'array'
+            kind: 'array',
             fields: {
                 values: {
                     kind: 'string',
@@ -100,7 +104,13 @@ const depolorizer = new Depolorizer(wire)
 console.log(depolorizer.depolorize(schema))
 
 // Output:
-// { name: 'orange', cost: 300, aliases: ['tangerine', 'mandarin'] }
+/* 
+    { 
+        name: 'orange', 
+        cost: 300, 
+        alias: [ 'tangerine', 'mandarin' ] 
+    }
+*/
 ```
 
 ### Document Encoding
@@ -137,7 +147,7 @@ console.log(document.bytes());
     {
         name: Raw {
             bytes: Uint8Array(7) [
-                6, 111, 114, 97,110, 103, 101
+                6, 111, 114, 97, 110, 103, 101
             ]
         },
         cost: Raw { bytes: Uint8Array(3) [ 3, 1, 44 ] },
@@ -157,6 +167,53 @@ console.log(document.bytes());
 ```
 
 ### Document Decoding
+
+#### Decode Document
+```javascript
+const wire = new Uint8Array([
+    13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 
+    97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 
+    101, 109, 97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116,
+    3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
+]);
+
+const schema = {
+    kind: 'struct',
+    fields: { 
+        name: { kind: 'string' },
+        cost: { kind: 'integer' },
+        alias: { 
+            kind: 'array', 
+            fields: { 
+                values: { kind: 'string' } 
+            } 
+        }
+    }
+};
+
+const document = new Document(wire, schema);
+
+console.log(document.getData());
+
+// Output:
+/*
+    {
+        name: Uint8Array(7) [
+            6, 111, 114, 97,
+        110, 103, 101
+        ],
+        cost: Uint8Array(3) [ 3, 1, 44 ],
+        alias: Uint8Array(22) [
+            14,  63,   6, 150,   1, 116,
+            97, 110, 103, 101, 114, 105,
+        110, 101, 109,  97, 110, 100,
+            97, 114, 105, 110
+        ],
+    }
+*/
+```
+
+#### Decode Struct
 ```javascript
 const wire = new Uint8Array([
     13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109, 97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116, 3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
@@ -181,7 +238,13 @@ const depolorizer = new Depolorizer(wire);
 console.log(depolorizer.depolorize(schema));
 
 // Output:
-// { name: 'orange', cost: 300, alias: [ 'tangerine', 'mandarin' ] }
+/* 
+    { 
+        name: 'orange', 
+        cost: 300, 
+        alias: [ 'tangerine', 'mandarin' ] 
+    }
+*/
 ```
 
 ## Contributing

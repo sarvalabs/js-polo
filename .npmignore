@@ -1,0 +1,14 @@
+__benchmarks__/
+__tests__/
+.github/
+coverage/
+docs/
+node_modules/
+src/
+types/
+.eslintignore
+.eslintrc.yml
+banner.png
+jest.config.cjs
+package-lock.json
+tsconfig.json

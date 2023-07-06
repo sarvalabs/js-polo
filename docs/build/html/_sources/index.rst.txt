@@ -8,7 +8,7 @@ This documentation is for js-polo v0.1.0.
 
 What is js-polo?
 ----------------
-js-polo is a JS implementation of the POLO encoding and object serialization 
+js-polo is a JS/TS implementation of the POLO encoding and object serialization 
 scheme. POLO stands for Prefix Ordered Lookup Offsets.
 
 It is intended for use in projects that prioritize deterministic serialization, 

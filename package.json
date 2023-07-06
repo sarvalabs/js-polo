@@ -1,7 +1,7 @@
 {
   "name": "js-polo",
-  "version": "0.0.1",
-  "description": "js-polo is the TS implementation of the POLO Serialization Format.",
+  "version": "0.1.0",
+  "description": "js-polo is the JS/TS implementation of the POLO Serialization Format.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
