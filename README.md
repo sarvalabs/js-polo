@@ -1,4 +1,4 @@
-![image](./banner.png)
+![image](https://moi-polo.s3.amazonaws.com/banner.png)
 
 ![license](https://img.shields.io/badge/license-MIT%2FApache--2.0-informational)
 

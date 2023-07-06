@@ -8,7 +8,6 @@ src/
 types/
 .eslintignore
 .eslintrc.yml
-banner.png
 jest.config.cjs
 package-lock.json
 tsconfig.json
