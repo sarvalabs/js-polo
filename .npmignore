@@ -1,0 +1,13 @@
+__benchmarks__/
+__tests__/
+.github/
+coverage/
+docs/
+node_modules/
+src/
+types/
+.eslintignore
+.eslintrc.yml
+jest.config.cjs
+package-lock.json
+tsconfig.json

@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classes and Methods &mdash; js-polo v0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.svg"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributions" href="contributions.html" />
+    <link rel="prev" title="Serialization Schemas" href="serialization-schemas.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            js-polo
+          </a>
+              <div class="version">
+                v0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-formats.html">Serialization Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-schemas.html">Serialization Schemas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Classes and Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#polorizer">Polorizer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#methods">methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeNull"><code class="docutils literal notranslate"><span class="pre">polorizeNull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeBool"><code class="docutils literal notranslate"><span class="pre">polorizeBool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeInteger"><code class="docutils literal notranslate"><span class="pre">polorizeInteger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeFloat"><code class="docutils literal notranslate"><span class="pre">polorizeFloat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeString"><code class="docutils literal notranslate"><span class="pre">polorizeString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeRaw"><code class="docutils literal notranslate"><span class="pre">polorizeRaw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeBytes"><code class="docutils literal notranslate"><span class="pre">polorizeBytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizePacked"><code class="docutils literal notranslate"><span class="pre">polorizePacked()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeInner"><code class="docutils literal notranslate"><span class="pre">polorizeInner()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorize"><code class="docutils literal notranslate"><span class="pre">polorize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#polorizeDocument"><code class="docutils literal notranslate"><span class="pre">polorizeDocument()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Polorizer.bytes"><code class="docutils literal notranslate"><span class="pre">Polorizer.bytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#packed"><code class="docutils literal notranslate"><span class="pre">packed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#depolorizer">Depolorizer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeNull"><code class="docutils literal notranslate"><span class="pre">depolorizeNull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeBool"><code class="docutils literal notranslate"><span class="pre">depolorizeBool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeInteger"><code class="docutils literal notranslate"><span class="pre">depolorizeInteger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeFloat"><code class="docutils literal notranslate"><span class="pre">depolorizeFloat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeString"><code class="docutils literal notranslate"><span class="pre">depolorizeString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeRaw"><code class="docutils literal notranslate"><span class="pre">depolorizeRaw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeBytes"><code class="docutils literal notranslate"><span class="pre">depolorizeBytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizePacked"><code class="docutils literal notranslate"><span class="pre">depolorizePacked()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeInner"><code class="docutils literal notranslate"><span class="pre">depolorizeInner()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorize"><code class="docutils literal notranslate"><span class="pre">depolorize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#depolorizeDocument"><code class="docutils literal notranslate"><span class="pre">depolorizeDocument()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#isDone"><code class="docutils literal notranslate"><span class="pre">isDone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Depolorizer.read"><code class="docutils literal notranslate"><span class="pre">Depolorizer.read()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#document">Document</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#setNull"><code class="docutils literal notranslate"><span class="pre">setNull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setBool"><code class="docutils literal notranslate"><span class="pre">setBool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setInteger"><code class="docutils literal notranslate"><span class="pre">setInteger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setFloat"><code class="docutils literal notranslate"><span class="pre">setFloat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setString"><code class="docutils literal notranslate"><span class="pre">setString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setRaw"><code class="docutils literal notranslate"><span class="pre">setRaw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setBytes"><code class="docutils literal notranslate"><span class="pre">setBytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setArray"><code class="docutils literal notranslate"><span class="pre">setArray()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setMap"><code class="docutils literal notranslate"><span class="pre">setMap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setStruct"><code class="docutils literal notranslate"><span class="pre">setStruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getNull"><code class="docutils literal notranslate"><span class="pre">getNull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getBool"><code class="docutils literal notranslate"><span class="pre">getBool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getInteger"><code class="docutils literal notranslate"><span class="pre">getInteger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getFloat"><code class="docutils literal notranslate"><span class="pre">getFloat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getString"><code class="docutils literal notranslate"><span class="pre">getString()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getRaw"><code class="docutils literal notranslate"><span class="pre">getRaw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getBytes"><code class="docutils literal notranslate"><span class="pre">getBytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getArray"><code class="docutils literal notranslate"><span class="pre">getArray()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getMap"><code class="docutils literal notranslate"><span class="pre">getMap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#getStruct"><code class="docutils literal notranslate"><span class="pre">getStruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Document.is"><code class="docutils literal notranslate"><span class="pre">Document.is()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Document.size"><code class="docutils literal notranslate"><span class="pre">Document.size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Document.bytes"><code class="docutils literal notranslate"><span class="pre">Document.bytes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#documentEncode"><code class="docutils literal notranslate"><span class="pre">documentEncode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#documentDecode"><code class="docutils literal notranslate"><span class="pre">documentDecode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license-and-copyright.html">License and Copyright</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">js-polo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Classes and Methods</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/classes-and-methods.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="classes-and-methods">
+<h1>Classes and Methods<a class="headerlink" href="#classes-and-methods" title="Permalink to this heading"></a></h1>
+<hr class="docutils" />
+<section id="polorizer">
+<h2>Polorizer<a class="headerlink" href="#polorizer" title="Permalink to this heading"></a></h2>
+<p>The Polorizer class is an encoding buffer that can sequentially polorize objects
+into it. It can be collapsed into its bytes with bytes() or packed().</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Creating a new Polorizer</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">polorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="parameters">
+<h3>parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<p>none</p>
+</section>
+<section id="methods">
+<h3>methods<a class="headerlink" href="#methods" title="Permalink to this heading"></a></h3>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeNull">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeNull</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polorizeNull" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes a WIRE_NULL into the head, consuming a
+position on the wire.</p>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeNull</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeBool">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeBool</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeBool" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the boolean as either WIRE_TRUE or WIRE_FALSE,
+depending on its value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>boolean</em>) – The boolean value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeBool</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeInteger">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeInteger</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeInteger" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the integer as the binary form of its absolute value
+with the wire type being WIRE_POSINT or WIRE_NEGINT based on polarity,
+with zero considered as positive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>number|BN</em>) – The integer or BN value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeInteger</span><span class="p">(</span><span class="mf">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeFloat">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeFloat</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeFloat" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the float as its IEEE754 binary form (big-endian)
+with the wire type being WIRE_FLOAT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>number</em>) – The float value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeFloat</span><span class="p">(</span><span class="mf">123.456</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeString">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeString</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeString" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the string as its UTF-8 encoded bytes with the
+wire type being WIRE_WORD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>string</em>) – The string value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeRaw">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeRaw</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeRaw" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the Raw directly with the wire type being WIRE_RAW.
+A nil Raw is encoded as WIRE_NULL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>RAW</em>) – The raw value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeRaw</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nx">Raw</span><span class="p">([</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">98</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">]))</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeBytes">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeBytes</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the bytes as is with the wire type being WireWord.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>Uint8Array</em>) – The bytes value to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeBytes</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizePacked">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizePacked</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pack</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizePacked" title="Permalink to this definition"></a></dt>
+<dd><p>The contents are packed into a WIRE_LOAD message and
+tagged with the WIRE_PACK wire type. If the given Polorizer is nil,
+a WIRE_NULL is encoded instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pack</strong> (<em>Polorizer</em>) – The Polorizer instance to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">orange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">alias</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;tangerine&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;mandarin&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">// Encode the Name field as a string</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="nx">orange</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+<span class="c1">// Encode the Cost field as an integer</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeInteger</span><span class="p">(</span><span class="nx">orange</span><span class="p">.</span><span class="nx">cost</span><span class="p">)</span>
+<span class="c1">// Create a new Polorizer to serialize the Alias field (slice)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">aliases</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">()</span>
+<span class="c1">// Encode each element in the Alias slice as a string</span>
+<span class="nx">orange</span><span class="p">.</span><span class="nx">alias</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">alias</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">aliases</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="nx">alias</span><span class="p">))</span>
+<span class="c1">// Encode the Polorizer containing the alias field contents as packed data</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizePacked</span><span class="p">(</span><span class="nx">aliases</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeInner">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeInner</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inner</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeInner" title="Permalink to this definition"></a></dt>
+<dd><p>Unlike PolorizePacked which will always write it as a
+packed wire while polorizeInner will write an atomic as is.
+If the given Polorizer is nil, a WireNull is encoded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inner</strong> (<em>Polorizer</em>) – The Polorizer instance to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">another</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">();</span>
+<span class="nx">another</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeInner</span><span class="p">(</span><span class="nx">another</span><span class="p">);</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorize">
+<span class="sig-name descname"><span class="n"><span class="pre">polorize</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorize" title="Permalink to this definition"></a></dt>
+<dd><p>Depending on the kind of the schema, the appropriate
+encoding method is called to encode the value. The supported kinds are
+null, bool, integer, float, string, raw, bytes, array, map, and struct.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>null|boolean|number|BN|string|Uint8Array|Array.&lt;unknown&gt;|Map.&lt;unknown, unknown&gt;|object</em>) – <ul>
+<li><p>The value to be encoded into the Polorizer.</p></li>
+</ul>
+</p></li>
+<li><p><strong>schema</strong> (<em>Schema</em>) – The schema that describes the value and its encoding.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Error</strong> – If the kind of the schema is not one of the supported kinds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>polorize array</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>polorize map</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Map</span><span class="p">()</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">keys</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>polorize struct</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">struct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorize</span><span class="p">(</span><span class="nx">struct</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="polorizeDocument">
+<span class="sig-name descname"><span class="n"><span class="pre">polorizeDocument</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polorizeDocument" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes the Document keys and raw values as POLO
+doc-encoded data with the wire type being WIRE_DOC.
+If the Document is nil, it is encoded as a WIRE_NULL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>object</em>) – The document object to encode.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Document</span><span class="p">()</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setInteger</span><span class="p">(</span><span class="s1">&#39;far&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">123</span><span class="p">)</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setString</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeDocument</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nb">document</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="Polorizer.bytes">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Polorizer</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">bytes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Polorizer.bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the contents of the Polorizer as bytes.</p>
+<p>If no objects were polarized, it returns a WIRE_NULL wire.
+If only one object was polarized, it returns the contents directly.
+If more than one object was polarized, it returns the contents in a packed wire.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Uint8Array</strong> – The contents of the Polorizer as bytes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">orange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">alias</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;tangerine&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;mandarin&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1">// Create a new Polorizer</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">polorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">()</span>
+
+<span class="c1">// Encode the Name field as a string</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="nx">orange</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+<span class="c1">// Encode the Cost field as an integer</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeInteger</span><span class="p">(</span><span class="nx">orange</span><span class="p">.</span><span class="nx">cost</span><span class="p">)</span>
+
+
+<span class="c1">// Create a new Polorizer to serialize the Alias field (slice)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">aliases</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Polorizer</span><span class="p">()</span>
+<span class="c1">// Encode each element in the Alias slice as a string</span>
+<span class="nx">orange</span><span class="p">.</span><span class="nx">alias</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">alias</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">aliases</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="nx">alias</span><span class="p">))</span>
+<span class="c1">// Encode the Polorizer containing the alias field contents as</span>
+<span class="c1">// packed data</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizePacked</span><span class="p">(</span><span class="nx">aliases</span><span class="p">)</span>
+
+<span class="c1">// Print the serialized bytes in the Polorizer buffer</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">polorizer</span><span class="p">.</span><span class="nx">bytes</span><span class="p">())</span>
+
+<span class="c1">// Output:</span>
+<span class="c1">// [14 79 6 99 142 1 111 114 97 110 103 101 1 44 63 6 150 1 116 97 110</span>
+<span class="c1">// 103 101 114 105 110 101 109 97 110 100 97 114 105 110]</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="packed">
+<span class="sig-name descname"><span class="n"><span class="pre">packed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#packed" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the contents of the Polorizer as bytes after packing it and
+tagging with WIRE_PACK.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Uint8Array</strong> – The packed contents of the Polorizer as bytes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">polorizeString</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">polorizer</span><span class="p">.</span><span class="nx">packed</span><span class="p">())</span>
+
+<span class="c1">// Output:</span>
+<span class="c1">// [14, 31, 6, 102, 111, 111]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="depolorizer">
+<h2>Depolorizer<a class="headerlink" href="#depolorizer" title="Permalink to this heading"></a></h2>
+<p>The Depolorizer class is a decoding buffer that can sequentially depolorize
+objects from it. It can check whether there are elements left in the buffer
+with <cite>isDone()</cite>, and peek the WireType of the next element with <cite>read()</cite>.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Creating a new Depolorizer</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">depolorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Depolorizer</span><span class="p">(</span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="w"> </span><span class="mf">14</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">]));</span>
+</pre></div>
+</div>
+<section id="id1">
+<h3>parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> - <code class="docutils literal notranslate"><span class="pre">Uint8Array</span></code>: The polo encoded data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load</span></code> - <code class="docutils literal notranslate"><span class="pre">LoadReader</span></code>: The read-only buffer that is obtained from a compound wire (pack).</p></li>
+</ol>
+</section>
+<section id="id2">
+<h3>methods<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeNull">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeNull</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeNull" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a null value from the Depolorizer, consuming one
+wire element. Returns <cite>null</cite> if a null value is successfully decoded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireNull.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>null</strong> – The decoded null value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeNull</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">null</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeBool">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeBool</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeBool" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a boolean value from the Depolorizer, consuming one wire element.
+Returns the decoded boolean value.
+Returns <cite>false</cite> if the element is of type WireNull.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireTrue or WireFalse.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>boolean</strong> – The decoded boolean value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeBool</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeInteger">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeInteger</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeInteger" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes an integer value from the Depolorizer, consuming
+one wire element. Returns the decoded integer value as either a number
+or a bigint, depending on the value’s size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WirePosInt or WireNegInt.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>number|bigint</strong> – The decoded integer value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeInteger</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">300</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeFloat">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeFloat</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeFloat" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a float value from the Depolorizer, consuming one wire element.
+Returns the decoded float value as a number.
+Returns 0 if the element is a WireNull.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireFloat.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>number</strong> – The decoded float value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeFloat</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">123.456</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeString">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeString</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeString" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a string value from the Depolorizer, consuming one wire element.
+Returns the decoded string value.
+Returns an empty string if the element is a WireNull.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireWord.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>string</strong> – The decoded string value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeString</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">foo</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeRaw">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeRaw</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeRaw" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a <cite>Raw</cite> value from the Depolorizer, consuming one wire element.
+Returns the decoded <cite>Raw</cite> value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireRaw.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Raw</strong> – The decoded <cite>Raw</cite> value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeRaw</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Raw</span><span class="p">([</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">98</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeBytes">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeBytes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a <cite>Uint8Array</cite> (bytes) value from the Depolorizer,
+consuming one wire element.
+Returns the decoded <cite>Uint8Array</cite> (bytes) value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not of type WireWord.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Uint8Array</strong> – The decoded <cite>Uint8Array</cite> (bytes) value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeBytes</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizePacked">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizePacked</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizePacked" title="Permalink to this definition"></a></dt>
+<dd><p>DepolorizePacked Decodes another Depolorizer from the Depolorizer,
+consuming one wire element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left, if the element is not WirePack or WireDoc, or if it is a WireNull.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Depolorizer</strong> – The depolorized packed Depolorizer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizePacked</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">Depolorizer</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeInner">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeInner</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeInner" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes another Depolorizer from the Depolorizer, consuming one wire element.</p>
+<p>Unlike DepolorizePacked, which expects a compound element and converts it
+into a packed Depolorizer.
+DepolorizeInner returns the atomic element as an atomic Depolorizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not a valid wire element.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Depolorizer</strong> – The depolorized inner Depolorizer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorizeInner</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorize">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorize</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#depolorize" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a value from the Depolorizer based on the provided schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>schema</strong> (<em>Schema</em>) – The schema representing the type of the value to decode.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Error</strong> – If the schema kind is unsupported or a decode error occurs.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unknown</strong> – The decoded value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p><strong>depolorize array</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">(</span><span class="nx">schema</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>depolorize map</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">keys</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">polorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">(</span><span class="nx">schema</span><span class="p">)</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">foo</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">bar</span>
+</pre></div>
+</div>
+<p><strong>depolorize struct</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">polorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">(</span><span class="nx">schema</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="depolorizeDocument">
+<span class="sig-name descname"><span class="n"><span class="pre">depolorizeDocument</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#depolorizeDocument" title="Permalink to this definition"></a></dt>
+<dd><p>Depolorizes a Document from the Depolorizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there are no elements left or if the element is not WireDoc.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Document</strong> – The depolorized Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">depolorize</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">Document</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="isDone">
+<span class="sig-name descname"><span class="n"><span class="pre">isDone</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#isDone" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if all elements in the Depolorizer have been read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>boolean</strong> – True if all elements have been read, false otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">isDone</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">false</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="Depolorizer.read">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Depolorizer</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">read</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Depolorizer.read" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the next element in the Depolorizer as a ReadBuffer.
+If the Depolorizer is in packed mode, it reads from the pack buffer.
+Otherwise, it returns the data from the read buffer and sets the done flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Throws<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Error</strong> – If there is insufficient data in the wire for decoding.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ReadBuffer</strong> – The next element in the Depolorizer as a ReadBuffer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">depolorizer</span><span class="p">.</span><span class="nx">read</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">ReadBuffer</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="document">
+<h2>Document<a class="headerlink" href="#document" title="Permalink to this heading"></a></h2>
+<p>The Document class is a representation for a string indexed collection of
+encoded object data. It represents an intermediary access format with objects
+settable/gettable with string keys.</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Creating a new Document</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Document</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="id3">
+<h3>parameters<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> - <code class="docutils literal notranslate"><span class="pre">Uint8Array</span></code> (Optional): The polo encoded data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">schema</span></code> - <code class="docutils literal notranslate"><span class="pre">Schema</span></code> (Optional): The polo schema that describes the data and its encoding.</p></li>
+</ol>
+</section>
+<section id="id4">
+<h3>methods<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<dl class="js function">
+<dt class="sig sig-object js" id="setNull">
+<span class="sig-name descname"><span class="n"><span class="pre">setNull</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setNull" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to
+represent a null value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setNull</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setBool">
+<span class="sig-name descname"><span class="n"><span class="pre">setBool</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setBool" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to
+represent a boolean value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The boolean value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setBool</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setInteger">
+<span class="sig-name descname"><span class="n"><span class="pre">setInteger</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setInteger" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to
+represent an integer value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The integer value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setInteger</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setFloat">
+<span class="sig-name descname"><span class="n"><span class="pre">setFloat</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setFloat" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to
+represent a float value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The float value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setFloat</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">123.456</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setString">
+<span class="sig-name descname"><span class="n"><span class="pre">setString</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setString" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to
+represent a string value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The string value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setString</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setRaw">
+<span class="sig-name descname"><span class="n"><span class="pre">setRaw</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setRaw" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to represent
+a raw value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The raw value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setRaw</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Raw</span><span class="p">([</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">98</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">]))</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setBytes">
+<span class="sig-name descname"><span class="n"><span class="pre">setBytes</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to represent
+a byte array value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>data</strong> – The byte array value to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setBytes</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setArray">
+<span class="sig-name descname"><span class="n"><span class="pre">setArray</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setArray" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to represent
+a array value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>array</strong> – The array value to set.</p></li>
+<li><p><strong>schema</strong> – The schema used to encode the array elements.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setArray</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">arr</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setMap">
+<span class="sig-name descname"><span class="n"><span class="pre">setMap</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setMap" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to represent
+a map value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>map</strong> – The map value to set.</p></li>
+<li><p><strong>schema</strong> – The schema used to encode the map keys and values.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Map</span><span class="p">()</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">keys</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setMap</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">map</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="setStruct">
+<span class="sig-name descname"><span class="n"><span class="pre">setStruct</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">struct</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#setStruct" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the encoded data associated with the specified key to represent
+a struct value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to set.</p></li>
+<li><p><strong>struct</strong> – The struct value to set.</p></li>
+<li><p><strong>schema</strong> – The schema used to encode the struct fields.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">struct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">doc</span><span class="p">.</span><span class="nx">setStruct</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">struct</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getNull">
+<span class="sig-name descname"><span class="n"><span class="pre">getNull</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getNull" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a null value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the null value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>null</strong> – The null value associated with the specified key, or null if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getNull</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">null</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getBool">
+<span class="sig-name descname"><span class="n"><span class="pre">getBool</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getBool" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a boolean value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the boolean value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>boolean</strong> – The boolean value associated with the specified key, or false if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getBool</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getInteger">
+<span class="sig-name descname"><span class="n"><span class="pre">getInteger</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getInteger" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves an integer value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the integer value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>number|bigint</strong> – The integer value associated with the specified key, or 0 if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getInteger</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">300</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getFloat">
+<span class="sig-name descname"><span class="n"><span class="pre">getFloat</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getFloat" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a float value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the float value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>number</strong> – The float value associated with the specified key, or 0 if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getFloat</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">123.456</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getString">
+<span class="sig-name descname"><span class="n"><span class="pre">getString</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getString" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a string value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the string value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>string</strong> – The string value associated with the specified key, or an empty string if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">bar</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getRaw">
+<span class="sig-name descname"><span class="n"><span class="pre">getRaw</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getRaw" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a raw value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the raw value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Raw</strong> – The raw value associated with the specified key, or null if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getRaw</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Raw</span><span class="p">([</span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">98</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getBytes">
+<span class="sig-name descname"><span class="n"><span class="pre">getBytes</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a byte array value associated with the specified key
+from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the byte array value to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Uint8Array</strong> – The byte array value associated with the specified key, or an empty Uint8Array if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getBytes</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getArray">
+<span class="sig-name descname"><span class="n"><span class="pre">getArray</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getArray" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves an array value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the array value to retrieve.</p></li>
+<li><p><strong>schema</strong> – The schema used to decode the array elements.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Array</strong> – The array value associated with the specified key, or an empty array if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getArray</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getMap">
+<span class="sig-name descname"><span class="n"><span class="pre">getMap</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getMap" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a map value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the map value to retrieve.</p></li>
+<li><p><strong>schema</strong> – The schema used to decode the map keys and values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Map</strong> – The map value associated with the specified key, or an empty map if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;map&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">keys</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">getMap</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mf">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">foo</span>
+<span class="nx">map</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mf">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nx">bar</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="getStruct">
+<span class="sig-name descname"><span class="n"><span class="pre">getStruct</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#getStruct" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves a struct value associated with the specified key from the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key of the struct value to retrieve.</p></li>
+<li><p><strong>schema</strong> – The schema used to decode the struct fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>object</strong> – The struct value associated with the specified key, or an empty object if the key does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">doc</span><span class="p">.</span><span class="nx">getStruct</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="Document.is">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Document</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">is</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Document.is" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the encoded data associated with the specified key in the
+Document has the specified WireType.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The key to check.</p></li>
+<li><p><strong>kind</strong> – The WireType to compare against.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>boolean</strong> – True if the encoded data has the specified WireType, false otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">WIRE_STRING</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="Document.size">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Document</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Document.size" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the number of key-value pairs in the Document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>number</strong> – The number of key-value pairs in the Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="mf">5</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="Document.bytes">
+<span class="sig-prename descclassname"><span class="n"><span class="pre">Document</span></span><span class="p"><span class="pre">.</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">bytes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Document.bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the encoded data of the Document as a Uint8Array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Uint8Array</strong> – The encoded data of the Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="nx">doc</span><span class="p">.</span><span class="nx">bytes</span><span class="p">()</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span><span class="mf">14</span><span class="w"> </span><span class="mf">79</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">99</span><span class="w"> </span><span class="mf">142</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">111</span><span class="w"> </span><span class="mf">114</span><span class="w"> </span><span class="mf">97</span><span class="w"> </span><span class="mf">110</span><span class="w"> </span><span class="mf">103</span><span class="w"> </span><span class="mf">101</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="mf">44</span><span class="w"> </span><span class="mf">63</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">150</span><span class="w"> </span><span class="mf">1</span>
+<span class="mf">116</span><span class="w"> </span><span class="mf">97</span><span class="w"> </span><span class="mf">110</span><span class="w"> </span><span class="mf">103</span><span class="w"> </span><span class="mf">101</span><span class="w"> </span><span class="mf">114</span><span class="w"> </span><span class="mf">105</span><span class="w"> </span><span class="mf">110</span><span class="w"> </span><span class="mf">101</span><span class="w"> </span><span class="mf">109</span><span class="w"> </span><span class="mf">97</span><span class="w"> </span><span class="mf">110</span><span class="w"> </span><span class="mf">100</span><span class="w"> </span><span class="mf">97</span><span class="w"> </span><span class="mf">114</span><span class="w"> </span><span class="mf">105</span><span class="w"> </span><span class="mf">110</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="functions">
+<h3>functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<dl class="js function">
+<dt class="sig sig-object js" id="documentEncode">
+<span class="sig-name descname"><span class="n"><span class="pre">documentEncode</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#documentEncode" title="Permalink to this definition"></a></dt>
+<dd><p>Encodes an object or map into a Document using the provided schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – The object or map to encode.</p></li>
+<li><p><strong>schema</strong> – The schema used for encoding.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Error</strong> – If the provided schema kind is unsupported.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Document</strong> – The encoded Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">orange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">alias</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;tangerine&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;mandarin&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">alias</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Encode the object into a Document</span>
+<span class="kd">const</span><span class="w"> </span><span class="nb">document</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentEncode</span><span class="p">(</span><span class="nx">orange</span><span class="p">,</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">bytes</span><span class="p">())</span>
+
+<span class="c1">// Output:</span>
+<span class="cm">/*</span>
+<span class="cm">    {</span>
+<span class="cm">        name: Raw {</span>
+<span class="cm">            bytes: Uint8Array(7) [</span>
+<span class="cm">                6, 111, 114, 97,110, 103, 101</span>
+<span class="cm">            ]</span>
+<span class="cm">        },</span>
+<span class="cm">        cost: Raw { bytes: Uint8Array(3) [ 3, 1, 44 ] },</span>
+<span class="cm">        alias: Raw {</span>
+<span class="cm">            bytes: Uint8Array(22) [</span>
+<span class="cm">                14, 63, 6, 150, 1, 116,</span>
+<span class="cm">                97, 110, 103, 101, 114, 105,</span>
+<span class="cm">                110, 101, 109,  97, 110, 100,</span>
+<span class="cm">                97, 114, 105, 110</span>
+<span class="cm">            ]</span>
+<span class="cm">        }</span>
+<span class="cm">    }</span>
+<span class="cm">*/</span>
+
+<span class="cm">/*</span>
+<span class="cm">    [</span>
+<span class="cm">        13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4,</span>
+<span class="cm">        229, 4, 97, 108, 105, 97, 115, 14, 63, 6, 150,</span>
+<span class="cm">        1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109,</span>
+<span class="cm">        97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116,</span>
+<span class="cm">        3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97,</span>
+<span class="cm">        110, 103, 101</span>
+<span class="cm">    ]</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<dl class="js function">
+<dt class="sig sig-object js" id="documentDecode">
+<span class="sig-name descname"><span class="n"><span class="pre">documentDecode</span></span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#documentDecode" title="Permalink to this definition"></a></dt>
+<dd><p>Decodes a Document from the provided ReadBuffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Arguments<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The ReadBuffer containing the encoded Document data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Throws<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Error</strong> – If the provided wire type is unsupported.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Document</strong> – The decoded Document.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// Example</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">wire</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Uint8Array</span><span class="p">([</span>
+<span class="w">    </span><span class="mf">13</span><span class="p">,</span><span class="w"> </span><span class="mf">175</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">85</span><span class="p">,</span><span class="w"> </span><span class="mf">182</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">245</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">166</span><span class="p">,</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span><span class="w"> </span><span class="mf">229</span><span class="p">,</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span><span class="w"> </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">108</span><span class="p">,</span><span class="w"> </span><span class="mf">105</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">115</span><span class="p">,</span><span class="w"> </span><span class="mf">14</span><span class="p">,</span><span class="w"> </span><span class="mf">63</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">150</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">116</span><span class="p">,</span><span class="w"> </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span><span class="w"> </span><span class="mf">103</span><span class="p">,</span><span class="w"> </span><span class="mf">101</span><span class="p">,</span><span class="w"> </span><span class="mf">114</span><span class="p">,</span><span class="w"> </span><span class="mf">105</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">101</span><span class="p">,</span><span class="w"> </span><span class="mf">109</span><span class="p">,</span><span class="w"> </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">114</span><span class="p">,</span><span class="w"> </span><span class="mf">105</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span><span class="w"> </span><span class="mf">99</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">115</span><span class="p">,</span><span class="w"> </span><span class="mf">116</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">44</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span><span class="w"> </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">109</span><span class="p">,</span><span class="w"> </span><span class="mf">101</span><span class="p">,</span><span class="w"> </span><span class="mf">6</span><span class="p">,</span><span class="w"> </span><span class="mf">111</span><span class="p">,</span><span class="w"> </span><span class="mf">114</span><span class="p">,</span><span class="w">  </span><span class="mf">97</span><span class="p">,</span><span class="w"> </span><span class="mf">110</span><span class="p">,</span><span class="w"> </span><span class="mf">103</span><span class="p">,</span><span class="w"> </span><span class="mf">101</span>
+<span class="p">])</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">schema</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;struct&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">cost</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;integer&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">alias</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;array&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">fields</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">values</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">kind</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">depolorizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Depolorizer</span><span class="p">(</span><span class="nx">wire</span><span class="p">)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">readBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">depolorizer</span><span class="p">.</span><span class="nx">read</span><span class="p">()</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">documentDecode</span><span class="p">(</span><span class="nx">readBuffer</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+
+<span class="c1">// Output:</span>
+<span class="c1">// {</span>
+<span class="c1">//  name: Uint8Array(7) [</span>
+<span class="c1">//          6, 111, 114, 97,</span>
+<span class="c1">//    110, 103, 101</span>
+<span class="c1">//  ],</span>
+<span class="c1">//  cost: Uint8Array(3) [ 3, 1, 44 ],</span>
+<span class="c1">//  alias: Uint8Array(22) [</span>
+<span class="c1">//          14,  63,   6, 150,   1, 116,</span>
+<span class="c1">//          97, 110, 103, 101, 114, 105,</span>
+<span class="c1">//     110, 101, 109,  97, 110, 100,</span>
+<span class="c1">//          97, 114, 105, 110</span>
+<span class="c1">//   ],</span>
+<span class="c1">// }</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="serialization-schemas.html" class="btn btn-neutral float-left" title="Serialization Schemas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributions.html" class="btn btn-neutral float-right" title="Contributions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Sarva Labs Inc. &amp; MOI Protocol Developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

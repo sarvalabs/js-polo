@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation &mdash; js-polo v0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.svg"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting-started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            js-polo
+          </a>
+              <div class="version">
+                v0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-formats.html">Serialization Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-schemas.html">Serialization Schemas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="classes-and-methods.html">Classes and Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license-and-copyright.html">License and Copyright</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">js-polo</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h1>
+<p>This documentation is for js-polo v0.1.0.</p>
+<hr class="docutils" />
+<section id="what-is-js-polo">
+<h2>What is js-polo?<a class="headerlink" href="#what-is-js-polo" title="Permalink to this heading"></a></h2>
+<p>js-polo is a JS/TS implementation of the POLO encoding and object serialization
+scheme. POLO stands for Prefix Ordered Lookup Offsets.</p>
+<p>It is intended for use in projects that prioritize deterministic serialization,
+minimal wire sizes and serialization safety. POLO follows a very strict
+specification that is optimized for partial decoding and differential messaging.
+This implementation is compliant with the POLO Specification that describes
+both the encoding (wire) format as well as implementation guidelines for
+several languages.</p>
+</section>
+<hr class="docutils" />
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<section id="deterministic-serialization">
+<h3>Deterministic Serialization<a class="headerlink" href="#deterministic-serialization" title="Permalink to this heading"></a></h3>
+<p>POLO’s strict specification is intended to create the same serialized wire for
+an object regardless of implementation. This is critical for cryptographic
+security with operations such as hashing which is used to guarantee data
+consistency and tamper proofing.</p>
+</section>
+<section id="high-wire-efficiency">
+<h3>High Wire Efficiency<a class="headerlink" href="#high-wire-efficiency" title="Permalink to this heading"></a></h3>
+<p>POLO has a highly optimized wire format allows messages to be relatively small,
+even surpassing <a class="reference external" href="https://protobuf.dev/programming-guides/encoding">Protocol Buffers</a> occassionaly. This is mainly because it supports a larger type based
+wire tagging that allows some information (especially metadata) to be passed
+around inferentially and thus reducing the total amount of information actually
+present in the wire.</p>
+<p>This is augmented by the fact that POLO supports Atomic Encoding, because of
+which simple objects such as integers &amp; strings can be encoded without needing
+to be wrapped within a larger (structural) message.</p>
+</section>
+<section id="partial-encoding-decoding-constructs">
+<h3>Partial Encoding/Decoding Constructs<a class="headerlink" href="#partial-encoding-decoding-constructs" title="Permalink to this heading"></a></h3>
+<p>The POLO wire format prefixes all metadata for the wire in the front, this
+metadata includes the wire type information as well as the offset position of
+the data. This kind of lookup based offset tags allows us to directly access
+the data for a particular field order. This capability is currently supported
+using the <code class="docutils literal notranslate"><span class="pre">Document</span></code> and <code class="docutils literal notranslate"><span class="pre">Raw</span></code> constructs.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Document</span></code> construct is used to create a string indexed collection of
+<code class="docutils literal notranslate"><span class="pre">Raw</span></code> object and it collapses into a special form of the POLO wire called the
+document-encoded wire with the <code class="docutils literal notranslate"><span class="pre">WireDoc</span></code> wire type. It’s unique in that it
+preserves the field name (string index) for the data unlike regular POLO
+encoding and is similar to encoding schemes like JSON or YAML and consequently
+consumes more wire space.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Raw</span></code> construct is useful for capturing the wire data for a specific field
+in the struct. It can also be used to define a structure that ‘skips’ the
+unrequired fields by capturing their raw wire instead of decoding them.</p>
+<p>Partial encodign/decoding capabilities for this implementation are unfinished
+can be extended to support field order based access/write for regular
+POLO encoded wires in the future.</p>
+</section>
+<section id="differential-messaging-coming-soon">
+<h3>Differential Messaging (Coming Soon)<a class="headerlink" href="#differential-messaging-coming-soon" title="Permalink to this heading"></a></h3>
+<p>POLO’s partially encoding and field order based indexing (and string based
+indexing for document encoded wires) allows the possibility for messaging that
+only allows the transmission of the difference between two states, this is
+useful for any version managment system where the same data is incrementally
+updated and transmitted, the ability to index the difference and only transmit
+the difference can result in massive reduction in the wire sizes for these use
+cases that often re-transmit already available information.</p>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Developer Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#importing">Importing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-formats.html">Serialization Formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serialization-formats.html#wire-types">Wire Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-formats.html#wire">Wire</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="serialization-schemas.html">Serialization Schemas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#null-schema">Null Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#boolean-schema">Boolean Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#integer-schema">Integer Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#float-schema">Float Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#string-schema">String Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#raw-schema">Raw Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#bytes-schema">Bytes Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#array-schema">Array Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#map-schema">Map Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#struct-schema">Struct Schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialization-schemas.html#document-schema">Document Schema</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="classes-and-methods.html">Classes and Methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classes-and-methods.html#polorizer">Polorizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classes-and-methods.html#depolorizer">Depolorizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classes-and-methods.html#document">Document</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license-and-copyright.html">License and Copyright</a></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting-started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Sarva Labs Inc. &amp; MOI Protocol Developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
