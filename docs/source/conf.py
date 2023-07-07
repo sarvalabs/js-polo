@@ -37,3 +37,5 @@ html_css_files = ["css/custom.css"]
 
 # Path to the favicon file relative to the conf.py file
 html_favicon = '_static/img/favicon.svg'
+
+html_baseurl = '/docs/build/packages/js-polo/'
