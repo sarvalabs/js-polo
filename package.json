@@ -10,12 +10,21 @@
     "build": "tsc -p tsconfig.json",
     "benchmark": "node --experimental-specifier-resolution=node --loader ts-node/esm __benchmarks__/*.ts"
   },
+  "homepage": "https://docs.moi.technology/docs/build/packages/js-polo",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sarvalabs/js-polo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sarvalabs/js-polo/issues"
+  },
   "keywords": [
+    "polo",
     "binary",
     "serializer",
     "deserializer"
   ],
-  "author": "",
+  "author": "Sarva Labs Inc. & MOI Protocol Developers",
   "license": "Apache-2.0 OR MIT",
   "dependencies": {
     "bn.js": "^5.2.1",
