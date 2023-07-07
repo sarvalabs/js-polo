@@ -1,6 +1,19 @@
 ![image](https://moi-polo.s3.amazonaws.com/banner.png)
 
-![license](https://img.shields.io/badge/license-MIT%2FApache--2.0-informational)
+[latestrelease]: https://github.com/sarvalabs/js-polo/releases/latest
+[issueslink]: https://github.com/sarvalabs/js-polo/issues
+[pullslink]: https://github.com/sarvalabs/js-polo/pulls
+[pkgdocs]: https://docs.moi.technology/docs/build/packages/js-polo
+
+[![docs](https://img.shields.io/badge/npm-documentation-red?style=for-the-badge)][pkgdocs]
+[![npm version](https://img.shields.io/npm/v/js-polo.svg?style=for-the-badge)](https://npmjs.com/js-polo)
+![license](https://img.shields.io/badge/license-MIT%2FApache--2.0-informational?style=for-the-badge)
+
+[![latest tag](https://img.shields.io/github/v/tag/sarvalabs/js-polo?color=blue&label=latest%20tag&sort=semver&style=for-the-badge)][latestrelease]
+[![issue count](https://img.shields.io/github/issues/sarvalabs/js-polo?style=for-the-badge&color=yellow)][issueslink]
+[![pulls count](https://img.shields.io/github/issues-pr/sarvalabs/js-polo?style=for-the-badge&color=brightgreen)][pullslink]
+![ci status](https://img.shields.io/github/actions/workflow/status/sarvalabs/js-polo/ci.yml?label=ci&style=for-the-badge)
+
 
 # js-polo
 
