@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer';
+
 /**
  * ByteReader is a class for reading bytes from a buffer.
  * This class provides an efficient way to read byte-by-byte from a buffer.

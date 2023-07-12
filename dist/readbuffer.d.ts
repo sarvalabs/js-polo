@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { Buffer } from 'buffer';
 import LoadReader from './loadreader';
 import { WireType } from './wiretype';
 import { Raw } from './raw';

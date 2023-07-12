@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import { Buffer } from 'buffer';
 import ByteReader from './bytereader';
 import Varint from './varint';
 import LoadReader from './loadreader';

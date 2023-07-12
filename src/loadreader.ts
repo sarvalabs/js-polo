@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import ByteReader from './bytereader';
 import { ReadBuffer } from './readbuffer';
 import Varint from './varint';
