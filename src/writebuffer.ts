@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import { Buffer } from 'buffer';
 import Varint from './varint';
 import { WireType } from './wiretype';
 import { DataRange } from './datarange';

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReadBuffer = void 0;
 const bn_js_1 = __importDefault(require("bn.js"));
+const buffer_1 = require("buffer");
 const bytereader_1 = __importDefault(require("./bytereader"));
 const varint_1 = __importDefault(require("./varint"));
 const loadreader_1 = __importDefault(require("./loadreader"));
@@ -25,14 +26,14 @@ class ReadBuffer {
     constructor(data, wiretype) {
         if (wiretype) {
             this.wire = wiretype;
-            this.data = Buffer.from(data);
+            this.data = buffer_1.Buffer.from(data);
         }
         else {
-            const byteReader = new bytereader_1.default(Buffer.from(data));
+            const byteReader = new bytereader_1.default(buffer_1.Buffer.from(data));
             // Attempt to consume a varint from the buffer
             const [tag, consumed] = varint_1.default.consume(byteReader);
             this.wire = tag & 15;
-            this.data = Buffer.from(data).subarray(consumed);
+            this.data = buffer_1.Buffer.from(data).subarray(consumed);
         }
     }
     /**
@@ -72,9 +73,9 @@ class ReadBuffer {
     read(br, n) {
         // If n == 0, return an empty buffer
         if (n == 0) {
-            return Buffer.alloc(0);
+            return buffer_1.Buffer.alloc(0);
         }
-        const buffer = Buffer.alloc(n);
+        const buffer = buffer_1.Buffer.alloc(n);
         const rn = br.read(buffer);
         if (rn != n) {
             throw new Error('insufficient data in reader');

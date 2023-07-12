@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WriteBuffer = void 0;
 const bn_js_1 = __importDefault(require("bn.js"));
+const buffer_1 = require("buffer");
 const varint_1 = __importDefault(require("./varint"));
 const wiretype_1 = require("./wiretype");
 const datarange_1 = require("./datarange");
@@ -182,13 +183,13 @@ class WriteBuffer {
                 break;
             case 1:
                 wiretype = wiretype_1.WireType.WIRE_POSINT;
-                buffer = Buffer.from(new bn_js_1.default(value).toArray('be', 8));
-                buffer = Buffer.from(buffer.subarray((8 - this.intSize(value))));
+                buffer = buffer_1.Buffer.from(new bn_js_1.default(value).toArray('be', 8));
+                buffer = buffer_1.Buffer.from(buffer.subarray((8 - this.intSize(value))));
                 break;
             default:
                 wiretype = wiretype_1.WireType.WIRE_NEGINT;
-                buffer = Buffer.from(new bn_js_1.default(-value).toArray('be', 8));
-                buffer = Buffer.from(buffer.subarray((8 - this.intSize(-value))));
+                buffer = buffer_1.Buffer.from(new bn_js_1.default(-value).toArray('be', 8));
+                buffer = buffer_1.Buffer.from(buffer.subarray((8 - this.intSize(-value))));
                 break;
         }
         this.write(wiretype, buffer);
@@ -201,7 +202,7 @@ class WriteBuffer {
      */
     writeFloat(value) {
         if (this.isFloat(value)) {
-            const buffer = Buffer.alloc(8);
+            const buffer = buffer_1.Buffer.alloc(8);
             buffer.writeDoubleBE(value, 0);
             this.write(wiretype_1.WireType.WIRE_FLOAT, buffer);
             return;
@@ -216,7 +217,7 @@ class WriteBuffer {
      * to the buffer.
      */
     writeString(value) {
-        this.write(wiretype_1.WireType.WIRE_WORD, Buffer.from(value, 'utf8'));
+        this.write(wiretype_1.WireType.WIRE_WORD, buffer_1.Buffer.from(value, 'utf8'));
     }
     /**
      * Writes the bytes from the given value to the write buffer with
