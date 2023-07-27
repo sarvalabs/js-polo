@@ -63,7 +63,7 @@ class WriteBuffer {
         if (this.isInt(value)) {
             // if the input value is smaller than 2 return 1, 
             // otherwise calculate and return the size
-            return (value < 2) ? 1 : Math.ceil(Math.log2(value) / 8);
+            return Math.ceil(Math.log2(value + 1) / 8);
         }
         // if the input value is not a number, return 8 bytes
         return 8;
