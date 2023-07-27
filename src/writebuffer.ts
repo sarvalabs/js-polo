@@ -61,8 +61,7 @@ export class WriteBuffer {
 	private intSize(value: number | BN): number {
 		// check if the input value is a number
 		if(this.isInt(value)) {
-			// if the input value is smaller than 2 return 1, 
-			// otherwise calculate and return the size
+			// calculate and return the size
 			return Math.ceil(Math.log2(value + 1) / 8);
 		}
 
