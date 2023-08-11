@@ -3,8 +3,8 @@ import Crypto from 'crypto';
 import { Schema } from '../../types/schema';
 
 
-const MIN_INT32 = -2147483648;
-const MAX_INT32 = 2147483647;
+const MIN_INT53 = -Number.MAX_SAFE_INTEGER;
+const MAX_INT53 = Number.MAX_SAFE_INTEGER;
 const MIN_BIGINT = -9223372036854775808n;
 const MAX_BIGINT = 9223372036854775807n;
 
@@ -16,7 +16,7 @@ export class Fuzzer {
 	}
 
 	private randInt(): number {
-		return Math.floor(Math.random() * (MAX_INT32 - MIN_INT32)) + MIN_INT32;
+		return Math.floor(Math.random() * (MAX_INT53 - MIN_INT53)) + MIN_INT53;
 	}
 
 	private randUInt64(): number {
