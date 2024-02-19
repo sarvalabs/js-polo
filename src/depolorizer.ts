@@ -233,23 +233,31 @@ export class Depolorizer {
 		const data = this.read();
 
 		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
-			const arr: Array<unknown> = [];
-			// Get the next element as a pack
-			// depolorizer with the slice elements
-			const pack = this.newLoadDepolorizer(data);
-			// Iterate until loadreader is done
-			while(!pack.isDone()) {
-				// Depolorize the element into the element type
-				const element = pack.depolorize(schema.fields.values);
-				if(element) {
-					// const ele = pack.unpack(schema.fields.values, element);
-					arr.push(element);
+			switch(data.wire) {
+			case WireType.WIRE_PACK: {
+				// Get the next element as a pack
+				// depolorizer with the slice elements
+				const pack = this.newLoadDepolorizer(data);
+				const arr: Array<unknown> = [];
+				// Iterate until loadreader is done
+				while(!pack.isDone()) {
+					// Depolorize the element into the element type
+					const element = pack.depolorize(schema.fields.values);
+					if(element) {
+						// const ele = pack.unpack(schema.fields.values, element);
+						arr.push(element);
+					}
 				}
+
+				return arr;
 			}
-
-			return arr;
+			case WireType.WIRE_NULL:
+				return [];
+			default:
+				throw new Error('Incompatible wire type');
+			}
 		}
-
+	
 		throw new Error('Invalid kind');
 	}
 
@@ -321,13 +329,13 @@ export class Depolorizer {
 
 		if(schema.fields && schema.fields.keys && schema.fields.values &&
 			schema.fields.keys.kind && schema.fields.values.kind) {
-			// Get the next element as a pack
-			// depolorizer with the slice elements
-			const pack = this.newLoadDepolorizer(data);
-
 			switch(data.wire){
 			case WireType.WIRE_PACK: {
+				// Get the next element as a pack
+				// depolorizer with the slice elements
+				const pack = this.newLoadDepolorizer(data);
 				const map: Map<unknown, unknown> = new Map();
+
 				// Iterate until loadreader is done
 				while(!pack.isDone()) {
 					// Get the next element from the load (key)
@@ -338,6 +346,8 @@ export class Depolorizer {
 		
 				return map;
 			}
+			case WireType.WIRE_NULL:
+				return new Map();
 			default:
 				throw new Error('Incompatible wire type');
 			}
@@ -358,14 +368,14 @@ export class Depolorizer {
 		// Peek the wire type of the next element
 		const data = this.read();
 
-		// Get the next element as a pack
-		// depolorizer with the slice elements
-		const pack = this.newLoadDepolorizer(data);
-
 		switch(data.wire) {
 		case WireType.WIRE_PACK:{
-			const obj: object = {};
+			// Get the next element as a pack
+			// depolorizer with the slice elements
+			const pack = this.newLoadDepolorizer(data);
 			const entries = Object.entries(schema.fields);
+			const obj = {};
+
 			let index = 0;
 
 			// Iterate until loadreader is done
@@ -390,6 +400,8 @@ export class Depolorizer {
 
 			return obj;
 		}
+		case WireType.WIRE_NULL:
+			return {};
 		default:
 			throw new Error('Incompatible wire type');
 		}
