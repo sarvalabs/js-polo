@@ -223,10 +223,7 @@ class Depolorizer {
                     while (!pack.isDone()) {
                         // Depolorize the element into the element type
                         const element = pack.depolorize(schema.fields.values);
-                        if (element) {
-                            // const ele = pack.unpack(schema.fields.values, element);
-                            arr.push(element);
-                        }
+                        arr.push(element);
                     }
                     return arr;
                 }
