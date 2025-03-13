@@ -1,6 +1,7 @@
 import { Depolorizer } from '../src/depolorizer';
 import { Document, documentEncode } from '../src/document';
 import { Raw } from '../src/raw';
+import { schema } from '../src/schema';
 
 describe('Test Document', () => {
 	test('Example Document', () => {
@@ -10,9 +11,9 @@ describe('Test Document', () => {
 		document.setInteger('cost', 300);
 
 		const alias = ['tangerine', 'mandarin'];
-		const schema = { kind: 'array', fields: { values: { kind: 'string' } } };
+		const arraySchema = schema.arrayOf(schema.string);
 
-		document.setArray('alias', alias, schema);
+		document.setArray('alias', alias, arraySchema);
 
 		console.log(document.getData());
 		console.log(document.bytes());
@@ -56,23 +57,14 @@ describe('Test Document', () => {
 			cost: 300,
 			alias: ['tangerine', 'mandarin']
 		};
-
-		const schema = {
-			kind: 'struct',
-			fields: { 
-				name: { kind: 'string' },
-				cost: { kind: 'integer' },
-				alias: { 
-					kind: 'array', 
-					fields: { 
-						values: { kind: 'string' } 
-					} 
-				}
-			}
-		};
+		const structSchema = schema.struct({
+			name: schema.string,
+			cost: schema.integer,
+			alias: schema.arrayOf(schema.string)
+		});
 
 		// Encode the object into a Document
-		const document = documentEncode(orange, schema);
+		const document = documentEncode(orange, structSchema);
 
 		console.log(document.getData());
 		console.log(document.bytes());
@@ -117,21 +109,15 @@ describe('Test Document', () => {
 			3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
 		]);
 
-		const schema = {
-			kind: 'struct',
-			fields: { 
-				name: { kind: 'string' },
-				cost: { kind: 'integer' },
-				alias: { 
-					kind: 'array', 
-					fields: { 
-						values: { kind: 'string' } 
-					} 
-				}
-			}
-		};
+		const structSchema = schema.struct({
+			name: schema.string,
+			cost: schema.integer,
+			alias: schema.arrayOf(schema.string)
+		});
 
-		const document = new Document(wire, schema);
+		
+
+		const document = new Document(wire, structSchema);
 
 		console.log(document.getData());
 
@@ -159,23 +145,17 @@ describe('Test Document', () => {
 			3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
 		]);
 
-		const schema = {
-			kind: 'struct',
-			fields: { 
-				name: { kind: 'string' },
-				cost: { kind: 'integer' },
-				alias: { 
-					kind: 'array', 
-					fields: { 
-						values: { kind: 'string' } 
-					} 
-				}
-			}
-		};
+		const structSchema = schema.struct({
+			name: schema.string,
+			cost: schema.integer,
+			alias: schema.arrayOf(schema.string)
+		});
+
+		
 
 		const depolorizer = new Depolorizer(wire);
 
-		console.log(depolorizer.depolorize(schema));
+		console.log(depolorizer.depolorize(structSchema));
 
 		// Output:
 		// { name: 'orange', cost: 300, alias: [ 'tangerine', 'mandarin' ] }
@@ -187,9 +167,7 @@ describe('Test Document Methods', () => {
 		const tests = [
 			{
 				data: {},
-				schema: {
-					kind: 'struct'
-				},
+				schema: schema.struct({}),
 				wire: new Uint8Array([
 					13, 15
 				])
@@ -198,14 +176,9 @@ describe('Test Document Methods', () => {
 				data: {
 					foo: new Uint8Array([1, 0, 1, 0])
 				},
-				schema: {
-					kind: 'struct',
-					fields: {
-						foo: {
-							kind: 'bytes'
-						}
-					}
-				},
+				schema: schema.struct({
+					foo: schema.bytes
+				}),
 				wire: new Uint8Array([
 					13, 47, 6, 53, 102, 111, 111, 6, 1, 0, 1, 0
 				])
@@ -215,17 +188,10 @@ describe('Test Document Methods', () => {
 					foo: 16777472,
 					bar: new Uint8Array([2, 1, 2, 1])
 				},
-				schema: {
-					kind: 'struct',
-					fields: {
-						foo: {
-							kind: 'integer'
-						},
-						bar: {
-							kind: 'bytes'
-						}
-					}
-				},
+				schema: schema.struct({
+					foo: schema.integer,
+					bar: schema.bytes
+				}),
 				wire: new Uint8Array([
 					13, 111, 6, 53, 134, 1, 181, 1, 98, 97, 114, 6, 2, 1, 2, 1, 
 					102, 111, 111, 3, 1, 0, 1, 0
@@ -243,23 +209,16 @@ describe('Test Document Methods', () => {
 		const tests = [
 			{
 				data: {},
-				schema: {
-					kind: 'struct'
-				},
+				schema: schema.struct({}),
 				size: 0
 			},
 			{
 				data: {
 					foo: new Uint8Array([1, 0, 1, 0])
 				},
-				schema: {
-					kind: 'struct',
-					fields: {
-						foo: {
-							kind: 'bytes'
-						}
-					}
-				},
+				schema: schema.struct({
+					foo: schema.bytes
+				}),
 				size: 1
 			},
 			{
@@ -267,17 +226,10 @@ describe('Test Document Methods', () => {
 					foo: new Uint8Array([1, 0, 1, 0]),
 					bar: new Uint8Array()
 				},
-				schema: {
-					kind: 'struct',
-					fields: {
-						foo: {
-							kind: 'bytes'
-						},
-						bar: {
-							kind: 'bytes'
-						}
-					}
-				},
+				schema: schema.struct({
+					foo: schema.bytes,
+					bar: schema.bytes
+				}),
 				size: 2
 			},
 		];
@@ -299,46 +251,18 @@ describe('Test Document Methods', () => {
 		doc.setFloat('tar', 12.5789);
 		doc.setString('dar', 'aar');
 		doc.setBytes('par', new Uint8Array([2, 1, 2, 1]));
-		doc.setArray(
-			'sar', 
-			['foo', 'boo'], 
-			{ 
-				kind: 'array', 
-				fields: { 
-					values: { 
-						kind: 'string' 
-					} 
-				} 
-			}
-		);
+		doc.setArray('sar', ['foo', 'boo'], schema.arrayOf(schema.string));
 		doc.setMap(
 			'var', 
 			new Map([['foo', 'bar']]), 
-			{ 
-				kind: 'map', 
-				fields: { 
-					keys: {
-						kind: 'string' 
-					},
-					values: { 
-						kind: 'string' 
-					} 
-				} 
-			}
+			schema.map({ keys: schema.string, values: schema.string })
 		);
 		doc.setStruct(
 			'zar', 
 			{ 
 				foo: 'bar' 
 			},
-			{ 
-				kind: 'struct', 
-				fields: { 
-					foo: {
-						kind: 'string'
-					}
-				} 
-			}
+			schema.struct({ foo: schema.string })
 		);
 
 		// Attempt to retrieve some unset keys from the document
@@ -352,33 +276,9 @@ describe('Test Document Methods', () => {
 		expect(doc.getFloat('tar')).toBe(12.5789);
 		expect(doc.getString('dar')).toBe('aar');
 		expect(doc.getBytes('par')).toEqual(new Uint8Array([2, 1, 2, 1]));
-		expect(doc.getArray('sar', { 
-			kind: 'array', 
-			fields: { 
-				values: { 
-					kind: 'string' 
-				} 
-			} 
-		})).toEqual(['foo', 'boo']);
-		expect(doc.getMap('var', { 
-			kind: 'map', 
-			fields: { 
-				keys: {
-					kind: 'string' 
-				},
-				values: { 
-					kind: 'string' 
-				} 
-			} 
-		})).toEqual(new Map([['foo', 'bar']]));
-		expect(doc.getStruct('zar', { 
-			kind: 'struct', 
-			fields: { 
-				foo: {
-					kind: 'string'
-				}
-			} 
-		})).toEqual({foo: 'bar'});
+		expect(doc.getArray('sar', schema.arrayOf(schema.string))).toEqual(['foo', 'boo']);
+		expect(doc.getMap('var', schema.map({ keys: schema.string, values: schema.string }))).toEqual(new Map([['foo', 'bar']]));
+		expect(doc.getStruct('zar', schema.struct({ foo: schema.string }))).toEqual({foo: 'bar'});
 	});
 
 	test('GetRaw SetRaw', () => {
