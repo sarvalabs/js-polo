@@ -11,12 +11,10 @@ export interface ArraySchema {
 	};
 }
 
-export type MapPropertyKey = PrimitiveSchema<Exclude<PrimitiveKind, 'null' | 'raw' | 'document' | 'bytes' | 'null'>>;
-
 export interface MapSchema {
 	kind: 'map';
 	fields: {
-		keys: MapPropertyKey;
+		keys: Schema;
 		values: Schema;
 	};
 }
