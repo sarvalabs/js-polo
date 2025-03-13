@@ -52,34 +52,22 @@ POLO's partially encoding and field order based indexing (and string based index
 ## Examples
 ### Polorizer
 ```javascript
+import { Polorizer, schema } from 'js-polo';
+
 const fruit = {
     name: 'orange',
     cost: 300,
     alias: ['tangerine', 'mandarin']
 };
 
-const schema = {
-    kind: 'struct',
-    fields: {
-        name: {
-            kind: 'string'
-        },
-        cost: {
-            kind: 'integer'
-        },
-        alias: {
-            kind: 'array',
-            fields: {
-                values: {
-                    kind: 'string',
-                }
-            }
-        }
-    }
-}
+const structSchema = schema.struct({
+    name: schema.string,
+    cost: schema.integer,
+    alias: schema.arrayOf(schema.string)
+});
 
 const polorizer = new Polorizer();
-polorizer.polorize(fruit, schema);
+polorizer.polorize(fruit, structSchema);
 console.log(polorizer.bytes())
 
 // Output:
@@ -92,29 +80,17 @@ console.log(polorizer.bytes())
 
 ### Depolorizer
 ```javascript
+import { Depolorizer, schema } from 'js-polo';
+
 const wire = new Uint8Array([14, 79, 6, 99, 142, 1, 111, 114, 97, 110, 103, 101, 1, 44, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109, 97, 110, 100, 97, 114, 105, 110])
-const schema = {
-    kind: 'struct',
-    fields: {
-        name: {
-            kind: 'string'
-        },
-        cost: {
-            kind: 'integer'
-        },
-        alias: {
-            kind: 'array',
-            fields: {
-                values: {
-                    kind: 'string',
-                }
-            }
-        }
-    }
-}
+const structSchema = schema.struct({
+    name: schema.string,
+    cost: schema.integer,
+    alias: schema.arrayOf(schema.string)
+})
 
 const depolorizer = new Depolorizer(wire)
-console.log(depolorizer.depolorize(schema))
+console.log(depolorizer.depolorize(structSchema))
 
 // Output:
 /* 
@@ -128,6 +104,8 @@ console.log(depolorizer.depolorize(schema))
 
 ### Document Encoding
 ```javascript
+import { Document, documentEncode, schema } from 'js-polo';
+
 // Create a Fruit object
 const fruit = {
     name: 'orange',
@@ -135,22 +113,14 @@ const fruit = {
     alias: ['tangerine', 'mandarin']
 };
 
-const schema = {
-    kind: 'struct',
-    fields: { 
-        name: { kind: 'string' },
-        cost: { kind: 'integer' },
-        alias: { 
-            kind: 'array', 
-            fields: { 
-                values: { kind: 'string' } 
-            } 
-        }
-    }
-};
+const structSchema = schema.struct({
+    name: schema.string,
+    cost: schema.integer,
+    alias: schema.arrayOf(schema.string)
+});
 
 // Encode the object into a Document
-const document = documentEncode(fruit, schema);
+const document = documentEncode(fruit, structSchema);
 
 console.log(document.getData());
 console.log(document.bytes());
@@ -183,6 +153,8 @@ console.log(document.bytes());
 
 #### Decode Document
 ```javascript
+import { Document, documentDecode, schema } from 'js-polo';
+
 const wire = new Uint8Array([
     13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 
     97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 
@@ -190,21 +162,13 @@ const wire = new Uint8Array([
     3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
 ]);
 
-const schema = {
-    kind: 'struct',
-    fields: { 
-        name: { kind: 'string' },
-        cost: { kind: 'integer' },
-        alias: { 
-            kind: 'array', 
-            fields: { 
-                values: { kind: 'string' } 
-            } 
-        }
-    }
-};
+const structSchema = schema.struct({
+    name: schema.string,
+    cost: schema.integer,
+    alias: schema.arrayOf(schema.string)
+});
 
-const document = new Document(wire, schema);
+const document = new Document(wire, structSchema);
 
 console.log(document.getData());
 
@@ -228,27 +192,21 @@ console.log(document.getData());
 
 #### Decode Struct
 ```javascript
+import { Depolorizer, schema } from 'js-polo';
+
 const wire = new Uint8Array([
     13, 175, 1, 6, 85, 182, 3, 245, 3, 166, 4, 229, 4, 97, 108, 105, 97, 115, 14, 63, 6, 150, 1, 116, 97, 110, 103, 101, 114, 105, 110, 101, 109, 97, 110, 100, 97, 114, 105, 110, 99, 111, 115, 116, 3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
 ]);
 
-const schema = {
-    kind: 'struct',
-    fields: { 
-        name: { kind: 'string' },
-        cost: { kind: 'integer' },
-        alias: { 
-            kind: 'array', 
-            fields: { 
-                values: { kind: 'string' } 
-            } 
-        }
-    }
-};
+const structSchema = schema.struct({
+    name: schema.string,
+    cost: schema.integer,
+    alias: schema.arrayOf(schema.string)
+});
 
 const depolorizer = new Depolorizer(wire);
 
-console.log(depolorizer.depolorize(schema));
+console.log(depolorizer.depolorize(structSchema));
 
 // Output:
 /* 
