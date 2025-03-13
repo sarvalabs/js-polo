@@ -1,6 +1,6 @@
-import { Schema } from '../types/schema';
 import BN from 'bn.js';
 import { Raw } from './raw';
+import { type Schema } from './schema';
 /**
  * Polorizer is an encoding buffer that can sequentially polorize objects
  * into it. It can be collapsed into its bytes with Bytes() or Packed().

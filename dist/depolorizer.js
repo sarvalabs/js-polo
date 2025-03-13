@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Depolorizer = void 0;
+const document_1 = require("./document");
 const readbuffer_1 = require("./readbuffer");
 const wiretype_1 = require("./wiretype");
-const document_1 = require("./document");
 /**
  * Depolorizer is a decoding buffer that can sequentially depolorize objects from it.
  * It can check whether there are elements left in the buffer with `isDone()`,
@@ -110,7 +110,7 @@ class Depolorizer {
             case 'struct':
                 return this.depolorizeStruct(schema);
             default:
-                throw Error(schema.kind + ' is unsupported.');
+                throw new Error(`Unsupported scheme: ${schema}`);
         }
     }
     /**

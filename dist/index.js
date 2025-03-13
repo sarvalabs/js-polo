@@ -14,7 +14,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./polorizer"), exports);
+exports.schema = void 0;
 __exportStar(require("./depolorizer"), exports);
 __exportStar(require("./document"), exports);
+__exportStar(require("./polorizer"), exports);
+var schema_1 = require("./schema");
+Object.defineProperty(exports, "schema", { enumerable: true, get: function () { return schema_1.schema; } });
 __exportStar(require("./wiretype"), exports);

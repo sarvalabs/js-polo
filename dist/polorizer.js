@@ -98,7 +98,7 @@ class Polorizer {
                 this.polorizeDocument(value);
                 break;
             default:
-                throw Error(schema.kind + ' is unsupported.');
+                throw new Error(`Unsupported schema: ${schema}`);
         }
     }
     /**

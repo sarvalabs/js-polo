@@ -1,7 +1,7 @@
 import BN from 'bn.js';
 import { ReadBuffer } from './readbuffer';
 import { Raw } from './raw';
-import { Schema } from '../types/schema';
+import { Schema, type ArraySchema, type MapSchema, type StructSchema } from './schema';
 import { WireType } from './wiretype';
 /**
  * Document is a representation for a string indexed collection of encoded object data.
@@ -112,7 +112,7 @@ export declare class Document {
      * @param array - The array value to set.
      * @param schema - The schema used to encode the array elements.
      */
-    setArray(key: string, array: Array<unknown>, schema: Schema): void;
+    setArray(key: string, array: Array<unknown>, schema: ArraySchema): void;
     /**
      * Sets the encoded data associated with the specified key to represent
      * a map value.
@@ -121,7 +121,7 @@ export declare class Document {
      * @param map - The map value to set.
      * @param schema - The schema used to encode the map keys and values.
      */
-    setMap(key: string, map: Map<unknown, unknown>, schema: Schema): void;
+    setMap(key: string, map: Map<unknown, unknown>, schema: MapSchema): void;
     /**
      * Sets the encoded data associated with the specified key to represent
      * a struct value.
@@ -130,7 +130,7 @@ export declare class Document {
      * @param struct - The struct value to set.
      * @param schema - The schema used to encode the struct fields.
      */
-    setStruct(key: string, struct: object, schema: Schema): void;
+    setStruct(key: string, struct: object, schema: StructSchema): void;
     /**
      * Retrieves a null value associated with the specified key from the Document.
      *
@@ -214,7 +214,7 @@ export declare class Document {
      * @returns {object} The struct value associated with the specified key,
      * or an empty object if the key does not exist.
      */
-    getStruct(key: string, schema: Schema): object;
+    getStruct(key: string, schema: StructSchema): object;
 }
 /**
  * Encodes an object or map into a Document using the provided schema.
