@@ -29,10 +29,7 @@ This schema represents a null value.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "null"
-    }
-    polorizer.polorize(null, schema)
+    polorizer.polorize(null, schema.null)
 
 Boolean Schema
 --------------
@@ -41,10 +38,7 @@ This schema represents a boolean value.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "bool"
-    }
-    polorizer.polorize(true, schema)
+    polorizer.polorize(true, schema.boolean)
 
 Integer Schema
 --------------
@@ -53,10 +47,7 @@ This schema represents an integer value.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "integer"
-    }
-    polorizer.polorize(300, schema)
+    polorizer.polorize(300, schema.integer)
 
 Float Schema
 ------------
@@ -65,10 +56,7 @@ This schema represents a floating-point value.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "float"
-    }
-    polorizer.polorize(123.456, schema)
+    polorizer.polorize(123.456, schema.float)
 
 String Schema
 -------------
@@ -77,10 +65,7 @@ This schema represents a string value.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "string"
-    }
-    polorizer.polorize("foo", schema)
+    polorizer.polorize("foo", schema.string)
 
 Raw Schema
 ----------
@@ -89,10 +74,7 @@ This schema represents a polo encoded raw data.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "raw"
-    }
-    polorizer.polorize(new Raw([6, 98, 111, 111]), schema)
+    polorizer.polorize(new Raw([6, 98, 111, 111]), schema.raw)
 
 Bytes Schema
 ------------
@@ -101,10 +83,7 @@ This schema represents a byte array.
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: "bytes"
-    }
-    polorizer.polorize(new Uint8Array([1, 1, 1, 1]), schema)
+    polorizer.polorize(new Uint8Array([1, 1, 1, 1]), schema.bytes)
 
 Array Schema
 ------------
@@ -114,16 +93,9 @@ This schema represents an array of values.
 
     // Example
     const arr = ["foo", "bar"]
-    const schema = {
-        kind: 'array',
-        fields: {
-            values: {
-                kind: 'string'
-            }
-        }
-    }
+    const arrSchema = schema.arrayOf(schema.string)
 
-    polorizer.polorize(arr, schema)
+    polorizer.polorize(arr, arrSchema);
 
 Map Schema
 ----------
@@ -136,19 +108,12 @@ This schema represents a map of key-value pairs.
     map.set(0, "foo")
     map.set(1, "bar")
 
-    const schema = {
-        kind: 'map',
-        fields: {
-            keys: {
-                kind: 'integer'
-            },
-            values: {
-                kind: 'string'
-            }
-        }	
-    }
+    const mapSchema = schema.map({
+        key: schema.integer,
+        value: schema.string
+    })
 
-    polorizer.polorize(map, schema)
+    polorizer.polorize(map, mapSchema)
 
 Struct Schema
 -------------
@@ -162,17 +127,10 @@ This schema represents a structured object with named fields.
         cost: 300,
     }
 
-    const schema = {
-        kind: 'struct',
-        fields: {
-            name: {
-                kind: 'string'
-            },
-            cost: {
-                kind: 'integer'
-            }
-        }	
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer
+    })
 
     polorizer.polorize(struct, schema)
 
@@ -187,8 +145,4 @@ This schema represents a polo document.
     doc.setInteger('far', 123)
     doc.setString('foo', 'bar')
 
-    const schema = {
-        kind: 'document'
-    }
-
-    polorizer.polorize(doc, schema)
+    polorizer.polorize(doc, schema.document)

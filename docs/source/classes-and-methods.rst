@@ -109,16 +109,9 @@ methods
 
     // Example
     const arr = ["foo", "bar"]
-    const schema = {
-        kind: 'array',
-        fields: {
-            values: {
-                kind: 'string'
-            }
-        }
-    }
+    const arraySchema = schema.arrayOf(schema.string)
 
-    polorizer.polorize(arr, schema)
+    polorizer.polorize(arr, arraySchema)
 
 **polorize map**
 
@@ -129,19 +122,12 @@ methods
     map.set(0, "foo")
     map.set(1, "bar")
 
-    const schema = {
-        kind: 'map',
-        fields: {
-            keys: {
-                kind: 'integer'
-            },
-            values: {
-                kind: 'string'
-            }
-        }	
-    }
+    const mapSchema = schema.map({
+        keys: schema.integer,
+        values: schema.string
+    })
 
-    polorizer.polorize(map, schema)
+    polorizer.polorize(map, mapSchema)
 
 **polorize struct**
 
@@ -153,19 +139,12 @@ methods
         cost: 300,
     }
 
-    const schema = {
-        kind: 'struct',
-        fields: {
-            name: {
-                kind: 'string'
-            },
-            cost: {
-                kind: 'integer'
-            }
-        }	
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer
+    })
 
-    polorizer.polorize(struct, schema)
+    polorizer.polorize(struct, structSchema)
 
 .. autofunction:: polorizeDocument
 
@@ -324,16 +303,9 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'array',
-        fields: {
-            values: {
-                kind: 'string'
-            }
-        }
-    }
+    const arrSchema = struct.arrayOf(struct.string)
 
-    polorizer.depolorize(schema)
+    polorizer.depolorize(arrSchema)
     >> ["foo", "bar"]
 
 **depolorize map**
@@ -341,19 +313,12 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'map',
-        fields: {
-            keys: {
-                kind: 'integer'
-            },
-            values: {
-                kind: 'string'
-            }
-        }	
-    }
+    const mapSchema = struct.map({
+        keys: struct.integer,
+        values: struct.string
+    })
 
-    const map = polorizer.depolorize(schema)
+    const map = polorizer.depolorize(mapSchema)
     map.get(0)
     >> foo
     map.get(1)
@@ -364,19 +329,12 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'struct',
-        fields: {
-            name: {
-                kind: 'string'
-            },
-            cost: {
-                kind: 'integer'
-            }
-        }	
-    }
+    const structSchema = struct.struct({
+        name: struct.string,
+        cost: struct.integer
+    })
 
-    polorizer.depolorize(schema)
+    polorizer.depolorize(structSchema)
     >> { name: 'orange', cost: 300 }
 
 .. autofunction:: depolorizeDocument
@@ -478,16 +436,9 @@ methods
 
     // Example
     const arr = ["foo", "bar"]
-    const schema = {
-        kind: 'array',
-        fields: {
-            values: {
-                kind: 'string'
-            }
-        }
-    }
+    const arrSchema =  schema.arrayOf(schema.string)
 
-    doc.setArray("foo", arr, schema)
+    doc.setArray("foo", arr, arrSchema)
 
 .. autofunction:: setMap
 
@@ -498,19 +449,12 @@ methods
     map.set(0, "foo")
     map.set(1, "bar")
 
-    const schema = {
-        kind: 'map',
-        fields: {
-            keys: {
-                kind: 'integer'
-            },
-            values: {
-                kind: 'string'
-            }
-        }	
-    }
+    const mapSchema = schema.map({
+        keys: schema.integer,
+        values: schema.string
+    })
 
-    doc.setMap("foo", map, schema)
+    doc.setMap("foo", map, mapSchema)
 
 .. autofunction:: setStruct
 
@@ -522,19 +466,12 @@ methods
         cost: 300,
     }
 
-    const schema = {
-        kind: 'struct',
-        fields: {
-            name: {
-                kind: 'string'
-            },
-            cost: {
-                kind: 'integer'
-            }
-        }	
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer
+    });
 
-    doc.setStruct("foo", struct, schema)
+    doc.setStruct("foo", struct, structSchema)
 
 .. autofunction:: getNull
 
@@ -597,16 +534,9 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'array',
-        fields: {
-            values: {
-                kind: 'string'
-            }
-        }
-    }
+    const arraySchema = schema.arrayOf(schema.string)
 
-    doc.getArray("foo", schema)
+    doc.getArray("foo", arraySchema)
     >> ["foo", "bar"]
 
 .. autofunction:: getMap
@@ -614,19 +544,12 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'map',
-        fields: {
-            keys: {
-                kind: 'integer'
-            },
-            values: {
-                kind: 'string'
-            }
-        }	
-    }
+    const mapSchema = schema.map({
+        keys: schema.integer,
+        values: schema.string
+    })
 
-    const map = doc.getMap("foo", schema)
+    const map = doc.getMap("foo", mapSchema)
     map.get(0)
     >> foo
     map.get(1)
@@ -637,19 +560,12 @@ methods
 .. code-block:: javascript
 
     // Example
-    const schema = {
-        kind: 'struct',
-        fields: {
-            name: {
-                kind: 'string'
-            },
-            cost: {
-                kind: 'integer'
-            }
-        }	
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer
+    });
 
-    doc.getStruct("foo", schema)
+    doc.getStruct("foo", structSchema)
     >> { name: 'orange', cost: 300 }
 
 .. autofunction:: Document#is
@@ -691,22 +607,14 @@ functions
         alias: ['tangerine', 'mandarin']
     }
 
-    const schema = {
-        kind: 'struct',
-        fields: { 
-            name: { kind: 'string' },
-            cost: { kind: 'integer' },
-            alias: { 
-                kind: 'array', 
-                fields: { 
-                    values: { kind: 'string' } 
-                } 
-            }
-        }
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer,
+        alias: schema.arrayOf(schema.string)
+    })
 
     // Encode the object into a Document
-    const document = documentEncode(orange, schema)
+    const document = documentEncode(orange, structSchema)
 
     console.log(document.data)
     console.log(document.bytes())
@@ -754,19 +662,11 @@ functions
         3, 1, 44, 110, 97, 109, 101, 6, 111, 114,  97, 110, 103, 101
     ])
 
-    const schema = {
-        kind: 'struct',
-        fields: { 
-            name: { kind: 'string' },
-            cost: { kind: 'integer' },
-            alias: { 
-                kind: 'array', 
-                fields: { 
-                    values: { kind: 'string' } 
-                } 
-            }
-        }
-    }
+    const structSchema = schema.struct({
+        name: schema.string,
+        cost: schema.integer,
+        alias: schema.arrayOf(schema.string)
+    })
 
     const depolorizer = new Depolorizer(wire)
     const readBuffer = depolorizer.read()
