@@ -7,6 +7,8 @@
     "target": "ESNext",
     "outDir": "./dist",
     "declaration": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "preserveSymlinks": true,
     "preserveWatchOutput": true,
     "pretty": true,
