@@ -5,7 +5,7 @@
     "types": ["node", "jest"],
     "lib": ["es6", "esnext", "dom"],
     "target": "ESNext",
-    "outDir": "./dist",
+    "noEmit": true,
     "declaration": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
