@@ -1,18 +1,10 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "lib": [
-      "es6",
-      "esnext",
-      "dom"
-    ],
-    "module": "commonjs",
-    "target": "esnext",
-    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "jest"],
+    "lib": ["es6", "esnext", "dom"],
+    "target": "ESNext",
     "outDir": "./dist",
     "declaration": true,
     "preserveSymlinks": true,
@@ -23,12 +15,8 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "experimentalDecorators": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": true
   },
-  "exclude": [
-    "node_modules", 
-    "__tests__",
-    "__benchmarks__"
-  ],
+  "exclude": ["node_modules", "__tests__", "__benchmarks__"],
   "files": ["src/index.ts"]
 }
