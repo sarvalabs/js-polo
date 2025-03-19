@@ -12,7 +12,7 @@ const mixedObject = {
 	e: 45.23
 };
 
-const struct: Schema = schema.struct({
+const structSchema: Schema = schema.struct({
 	a: schema.string,
 	b: schema.integer,
 	c: schema.arrayOf(schema.string),
@@ -23,16 +23,16 @@ const struct: Schema = schema.struct({
 (():void => {  
 	const suite = new Benchmark.Suite;  
 	const polorizer = new Polorizer();
-	polorizer.polorize(mixedObject, struct);
+	polorizer.polorize(mixedObject, structSchema);
 	const wire = polorizer.bytes();
     
     
 	suite.add('Polorize', () => {
 		const polorizer = new Polorizer();
-		polorizer.polorize(mixedObject, struct);
+		polorizer.polorize(mixedObject, structSchema);
 	}).add('Depolorize', () => {
 		const depolorizer = new Depolorizer(wire);
-		depolorizer.depolorize(struct);
+		depolorizer.depolorize(structSchema);
 	}).on('cycle', (event) => {
 		console.log(String(event.target));
 	}).run({ 'async': true });
@@ -40,17 +40,17 @@ const struct: Schema = schema.struct({
 
 (():void => {
 	const suite = new Benchmark.Suite;
-	const doc = documentEncode(mixedObject, struct);
+	const doc = documentEncode(mixedObject, structSchema);
 	const docWire = doc.bytes();
 
 	suite.add('Document Encode', () => {
-		documentEncode(mixedObject, struct);
+		documentEncode(mixedObject, structSchema);
 	}).add('Decode To Document', () => {
 		const deplorizer = new Depolorizer(docWire);
 		deplorizer.depolorizeDocument();
 	}).add('Decode To Struct', () => {
 		const deplorizer = new Depolorizer(docWire);
-		deplorizer.depolorize(struct);
+		deplorizer.depolorize(structSchema);
 	}).on('cycle', (event) => {
 		console.log(String(event.target));
 	}).run({ 'async': true });

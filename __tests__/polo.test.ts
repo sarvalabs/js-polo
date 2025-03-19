@@ -56,13 +56,13 @@ describe('Test Bool', () => {
 
 	test('Bool Object', () => {
 		for(let i = 0; i < 1000; i++) {
-			const struct = schema.struct({
+			const structSchema = schema.struct({
 				a: schema.boolean,
 				b: schema.boolean
 			});
-			const value = new Test(fuzzer.fuzz(struct));
+			const value = new Test(fuzzer.fuzz(structSchema));
 
-			testObject(value, struct);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -96,15 +96,15 @@ describe('Test Word', () => {
 
 	test('Word Object', () => {
 		for(let i = 0; i < 1000; i++) {
-			const struct = schema.struct({
+			const structSchema = schema.struct({
 				a: schema.string,
 				b: schema.string,
 				c: schema.bytes,
 				d: schema.bytes
 			});
-			const value = fuzzer.fuzz(struct);
+			const value = fuzzer.fuzz(structSchema);
 	
-			testObject(value, struct);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -119,15 +119,15 @@ describe('Test float', () => {
 	});
 
 	test('Float Object', () => {
-		const struct = schema.struct({
+		const structSchema = schema.struct({
 			a: schema.float,
 			b: schema.float
 		});	
 
 		for(let i = 0; i < 1000; i++) {
-			const value = fuzzer.fuzz(struct);
+			const value = fuzzer.fuzz(structSchema);
 	
-			testObject(value, struct);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -200,7 +200,7 @@ describe('Test Sequence', () => {
 	});
 
 	test('Sequence object', () => {
-		const struct = schema.struct({
+		const structSchema = schema.struct({
 			a: schema.arrayOf(schema.string),
 			b: schema.arrayOf(schema.integer),
 			c: schema.arrayOf(schema.map({
@@ -223,9 +223,9 @@ describe('Test Sequence', () => {
 		});
 
 		for(let i = 0; i < 1000; i++) {
-			const value = fuzzer.fuzz(struct);
+			const value = fuzzer.fuzz(structSchema);
 
-			testObject(value, struct);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -294,7 +294,7 @@ describe('Test Map Object', () => {
 	});
 
 	test('Map Object', () => {
-		const struct = schema.struct({
+		const structSchema = schema.struct({
 			a: schema.map({
 				keys: schema.boolean,
 				values: schema.string
@@ -337,13 +337,13 @@ describe('Test Map Object', () => {
 			})
 		});
 		
-		const value = fuzzer.fuzz(struct);
-		testObject(value, struct);
+		const value = fuzzer.fuzz(structSchema);
+		testObject(value, structSchema);
 	});
 });
 
 describe('Test Nested', () => {
-	const struct = schema.struct({
+	const structSchema = schema.struct({
 		a: schema.struct({
 			a: schema.string,
 			b: schema.string,
@@ -358,8 +358,8 @@ describe('Test Nested', () => {
 		})
 	});
 	for(let i = 0; i < 1000; i++) {
-		const value = fuzzer.fuzz(struct);
-		testObject(value, struct);
+		const value = fuzzer.fuzz(structSchema);
+		testObject(value, structSchema);
 	}
 });
 
