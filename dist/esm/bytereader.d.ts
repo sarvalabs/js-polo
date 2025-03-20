@@ -1,5 +1,4 @@
 /// <reference types="node" />
-/// <reference types="node" />
 import { Buffer } from 'buffer';
 /**
  * ByteReader is a class for reading bytes from a buffer.
