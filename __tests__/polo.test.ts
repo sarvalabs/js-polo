@@ -1,5 +1,4 @@
-import { Depolorizer, Polorizer } from '../src';
-import { Schema } from '../types/schema';
+import { Depolorizer, Polorizer, schema, type Schema } from '../src';
 import { Fuzzer } from './utils/fuzzer';
 
 
@@ -32,7 +31,7 @@ const bigIntToNum = (x: any): unknown => {
 	return x;
 };
 
-const testObject = (x: any, schema: Schema, isBN?: boolean): void => {
+const testObject = (x: unknown, schema: Schema, isBN?: boolean): void => {
 	const polorizer = new Polorizer();
 	polorizer.polorize(x, schema);
 	const wire = polorizer.bytes();
@@ -50,31 +49,20 @@ const testObject = (x: any, schema: Schema, isBN?: boolean): void => {
 describe('Test Bool', () => {
 	test('Bool', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'bool'
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(schema.boolean);
+			testObject(value, schema.boolean);
 		}
 	});
 
 	test('Bool Object', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'struct',
-				fields: {
-					a: {
-						kind: 'bool'
-					},
-					b: {
-						kind: 'bool'
-					}
-				}
-			};
+			const structSchema = schema.struct({
+				a: schema.boolean,
+				b: schema.boolean
+			});
+			const value = new Test(fuzzer.fuzz(structSchema));
 
-			const value = new Test(fuzzer.fuzz(schema));
-
-			testObject(value, schema);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -82,12 +70,9 @@ describe('Test Bool', () => {
 describe('Test integer', () => {
 	test('Int', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'integer'
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(schema.integer);
 
-			testObject(value, schema);
+			testObject(value, schema.integer);
 		}
 	});
 });
@@ -95,40 +80,31 @@ describe('Test integer', () => {
 describe('Test Word', () => {
 	test('String', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'string'
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(schema.string);
 
-			testObject(value, schema);
+			testObject(value, schema.string);
 		}
 	});
 
 	test('Bytes', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'bytes'
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(schema.bytes);
 
-			testObject(value, schema);
+			testObject(value, schema.bytes);
 		}
 	});
 
 	test('Word Object', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'struct',
-				fields: {
-					a: { kind: 'string' },
-					b: { kind: 'string' },
-					c: { kind: 'bytes' },
-					d: { kind: 'bytes' }
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+			const structSchema = schema.struct({
+				a: schema.string,
+				b: schema.string,
+				c: schema.bytes,
+				d: schema.bytes
+			});
+			const value = fuzzer.fuzz(structSchema);
 	
-			testObject(value, schema);
+			testObject(value, structSchema);
 		}
 	});
 });
@@ -136,554 +112,272 @@ describe('Test Word', () => {
 describe('Test float', () => {
 	test('Float', () => {
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'float'
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(schema.float);
 
-			testObject(value, schema);
+			testObject(value, schema.float);
 		}
 	});
 
 	test('Float Object', () => {
-		for(let i = 0; i < 1000; i++) {	
-			const schema: Schema = {
-				kind: 'struct',
-				fields: {
-					a: { kind: 'float' },
-					b: { kind: 'float' },
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+		const structSchema = schema.struct({
+			a: schema.float,
+			b: schema.float
+		});	
+
+		for(let i = 0; i < 1000; i++) {
+			const value = fuzzer.fuzz(structSchema);
 	
-			testObject(value, schema);
+			testObject(value, structSchema);
 		}
 	});
 });
 
 describe('Test Sequence', () => {
 	test('Array of String', () => {
+		const array = schema.arrayOf(schema.string);
+		
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					values: {
-						kind: 'string'
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(array);
 
-			testObject(value, schema);
+			testObject(value, array);
 		}
 	});
 
 	test('Integer Array', () => {
-		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					'values': {
-						kind: 'integer'
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+		const array = schema.arrayOf(schema.integer);
 
-			testObject(value, schema);
+		for(let i = 0; i < 1000; i++) {
+			const value = fuzzer.fuzz(array);
+
+			testObject(value, array);
 		}
 	});
 
 	test('Array of Maps', () => {
-		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					values: {
-						kind: 'map',
-						fields: {
-							keys: {
-								kind: 'string'
-							},
-							values: {
-								kind: 'string'
-							}
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+		const array = schema.arrayOf(schema.map({
+			keys: schema.string,
+			values: schema.string
+		}));
 
-			testObject(value, schema);
+		for(let i = 0; i < 1000; i++) {
+			const value = fuzzer.fuzz(array);
+
+			testObject(value, array);
 		}
 	});
 
 	test('Double array string', () => {
+		const array = schema.arrayOf(schema.arrayOf(schema.string));
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					values: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'string'
-							}
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(array);
 
-			testObject(value, schema);
+			testObject(value, array);
 		}
 	});
 
 	test('Double array bytes', () => {
+		const array = schema.arrayOf(schema.arrayOf(schema.bytes));
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					values: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'bytes'
-							}
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+			const value = fuzzer.fuzz(array);
 
-			testObject(value, schema);
+			testObject(value, array);
 		}
 	});
 
 	test('Word object array', () => {
-		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'array',
-				fields: {
-					values: {
-						kind: 'struct',
-						fields: {
-							a: { kind: 'string' },
-							b: { kind: 'string' },
-							c: { kind: 'bytes' },
-							d: { kind: 'bytes' }
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+		const array = schema.arrayOf(schema.struct({
+			a: schema.string,
+			b: schema.string,
+			c: schema.bytes,
+			d: schema.bytes
+		}));
 
-			testObject(value, schema);
+		for(let i = 0; i < 1000; i++) {
+			const value = fuzzer.fuzz(array);
+
+			testObject(value, array);
 		}
 	});
 
 	test('Sequence object', () => {
-		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'struct',
-				fields: {
-					a: { 
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'string'
-							}
-						}
-					},
-					b: { 
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'integer'
-							}
-						}
-					},
-					c: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'map',
-								fields: {
-									keys: {
-										kind: 'string'
-									},
-									values: {
-										kind: 'string'
-									}
-								}
-							}
-						}
-					},
-					d: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'array',
-								fields: {
-									values: {
-										kind: 'string'
-									}
-								}
-							}
-						}
-					},
-					e: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'array',
-								fields: {
-									values: {
-										kind: 'bytes'
-									}
-								}
-							}
-						}
-					},
-					f: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'struct',
-								fields: {
-									a: { kind: 'string' },
-									b: { kind: 'string' },
-									c: { kind: 'bytes' },
-									d: { kind: 'bytes' }
-								}
-							}
-						}
-					},
-					g: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'map',
-								fields: {
-									keys: { kind: 'integer' },
-									values: { kind: 'bool' }
-								}
-							}
-						}
-					},
-					h: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'array',
-								fields: {
-									values: { kind: 'float' }
-								}
-							}
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
+		const structSchema = schema.struct({
+			a: schema.arrayOf(schema.string),
+			b: schema.arrayOf(schema.integer),
+			c: schema.arrayOf(schema.map({
+				keys: schema.string,
+				values: schema.string
+			})),
+			d: schema.arrayOf(schema.arrayOf(schema.string)),
+			e: schema.arrayOf(schema.arrayOf(schema.bytes)),
+			f: schema.arrayOf(schema.struct({
+				a: schema.string,
+				b: schema.string,
+				c: schema.bytes,
+				d: schema.bytes
+			})),
+			g: schema.arrayOf(schema.map({
+				keys: schema.integer,
+				values: schema.boolean
+			})),
+			h: schema.arrayOf(schema.arrayOf(schema.float))
+		});
 
-			testObject(value, schema);
+		for(let i = 0; i < 1000; i++) {
+			const value = fuzzer.fuzz(structSchema);
+
+			testObject(value, structSchema);
 		}
 	});
 });
 
 describe('Test Map Object', () => {
 	test('String Map', () => {
+		const map = schema.map({
+			keys: schema.string,
+			values: schema.string
+		});
+
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'bool'
-					},
-					values: {
-						kind: 'string'
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(map);
+			testObject(value, map);
 		}
 	});
 
 	test('Integer map', () => {
+		const map = schema.map({
+			keys: schema.integer,
+			values: schema.integer
+		});
+
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'integer'
-					},
-					values: {
-						kind: 'float'
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(map);
+			testObject(value, map);
 		}
 	});
 
 	test('Array Map', () => {
+		const map = schema.map({
+			keys: schema.arrayOf(schema.string),
+			values: schema.string
+		});
+
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'string'
-							}
-						}
-					},
-					values: {
-						kind: 'string'
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(map);
+			testObject(value, map);
 		}
 	});
 
-	test('Double Map', () => {
+	test('Nested Map', () => {
+		const map = schema.map({
+			keys: schema.string,
+			values: schema.map({
+				keys: schema.string,
+				values: schema.boolean
+			})
+		});
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'string',
-					},
-					values: {
-						kind: 'map',
-						fields: {
-							keys: {
-								kind: 'string'
-							},
-							values: {
-								kind: 'bool'
-							}
-						}
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(map);
+			testObject(value, map);
 		}
 	});
 
 	test('Bytes Map', () => {
+		const map = schema.map({
+			keys: schema.bytes,
+			values: schema.bytes
+		});
+		
 		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'bytes',
-					},
-					values: {
-						kind: 'bytes',
-					}
-				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
+			const value = fuzzer.fuzz(map);
+			testObject(value, map);
 		}
 	});
 
 	test('Map Object', () => {
-		const schema: Schema = {
-			kind: 'struct',
-			fields: {
-				a: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'bool'
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				b: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'float'
-						},
-						values: {
-							kind: 'integer'
-						}
-					}	
-				},
-				c: {
-					kind: 'float',
-					fields: {
-						kind: 'map',
-						fields: {
-							keys: {
-								kind: 'string'
-							},
-							values: {
-								kind: 'string'
-							}
-						}
-					}
-				},
-				d: {
-					kind: 'integer',
-					fields: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'string'
-							}
-						}
-					}
-				},
-				e: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'string'
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				f: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'integer'
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				g: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'integer'
-								}
-							}
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				h: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'integer'
-								}
-							}
-						},
-						values: {
-							kind: 'integer'
-						}
-					}
-				},
-				i: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'float'
-								}
-							}
-						},
-						values: {
-							kind: 'integer'
-						}
-					}
-				},
-				j: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'string'
-								}
-							}
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				}
-			}
-		};
-		const value = fuzzer.fuzz(schema);
-		testObject(value, schema);
+		const structSchema = schema.struct({
+			a: schema.map({
+				keys: schema.boolean,
+				values: schema.string
+			}),
+			b: schema.map({
+				keys: schema.float,
+				values: schema.integer
+			}),
+			c: schema.map({
+				keys: schema.float,
+				values: schema.string
+			}),
+			d: schema.map({
+				keys: schema.arrayOf(schema.float),
+				values: schema.string
+			}),
+			e: schema.map({
+				keys: schema.string,
+				values: schema.string
+			}),
+			f: schema.map({
+				keys: schema.integer,
+				values: schema.string
+			}),
+			g: schema.map({
+				keys: schema.arrayOf(schema.integer),
+				values: schema.string
+			}),
+			h: schema.map({
+				keys: schema.arrayOf(schema.integer),
+				values: schema.integer
+			}),
+			i: schema.map({
+				keys: schema.arrayOf(schema.float),
+				values: schema.integer
+			}),
+			j: schema.map({
+				keys: schema.arrayOf(schema.string),
+				values: schema.string
+			})
+		});
+		
+		const value = fuzzer.fuzz(structSchema);
+		testObject(value, structSchema);
 	});
 });
 
 describe('Test Nested', () => {
+	const structSchema = schema.struct({
+		a: schema.struct({
+			a: schema.string,
+			b: schema.string,
+			c: schema.bytes,
+			d: schema.bytes
+		}),
+		b: schema.struct({
+			a: schema.integer,
+			b: schema.integer,
+			c: schema.float,
+			d: schema.float
+		})
+	});
 	for(let i = 0; i < 1000; i++) {
-		const schema: Schema = {
-			kind: 'struct',
-			fields: {
-				a: {
-					kind: 'struct',
-					fields: {
-						a: { kind: 'string' },
-						b: { kind: 'string' },
-						c: { kind: 'bytes' },
-						d: { kind: 'bytes' }
-					}
-				},
-				b: {
-					kind: 'struct',
-					fields: {
-						a: { kind: 'integer' },
-						b: { kind: 'integer' },
-						c: { kind: 'float' },
-						d: { kind: 'float' }
-					}
-				}
-			}
-		};
-		const value = fuzzer.fuzz(schema);
-		testObject(value, schema);
+		const value = fuzzer.fuzz(structSchema);
+		testObject(value, structSchema);
 	}
 });
 
 describe('Test BigInt', () => {
 	test('BigInt', () => {
 		for(let i = 0; i < 1000; i++) {
-			let schema: Schema = {
+			const bnSchema = {
 				kind: 'bigint'
 			};
-			const value = fuzzer.fuzz(schema);
-			schema = JSON.parse(JSON.stringify(schema).replace(/bigint/g, 'integer'));
+			const value = fuzzer.fuzz(bnSchema);
+			const schema: Schema = JSON.parse(JSON.stringify(bnSchema).replace(/bigint/g, 'integer'));
 			testObject(value, schema, true);
 		}
 	});
 
 	test('BigInt Object', () => {
 		for(let i = 0; i < 1000; i++) {
-			let schema: Schema = {
+			const bnSchema = {
 				kind: 'struct',
 				fields: {
 					a: { 
@@ -702,8 +396,8 @@ describe('Test BigInt', () => {
 					}
 				}
 			};
-			const value = fuzzer.fuzz(schema);
-			schema = JSON.parse(JSON.stringify(schema).replace(/bigint/g, 'integer'));
+			const value = fuzzer.fuzz(bnSchema);
+			const schema: Schema = JSON.parse(JSON.stringify(bnSchema).replace(/bigint/g, 'integer'));
 			testObject(value, schema, true);
 		}
 	});

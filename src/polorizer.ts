@@ -1,9 +1,10 @@
 import { WriteBuffer } from './writebuffer';
 import { WireType } from './wiretype';
-import { Schema } from '../types/schema';
 import BN from 'bn.js';
 import { Raw } from './raw';
 import { ReadBuffer } from './readbuffer';
+import { type ArraySchema, type MapSchema, type Schema, type StructSchema } from './schema';
+
 
 /**
  * Polorizer is an encoding buffer that can sequentially polorize objects 
@@ -107,7 +108,7 @@ export class Polorizer {
 			this.polorizeDocument(value);
 			break;
 		default:
-			throw Error(schema.kind + ' is unsupported.');
+			throw new Error(`Unsupported schema: ${schema}`);
 		}
 	}
 
@@ -256,7 +257,7 @@ export class Polorizer {
 	 * its encoding.
 	 * @description It is encoded as element pack encoded data.
 	 */
-	private polorizeArray(array: Array<unknown>, schema: Schema): void {
+	private polorizeArray(array: Array<unknown>, schema: ArraySchema): void {
 		if(!array) {
 			this.polorizeNull();
 			return;
@@ -281,7 +282,7 @@ export class Polorizer {
 	 * @description It is encoded as key-value pack encoded data. Map keys 
 	 * are sorted before being sequentially encoded.
 	 */
-	private polorizeMap(map: Map<unknown, unknown>, schema: Schema): void {
+	private polorizeMap(map: Map<unknown, unknown>, schema: MapSchema): void {
 		if(!map) {
 			this.polorizeNull();
 			return;
@@ -312,7 +313,7 @@ export class Polorizer {
 	 * its encoding.
 	 * @description It is encoded as field ordered pack encoded data.
 	 */
-	private polorizeStruct(struct: object, schema: Schema): void {
+	private polorizeStruct(struct: object, schema: StructSchema): void {
 		if(!struct) {
 			this.polorizeNull();
 			return;

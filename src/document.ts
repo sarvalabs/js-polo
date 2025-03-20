@@ -3,7 +3,7 @@ import { WriteBuffer } from './writebuffer';
 import { ReadBuffer } from './readbuffer';
 import { Raw } from './raw';
 import { Polorizer } from './polorizer';
-import { Schema } from '../types/schema';
+import { Schema, type ArraySchema, type MapSchema, type StructSchema } from './schema';
 import { Depolorizer } from './depolorizer';
 import { WireType } from './wiretype';
 
@@ -192,7 +192,7 @@ export class Document {
 	 * @param array - The array value to set.
 	 * @param schema - The schema used to encode the array elements.
 	 */
-	public setArray(key: string, array: Array<unknown>, schema: Schema): void {
+	public setArray(key: string, array: Array<unknown>, schema: ArraySchema): void {
 		const polorizer = new Polorizer();
 		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
 			array.forEach(arr => polorizer.polorize(arr, schema.fields.values));
@@ -209,7 +209,7 @@ export class Document {
 	 * @param map - The map value to set.
 	 * @param schema - The schema used to encode the map keys and values.
 	 */
-	public setMap(key: string, map: Map<unknown, unknown>, schema: Schema): void {
+	public setMap(key: string, map: Map<unknown, unknown>, schema: MapSchema): void {
 		const polorizer = new Polorizer();
 		if(schema.fields && schema.fields.keys && schema.fields.values &&
 		schema.fields.keys.kind && schema.fields.values.kind) {
@@ -233,7 +233,7 @@ export class Document {
 	 * @param struct - The struct value to set.
 	 * @param schema - The schema used to encode the struct fields.
 	 */
-	public setStruct(key: string, struct: object, schema: Schema): void {
+	public setStruct(key: string, struct: object, schema: StructSchema): void {
 		const polorizer = new Polorizer();
 		Object.entries(struct).forEach(([key, value]) => {
 			polorizer.polorize(value, schema.fields[key]);
@@ -396,7 +396,7 @@ export class Document {
 	 * @returns {object} The struct value associated with the specified key, 
 	 * or an empty object if the key does not exist.
 	 */
-	public getStruct(key: string, schema: Schema): object {
+	public getStruct(key: string, schema: StructSchema): object {
 		const obj = {};
 
 		if(this.data[key]) {

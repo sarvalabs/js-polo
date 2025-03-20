@@ -1,8 +1,8 @@
+import { Document } from './document';
 import LoadReader from './loadreader';
-import { Schema } from '../types/schema';
 import { Raw } from './raw';
 import { ReadBuffer } from './readbuffer';
-import { Document } from './document';
+import { type Schema } from './schema';
 /**
  * Depolorizer is a decoding buffer that can sequentially depolorize objects from it.
  * It can check whether there are elements left in the buffer with `isDone()`,

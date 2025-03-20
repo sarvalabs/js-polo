@@ -1,9 +1,9 @@
+import { Document, documentDecode } from './document';
 import LoadReader from './loadreader';
-import { Schema } from '../types/schema';
 import { Raw } from './raw';
 import { ReadBuffer } from './readbuffer';
+import { type ArraySchema, type MapSchema, type Schema, type StructSchema } from './schema';
 import { WireType } from './wiretype';
-import { Document, documentDecode } from './document';
 
 /**
  * Depolorizer is a decoding buffer that can sequentially depolorize objects from it.
@@ -121,7 +121,7 @@ export class Depolorizer {
 		case 'struct':
 			return this.depolorizeStruct(schema);
 		default:
-			throw Error(schema.kind + ' is unsupported.');
+			throw new Error(`Unsupported scheme: ${schema}`);
 		}
 	}
 
@@ -228,7 +228,7 @@ export class Depolorizer {
 	 * @returns {Array<unknown>} The depolorized array.
 	 * @throws {Error} If the the schema is invalid.
 	 */
-	private depolorizeArray(schema: Schema): Array<unknown> {
+	private depolorizeArray(schema: ArraySchema): Array<unknown> {
 		// Peek the wire type of the next element
 		const data = this.read();
 
@@ -320,7 +320,7 @@ export class Depolorizer {
 	 * @returns {Map<unknown, unknown>} The depolorized map.
 	 * @throws {Error} If the schema or wire element is invalid.
 	 */
-	private depolorizeMap(schema: Schema): Map<unknown, unknown> {
+	private depolorizeMap(schema: MapSchema): Map<unknown, unknown> {
 		// Peek the wire type of the next element
 		const data = this.read();
 
@@ -361,7 +361,7 @@ export class Depolorizer {
 	 * @returns {object} The depolorized object.
 	 * @throws {Error} If the wire type is incompatible or the schema is invalid.
 	 */
-	private depolorizeStruct(schema: Schema): object {
+	private depolorizeStruct(schema: StructSchema): object {
 		// Peek the wire type of the next element
 		const data = this.read();
 
