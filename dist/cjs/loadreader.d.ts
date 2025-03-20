@@ -1,5 +1,4 @@
 /// <reference types="node" />
-/// <reference types="node" />
 import { Buffer } from 'buffer';
 import { ReadBuffer } from './readbuffer';
 import { WireType } from './wiretype';

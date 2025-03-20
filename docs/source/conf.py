@@ -23,7 +23,7 @@ release = u'v0.1.4'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = ['sphinx_js']
-js_source_path = '../../dist'
+js_source_path = '../../dist/esm'
 primary_domain = 'js'
 
 templates_path = ['_templates']

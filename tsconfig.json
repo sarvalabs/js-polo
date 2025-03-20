@@ -1,20 +1,14 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "lib": [
-      "es6",
-      "esnext",
-      "dom"
-    ],
-    "module": "commonjs",
-    "target": "esnext",
-    "moduleResolution": "node",
-    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "jest"],
+    "lib": ["es6", "esnext", "dom"],
+    "target": "ESNext",
+    "noEmit": true,
     "declaration": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "preserveSymlinks": true,
     "preserveWatchOutput": true,
     "pretty": true,
@@ -23,12 +17,8 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "experimentalDecorators": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": true
   },
-  "exclude": [
-    "node_modules", 
-    "__tests__",
-    "__benchmarks__"
-  ],
+  "exclude": ["node_modules", "__tests__", "__benchmarks__"],
   "files": ["src/index.ts"]
 }
