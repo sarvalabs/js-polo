@@ -84,7 +84,7 @@ class Varint {
             }
             throw new Error('varint overflows 64-bit integer');
         }
-        catch (err) {
+        catch {
             throw new Error('varint terminated prematurely');
         }
     }
