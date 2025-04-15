@@ -29,7 +29,7 @@ var WireType;
     WireType[WireType["WIRE_PACK"] = 14] = "WIRE_PACK";
     // WIRE_LOAD represents a load tag for compound wire type.
     WireType[WireType["WIRE_LOAD"] = 15] = "WIRE_LOAD";
-})(WireType = exports.WireType || (exports.WireType = {}));
+})(WireType || (exports.WireType = WireType = {}));
 /**
  * Utility class for working with wire types.
  */

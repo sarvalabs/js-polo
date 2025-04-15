@@ -12,6 +12,7 @@
     "preserveSymlinks": true,
     "preserveWatchOutput": true,
     "pretty": true,
+    "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
