@@ -7,7 +7,7 @@ import { Buffer } from 'buffer';
  * @class
  */
 class ByteReader {
-	private buffer: Buffer;
+	private buffer: Buffer
 	private position: number; // current reading index
 
 	constructor(buffer: Buffer) {
