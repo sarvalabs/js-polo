@@ -121,7 +121,13 @@ class ReadBuffer {
         if (data.length > 8) {
             throw new Error('excess data for 64-bit integer');
         }
-        return Number(new bn_js_1.default(data, 'be'));
+        const value = new bn_js_1.default(data, 'be');
+        // Values beyond 2^53-1 cannot be represented exactly as a
+        // number, so they are returned as a bigint instead.
+        if (value.bitLength() > 53) {
+            return BigInt(value.toString());
+        }
+        return value.toNumber();
     }
     // Reads the data in the read buffer into an integer
     readInteger() {

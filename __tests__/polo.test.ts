@@ -16,17 +16,22 @@ class Assignable {
 class Test extends Assignable { }
 
 // helper functions
-const bigIntToNum = (x: any): unknown => {
+const MAX_SAFE_BIGINT = BigInt(Number.MAX_SAFE_INTEGER);
+const MIN_SAFE_BIGINT = BigInt(Number.MIN_SAFE_INTEGER);
+
+const normalizeBigInt = (x: any): unknown => {
 	if(typeof x === 'bigint') {
-		x = Number(x);
-	} else if (typeof x === 'object') {
+		return (x >= MIN_SAFE_BIGINT && x <= MAX_SAFE_BIGINT) ? Number(x) : x;
+	} else if (x !== null && typeof x === 'object') {
 		if(x instanceof Array){
-			x = x.map(val => bigIntToNum(val));
-		} else {
-			Object.entries(x).forEach(([key, value]) => {
-				x[key] = bigIntToNum(value);
-			});
+			return x.map(val => normalizeBigInt(val));
 		}
+
+		const result = {};
+		Object.entries(x).forEach(([key, value]) => {
+			result[key] = normalizeBigInt(value);
+		});
+		return result;
 	}
 
 	return x;
@@ -36,12 +41,12 @@ const testObject = (x: any, schema: Schema, isBN?: boolean): void => {
 	const polorizer = new Polorizer();
 	polorizer.polorize(x, schema);
 	const wire = polorizer.bytes();
-	
+
 	const depolorizer = new Depolorizer(wire);
 	const y = depolorizer.depolorize(schema);
 
 	if(isBN) {
-		x = bigIntToNum(x);
+		x = normalizeBigInt(x);
 	}
 
 	expect(y).toEqual(x);

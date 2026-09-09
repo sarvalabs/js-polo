@@ -132,12 +132,20 @@ export class ReadBuffer {
 		return this.data.toString();
 	}
 
-	private readUInt(data: Buffer): number | BN {
+	private readUInt(data: Buffer): number | bigint {
 		if(data.length > 8) {
 			throw new Error('excess data for 64-bit integer');
 		}
 
-		return Number(new BN(data, 'be'));
+		const value = new BN(data, 'be');
+
+		// Values beyond 2^53-1 cannot be represented exactly as a
+		// number, so they are returned as a bigint instead.
+		if(value.bitLength() > 53) {
+			return BigInt(value.toString());
+		}
+
+		return value.toNumber();
 	}
 
 	// Reads the data in the read buffer into an integer
@@ -147,11 +155,11 @@ export class ReadBuffer {
 		case WireType.WIRE_POSINT:
 		case WireType.WIRE_NEGINT: {
 			const value = this.readUInt(this.data);
-			
+
 			if(this.wire == WireType.WIRE_NEGINT) {
 				return -value;
 			}
-			
+
 			return value;
 		}
 		default:
