@@ -2,8 +2,6 @@
 Getting Started
 ===============
 
---------------------------------------------------------------------------------
-
 Installing
 ------------
 Install the latest `release <https://github.com/sarvalabs/js-polo/releases>`_ 

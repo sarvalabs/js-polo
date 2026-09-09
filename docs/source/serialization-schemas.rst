@@ -2,8 +2,6 @@
 Serialization Schemas
 =====================
 
---------------------------------------------------------------------------------
-
 Serialization schemas are a vital part of a JavaScript implementation. These 
 schemas are responsible for encoding and decoding elements in a defined order 
 and format, ensuring data consistency and interoperability.
