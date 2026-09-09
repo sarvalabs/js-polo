@@ -2,8 +2,6 @@
 Classes and Methods
 ===================
 
---------------------------------------------------------------------------------
-
 Polorizer
 ---------
 The Polorizer class is an encoding buffer that can sequentially polorize objects 

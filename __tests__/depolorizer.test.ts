@@ -1,4 +1,4 @@
-import { Depolorizer, WireType } from '../src';
+import { Depolorizer, Polorizer, WireType } from '../src';
 import { PackDepolorizer } from '../src/packdepolorizer';
 
 interface Fruit {
@@ -148,6 +148,24 @@ describe('Test Depolorizer', () => {
 		value = depolorizer.depolorizeFloat();
 		expect(value).toBe(-99.99);
 		expect(depolorizer.isDone()).toBe(true);
+	});
+
+	test('Large Uint precision', () => {
+		const values = [
+			9007199254740993n, // 2^53+1, first unsafe value
+			72057594037927935n, // 2^56-1, 7 bytes
+			1757260800123456789n, // nanosecond timestamp, 8 bytes
+			18446744073709551615n, // max uint64
+			-9007199254740993n,
+		];
+
+		values.forEach(value => {
+			const polorizer = new Polorizer();
+			polorizer.polorizeInteger(value);
+
+			const depolorizer = new Depolorizer(polorizer.bytes());
+			expect(depolorizer.depolorizeInteger()).toBe(value);
+		});
 	});
 
 	// Todo: check bigint, packed

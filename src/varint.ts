@@ -64,7 +64,7 @@ class Varint {
 	 *
 	 * @param {ByteReader} br - The byte reader object from which the 
 	 * varint should be read.
-	 * @returns {[number, number]} A tuple containing the decoded varint value 
+	 * @returns {number[]} A tuple containing the decoded varint value
 	 * and the number of bytes consumed from the reader.
 	 * @throws {Error} If an invalid varint is encountered in the reader or 
 	 * the varint overflows 64-bit integer or varint terminated prematurely.
