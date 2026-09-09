@@ -2,7 +2,7 @@
 Documentation
 =============
 
-This documentation is for js-polo v0.1.4.
+This documentation is for js-polo v0.1.5.
 
 --------------------------------------------------------------------------------
 
