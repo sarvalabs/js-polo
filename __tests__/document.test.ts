@@ -1,4 +1,5 @@
 import { Depolorizer } from '../src/depolorizer';
+import { Polorizer } from '../src/polorizer';
 import { Document, documentEncode } from '../src/document';
 import { Raw } from '../src/raw';
 
@@ -131,24 +132,13 @@ describe('Test Document', () => {
 			}
 		};
 
-		const document = new Document(wire, schema);
+		const document = new Document(wire);
 
-		console.log(document.getData());
-
-		// Output:
-		// {
-		// 	name: Uint8Array(7) [
-		// 		6, 111, 114, 97,
-		// 	  110, 103, 101
-		// 	],
-		// 	cost: Uint8Array(3) [ 3, 1, 44 ],
-		// 	alias: Uint8Array(22) [
-		// 		14,  63,   6, 150,   1, 116,
-		// 		97, 110, 103, 101, 114, 105,
-		// 	   110, 101, 109,  97, 110, 100,
-		// 		97, 114, 105, 110
-		// 	 ],
-		// }
+		expect(document.keys()).toEqual(['alias', 'cost', 'name']);
+		expect(document.getString('name')).toBe('orange');
+		expect(document.getInteger('cost')).toBe(300);
+		expect(document.getArray('alias', schema.fields.alias)).toEqual(['tangerine', 'mandarin']);
+		expect(document.bytes()).toEqual(wire);
 	});
 
 	test('Decode To Struct', () => {
@@ -173,12 +163,13 @@ describe('Test Document', () => {
 			}
 		};
 
-		const depolorizer = new Depolorizer(wire);
+		// A struct accepts a document only with the option docStructs.
+		expect(() => new Depolorizer(wire).depolorize(schema)).toThrow('set the option docStructs');
 
-		console.log(depolorizer.depolorize(schema));
-
-		// Output:
-		// { name: 'orange', cost: 300, alias: [ 'tangerine', 'mandarin' ] }
+		const depolorizer = new Depolorizer(wire, { docStructs: true });
+		expect(depolorizer.depolorize(schema)).toEqual({
+			name: 'orange', cost: 300, alias: ['tangerine', 'mandarin']
+		});
 	});
 });
 
@@ -341,9 +332,13 @@ describe('Test Document Methods', () => {
 			}
 		);
 
-		// Attempt to retrieve some unset keys from the document
-		// TODO: check for errors
+		// A key that is not in the document gives the zero value of its type
 		expect(doc.getString('faa')).toBe('');
+		expect(doc.getInteger('faa')).toBe(0);
+		expect(doc.getBool('faa')).toBe(false);
+		expect(doc.getBytes('faa')).toBe(null);
+		expect(doc.getArray('faa', { kind: 'array', fields: { values: { kind: 'string' } } })).toBe(null);
+		expect(doc.getStruct('faa', { kind: 'struct', fields: { foo: { kind: 'string' } } })).toEqual({ foo: '' });
 
 		// Attempt to retrieve some set keys from the document and confirm equality
 		expect(doc.getNull('foo')).toBe(null);
@@ -388,11 +383,70 @@ describe('Test Document Methods', () => {
 		doc.setRaw('bar', new Raw([2, 1, 2, 1]));
 
 		// Attempt to retrieve some unset keys from the document
-		expect(doc.getRaw('far')).toEqual(new Raw());
-		expect(doc.getRaw('boo')).toEqual(new Raw());
+		expect(doc.getRaw('far')).toBe(null);
+		expect(doc.getRaw('boo')).toBe(null);
 
 		// Attempt to retrieve some set keys from the document
 		expect(doc.getRaw('foo')).toEqual(new Raw([1, 0, 1, 0]));
 		expect(doc.getRaw('bar')).toEqual(new Raw([2, 1, 2, 1]));
+	});
+});
+
+// Issue #25: encode a list of structs that hold a list of structs.
+// js-moi-manifest encoded each struct as a document by hand and changed the
+// schema of the struct to `document`. The second item then reached
+// polorizeDocument as a plain object. The option docStructs encodes each
+// struct as a document, so the schema does not change.
+describe('Issue #25: nested structs as documents', () => {
+	const inner = { kind: 'struct', fields: { amount: { kind: 'integer' } } };
+	const outer = { kind: 'struct', fields: { items: { kind: 'array', fields: { values: inner } } } };
+	const schema = { kind: 'struct', fields: { outers: { kind: 'array', fields: { values: outer } } } };
+	const documents = { kind: 'array', fields: { values: { kind: 'document' } } };
+
+	const calldata = {
+		outers: [
+			{ items: [{ amount: 1n }] },
+			{ items: [{ amount: 2n }] },
+		]
+	};
+
+	// The document that js-moi-manifest builds by hand.
+	const byHand = (): Document => {
+		const outerDocument = (amount: bigint): Document => {
+			const doc = new Document();
+			doc.setArray('items', [documentEncode({ amount }, inner)], documents);
+			return doc;
+		};
+
+		const doc = new Document();
+		doc.setArray('outers', [outerDocument(1n), outerDocument(2n)], documents);
+		return doc;
+	};
+
+	test('documentEncode with docStructs gives the same bytes', () => {
+		const doc = documentEncode(calldata, schema, { docStructs: true });
+		expect(doc.bytes()).toEqual(byHand().bytes());
+	});
+
+	test('the Polorizer with docStructs gives the same bytes', () => {
+		const polorizer = new Polorizer({ docStructs: true });
+		polorizer.polorize(calldata, schema);
+		expect(polorizer.bytes()).toEqual(byHand().bytes());
+	});
+
+	test('the Depolorizer with docStructs decodes the value', () => {
+		const wire = documentEncode(calldata, schema, { docStructs: true }).bytes();
+		expect(new Depolorizer(wire, { docStructs: true }).depolorize(schema)).toEqual({
+			outers: [
+				{ items: [{ amount: 1 }] },
+				{ items: [{ amount: 2 }] },
+			]
+		});
+	});
+
+	test('a plain object in place of a document gives a clear error', () => {
+		const polorizer = new Polorizer();
+		expect(() => polorizer.polorize({ amount: 2n }, { kind: 'document' }))
+			.toThrow('invalid document value for key "amount"');
 	});
 });

@@ -1,14 +1,31 @@
 {
   "name": "js-polo",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "js-polo is the JS/TS implementation of the POLO Serialization Format.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "scripts": {
     "test": "jest --env=node --colors --coverage --collectCoverageFrom='src/**/*.ts'",
     "lint": "eslint src/**/*.ts __tests__/**/*.ts",
-    "build": "tsc -p tsconfig.json",
-    "benchmark": "node --experimental-specifier-resolution=node --loader ts-node/esm __benchmarks__/*.ts"
+    "build": "node scripts/build.cjs",
+    "benchmark": "node --experimental-specifier-resolution=node --loader ts-node/esm __benchmarks__/*.ts",
+    "test:package": "node scripts/smoke.cjs && node scripts/smoke.mjs",
+    "vectors": "cd scripts/gen-vectors && go run . > ../../__tests__/vectors/go-polo.json"
   },
   "homepage": "https://docs.moi.technology/docs/build/packages/js-polo",
   "repository": {

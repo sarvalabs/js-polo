@@ -1,5 +1,5 @@
 import { Depolorizer, Polorizer } from '../src';
-import { Schema } from '../types/schema';
+import { Schema } from '../src/schema';
 import { Fuzzer } from './utils/fuzzer';
 
 
@@ -434,26 +434,30 @@ describe('Test Map Object', () => {
 	});
 
 	test('Array Map', () => {
-		for(let i = 0; i < 1000; i++) {
-			const schema: Schema = {
-				kind: 'map',
-				fields: {
-					keys: {
-						kind: 'array',
-						fields: {
-							values: {
-								kind: 'string'
-							}
+		// An array cannot be a map key. Only bool, integer, float, string
+		// and bytes keys have a POLO key order in js-polo.
+		const schema: Schema = {
+			kind: 'map',
+			fields: {
+				keys: {
+					kind: 'array',
+					fields: {
+						values: {
+							kind: 'string'
 						}
-					},
-					values: {
-						kind: 'string'
 					}
+				},
+				values: {
+					kind: 'string'
 				}
-			};
-			const value = fuzzer.fuzz(schema);
-			testObject(value, schema);
-		}
+			}
+		};
+
+		const polorizer = new Polorizer();
+		expect(() => polorizer.polorize(new Map([[['a'], 'b']]), schema))
+			.toThrow('a array cannot be a map key');
+		expect(() => new Depolorizer(new Uint8Array([14, 15])).depolorize(schema))
+			.toThrow('a array cannot be a map key');
 	});
 
 	test('Double Map', () => {
@@ -567,70 +571,6 @@ describe('Test Map Object', () => {
 					fields: {
 						keys: {
 							kind: 'integer'
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				g: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'integer'
-								}
-							}
-						},
-						values: {
-							kind: 'string'
-						}
-					}
-				},
-				h: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'integer'
-								}
-							}
-						},
-						values: {
-							kind: 'integer'
-						}
-					}
-				},
-				i: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'float'
-								}
-							}
-						},
-						values: {
-							kind: 'integer'
-						}
-					}
-				},
-				j: {
-					kind: 'map',
-					fields: {
-						keys: {
-							kind: 'array',
-							fields: {
-								values: {
-									kind: 'string'
-								}
-							}
 						},
 						values: {
 							kind: 'string'

@@ -12,9 +12,16 @@ into it. It can be collapsed into its bytes with bytes() or packed().
     // Creating a new Polorizer
     const polorizer = new Polorizer()
 
+    // Creating a Polorizer that writes each struct as a document
+    const docPolorizer = new Polorizer({ docStructs: true })
+
 parameters
 ~~~~~~~~~~
-none
+1. ``options`` - ``EncodeOptions`` (Optional): The encode options. The
+   polorizers for compound values use the same options.
+
+   - ``docStructs`` - ``boolean``: Write each struct as a document, at all
+     levels. The decoder must use the same option.
 
 methods
 ~~~~~~~
@@ -238,8 +245,20 @@ with `isDone()`, and peek the WireType of the next element with `read()`.
 
 parameters
 ~~~~~~~~~~
-1. ``data`` - ``Uint8Array``: The polo encoded data.
-2. ``load`` - ``LoadReader``: The read-only buffer that is obtained from a compound wire (pack).
+1. ``data`` - ``Uint8Array``: The polo encoded data. It must have at least
+   one byte.
+2. ``options`` - ``DecodeOptions`` (Optional): The decode options. The
+   depolorizers for compound values use the same options.
+
+   - ``docStructs`` - ``boolean``: Accept a document and a pack for each
+     struct. For a document, the decoder ignores unknown keys and gives the
+     zero value to each field that has no key.
+   - ``maxDepth`` - ``number``: The maximum nesting depth of compound
+     elements. The default is 1000. A value less than 1 removes the limit.
+
+The decoder accepts only the canonical encoding of each value. It throws
+an error for all other wires. Refer to "Canonical Encoding" in
+:doc:`serialization-schemas`.
 
 methods
 ~~~~~~~
@@ -416,8 +435,11 @@ settable/gettable with string keys.
 
 parameters
 ~~~~~~~~~~
-1. ``data`` - ``Uint8Array`` (Optional): The polo encoded data.
-2. ``schema`` - ``Schema`` (Optional): The polo schema that describes the data and its encoding.
+1. ``data`` - ``Uint8Array`` (Optional): The wire of a document. The
+   constructor decodes it.
+
+For a key that is not in the document, a get method gives the zero value of
+its type: ``false``, ``0``, ``""`` or ``null``.
 
 methods
 ~~~~~~~
@@ -769,7 +791,7 @@ functions
     const depolorizer = new Depolorizer(wire)
     const readBuffer = depolorizer.read()
     const doc = documentDecode(readBuffer)
-    console.log(doc.data)
+    console.log(doc.getData())
 
     // Output:
     // {

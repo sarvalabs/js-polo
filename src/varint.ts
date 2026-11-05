@@ -1,21 +1,35 @@
 import BN from 'bn.js';
-import ByteReader from './bytereader';
+import ByteReader from './bytereader.js';
 
+// The maximum length of a LEB128 integer that fits in 64 bits.
 const MaxVarintLen64 = 10;
 
 /**
  * Class for encoding and decoding variable-length integers (varints).
- * 
+ * POLO uses unsigned LEB128 for tags.
+ *
  * @class
  */
 class Varint {
+	/**
+	 * Encodes a non-negative integer as a LEB128 integer.
+	 *
+	 * This method does not use the 32-bit bitwise operators. Thus it gives
+	 * the correct bytes for all safe integers.
+	 *
+	 * @param {number} num - The integer to encode.
+	 * @returns {Uint8Array} The LEB128 bytes.
+	 */
 	public static encode(num: number): Uint8Array {
-		const result = [];
+		const result: number[] = [];
+
 		while (num >= 0x80) {
-			result.push(num & 0x7f | 0x80);
-			num = num >>> 7;
+			result.push((num % 0x80) | 0x80);
+			num = Math.floor(num / 0x80);
 		}
+
 		result.push(num);
+
 		return new Uint8Array(result);
 	}
 
@@ -31,17 +45,21 @@ class Varint {
 
 	/**
 	 * Appends a given number to a given byte array as a varint-encoded value.
-	 * 
-	 * @param {Uint8Array} bytes - The byte array to which the varint 
+	 *
+	 * @param {Uint8Array} bytes - The byte array to which the varint
 	 * should be appended.
 	 * @param {number} v - The number value to be appended as a varint.
-	 * @returns {Uint8Array} A new byte array containing the original array and 
+	 * @returns {Uint8Array} A new byte array containing the original array and
 	 * the varint-encoded value.
 	 */
-	public static append(b: Uint8Array, v: number | BN): Uint8Array {
-		let num = new BN(v);
+	public static append(b: Uint8Array, v: number | bigint | BN): Uint8Array {
+		if(typeof v === 'number') {
+			return new Uint8Array([...b, ...Varint.encode(v)]);
+		}
+
+		let num = new BN(v.toString());
 		const result: number[] = [];
-	
+
 		if(num.isZero()) {
 			return new Uint8Array([...b, 0]);
 		}
@@ -59,43 +77,54 @@ class Varint {
 	}
 
 	/**
-	 * This method reads a varint-encoded value from a given byte reader and 
-	 * returns the decoded value and number of bytes consumed
+	 * Reads one LEB128 integer from a byte reader. It returns the value and
+	 * the number of bytes that it read.
 	 *
-	 * @param {ByteReader} br - The byte reader object from which the 
-	 * varint should be read.
-	 * @returns {number[]} A tuple containing the decoded varint value
-	 * and the number of bytes consumed from the reader.
-	 * @throws {Error} If an invalid varint is encountered in the reader or 
-	 * the varint overflows 64-bit integer or varint terminated prematurely.
+	 * The decoder accepts only the canonical form (rule C1):
+	 * - The integer must be complete. The data must not stop before a byte
+	 *   with a most significant bit of 0.
+	 * - The encoding must be minimal. A last byte of 0 is not permitted
+	 *   after the first byte. For example, 83 00 is not valid.
+	 * - The integer must fit in 64 bits. The maximum length is 10 bytes, and
+	 *   the tenth byte must be 0 or 1.
+	 *
+	 * A value above 2^53 - 1 is not exact. A tag with such a value is never
+	 * valid, because its offset is more than the length of all data.
+	 *
+	 * @param {ByteReader} br - The byte reader that holds the varint.
+	 * @returns {number[]} The value and the number of bytes read.
+	 * @throws {Error} If the varint is not complete, not minimal, or does
+	 * not fit in 64 bits.
 	 */
 	public static consume(br: ByteReader): [number, number] {
-		try {
-			let x = 0;
-			let s = 0;
-			let b = 0;
-	
-			for(let i = 0; i < MaxVarintLen64; i++) {
-				b = br.readByte();
-	
-				if(b < 0x80) {
-					if(i == MaxVarintLen64 - 1 && b > 1) {
-						throw new Error('varint overflows 64-bit integer');
-					}
-	
-					x |= b << s;
-	
-					return [x, i+1];
-				}
-	
-				x |= (b&0x7f) << s;
-				s += 7;
+		let value = 0;
+		let multiplier = 1;
+
+		for(let i = 0; i < MaxVarintLen64; i++) {
+			const b = br.readByte();
+
+			if(b === null) {
+				throw new Error('varint is not complete');
 			}
-	
-			throw new Error('varint overflows 64-bit integer');
-		} catch(err) {
-			throw new Error('varint terminated prematurely');
+
+			if(i == MaxVarintLen64 - 1 && b > 1) {
+				throw new Error('varint overflows 64-bit integer');
+			}
+
+			value += (b & 0x7f) * multiplier;
+
+			if(b < 0x80) {
+				if(b === 0 && i > 0) {
+					throw new Error('varint is not minimal');
+				}
+
+				return [value, i + 1];
+			}
+
+			multiplier *= 0x80;
 		}
+
+		throw new Error('varint overflows 64-bit integer');
 	}
 }
 

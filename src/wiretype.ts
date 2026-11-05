@@ -36,19 +36,58 @@ export enum WireType {
 	// WIRE_LOAD represents a load tag for compound wire type.
 	WIRE_LOAD = 15,
 }
-  
+
+const WIRE_NAMES: Record<number, string> = {
+	[WireType.WIRE_NULL]: 'Null',
+	[WireType.WIRE_FALSE]: 'False',
+	[WireType.WIRE_TRUE]: 'True',
+	[WireType.WIRE_POSINT]: 'PosInt',
+	[WireType.WIRE_NEGINT]: 'NegInt',
+	[WireType.WIRE_RAW]: 'Raw',
+	[WireType.WIRE_WORD]: 'Word',
+	[WireType.WIRE_FLOAT]: 'Float',
+	[WireType.WIRE_DOC]: 'Document',
+	[WireType.WIRE_PACK]: 'Pack',
+	[WireType.WIRE_LOAD]: 'Load',
+};
+
 /**
  * Utility class for working with wire types.
  */
 export class Wire {
 	/**
 	 * Checks if a given wire type is null.
-	 * A wire type is null if it is WireNull, has a value greater than 15, or is between 8 and 12 (reserved).
+	 * Only WIRE_NULL is null. A reserved wire type is not null: the decoder
+	 * rejects an element with a reserved wire type.
 	 * @param wt The wire type to check.
 	 * @returns True if the wire type is null, false otherwise.
 	 */
 	public static isNull(wt: WireType): boolean {
-		return wt > 15 || wt === WireType.WIRE_NULL || (wt >= 8 && wt <= 12);
+		return wt === WireType.WIRE_NULL;
+	}
+
+	/**
+	 * Checks if a given wire type is reserved. The wire types 8 to 12 are
+	 * reserved. The decoder rejects an element with a reserved wire type.
+	 * @param wt The wire type to check.
+	 * @returns True if the wire type is reserved, false otherwise.
+	 */
+	public static isReserved(wt: WireType): boolean {
+		return wt >= 8 && wt <= 12;
+	}
+
+	/**
+	 * Returns the name of a wire type, as the POLO Wire Specification
+	 * gives it. For example, the name of WIRE_POSINT is "PosInt".
+	 * @param wt The wire type.
+	 * @returns The name of the wire type.
+	 */
+	public static nameOf(wt: WireType): string {
+		if(Wire.isReserved(wt)) {
+			return `reserved (${wt})`;
+		}
+
+		return WIRE_NAMES[wt] ?? `unknown (${wt})`;
 	}
 
 	/**

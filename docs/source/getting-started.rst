@@ -13,8 +13,9 @@ using the following command:
 
 Importing
 -----------
-If you are using CommonJS or ES5, the require statement is used for 
-importing `js-polo`.
+The package has a CommonJS build and an ES module build. Node and bundlers
+select the correct build. If you are using CommonJS or ES5, the require
+statement is used for importing `js-polo`.
 
 .. code-block:: javascript
 

@@ -1,6 +1,6 @@
 import Chance from 'chance';
 import Crypto from 'crypto';
-import { Schema } from '../../types/schema';
+import { Schema } from '../../src/schema';
 
 
 const MIN_INT53 = -Number.MAX_SAFE_INTEGER;
@@ -61,11 +61,22 @@ export class Fuzzer {
 		const map = new Map();
 		if(schema.fields && schema.fields.keys && schema.fields.values &&
 			schema.fields.keys.kind && schema.fields.values.kind) {
+			// Two Uint8Array keys with the same bytes are different keys of a
+			// JavaScript Map, but they are the same POLO key. Keep only one.
+			const seen = new Set<string>();
+
 			for(let i = 0; i < length; i++) {
-				map.set(
-					this.fuzz(schema.fields.keys), 
-					this.fuzz(schema.fields.values)
-				);
+				const key = this.fuzz(schema.fields.keys);
+
+				if(key instanceof Uint8Array) {
+					const hex = Buffer.from(key).toString('hex');
+					if(seen.has(hex)) {
+						continue;
+					}
+					seen.add(hex);
+				}
+
+				map.set(key, this.fuzz(schema.fields.values));
 			}
 
 			return map;

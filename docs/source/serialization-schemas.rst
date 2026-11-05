@@ -46,7 +46,10 @@ This schema represents a boolean value.
 
 Integer Schema
 --------------
-This schema represents an integer value.
+This schema represents an integer value. The encoder accepts a ``number``
+(a safe integer), a ``bigint``, a ``BN`` and a string that holds a decimal
+integer. The integer has no size limit. The decoder gives a ``number`` for a
+safe integer and a ``bigint`` for a larger value.
 
 .. code-block:: javascript
 
@@ -58,7 +61,8 @@ This schema represents an integer value.
 
 Float Schema
 ------------
-This schema represents a floating-point value.
+This schema represents a floating-point value: an IEEE 754 binary64 float.
+All numbers are valid floats, also integers, ``-0`` and ``NaN``.
 
 .. code-block:: javascript
 
@@ -70,7 +74,9 @@ This schema represents a floating-point value.
 
 String Schema
 -------------
-This schema represents a string value.
+This schema represents a string value. The data is UTF-8. The encoder
+rejects a string with a lone surrogate, and the decoder rejects data that is
+not valid UTF-8. POLO does not normalize strings.
 
 .. code-block:: javascript
 
@@ -125,7 +131,20 @@ This schema represents an array of values.
 
 Map Schema
 ----------
-This schema represents a map of key-value pairs.
+This schema represents a map of key-value pairs. The value must be a
+``Map``. The keys can be ``bool``, ``integer``, ``float``, ``string`` or
+``bytes``. The encoder sorts the keys in the POLO order of their kind:
+
+- ``bool``: false, then true.
+- ``integer`` and ``float``: by numeric value. A ``NaN`` cannot be a key.
+- ``string``: byte by byte on the UTF-8 data. This is not the UTF-16 order
+  of JavaScript.
+- ``bytes``: byte by byte. A shorter key that is the start of a longer key
+  is first.
+
+The encoder rejects two keys with the same value, for example ``5`` and
+``5n``, or two ``Uint8Array`` keys with the same bytes. The decoder rejects
+keys that are not in strictly ascending order.
 
 .. code-block:: javascript
 
@@ -150,7 +169,10 @@ This schema represents a map of key-value pairs.
 
 Struct Schema
 -------------
-This schema represents a structured object with named fields.
+This schema represents a structured object with named fields. The wire is
+a pack with one element for each field of the schema, in the order of the
+schema. With the option ``docStructs``, the wire is a document with one key
+for each field.
 
 .. code-block:: javascript
 
@@ -190,3 +212,38 @@ This schema represents a polo document.
     }
 
     polorizer.polorize(doc, schema)
+
+Optional Values and Null
+------------------------
+A Null means "no value". It is not the same as an empty value: an empty
+array is ``0e 0f``, but a Null is ``00``.
+
+- The kinds ``array``, ``map``, ``bytes``, ``raw`` and ``document`` accept a
+  Null. The encoder writes a Null for ``null`` and ``undefined``, and the
+  decoder gives ``null`` for a Null.
+- The kinds ``bool``, ``integer``, ``float``, ``string`` and ``struct``
+  reject a Null. Set ``optional: true`` in the schema for a value that can
+  be absent. Go uses a pointer for such a value, for example ``*uint64``.
+
+.. code-block:: javascript
+
+    // Example
+    const schema = {
+        kind: 'array',
+        fields: {
+            values: {
+                kind: 'integer',
+                optional: true
+            }
+        }
+    }
+
+    polorizer.polorize([1, null, 3], schema)
+
+Canonical Encoding
+------------------
+js-polo follows the POLO Wire Specification v0.5.0. Each value has exactly
+one encoding. The encoder writes only this encoding, and the decoder accepts
+only this encoding. Thus ``encode(decode(wire))`` gives the same bytes as the
+wire, and the bytes are safe to hash. The tests of js-polo compare its
+output with go-polo, the reference implementation.

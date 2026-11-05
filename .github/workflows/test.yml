@@ -7,20 +7,35 @@ on:
 
 jobs:
   test:
-    name: Run Tests
+    name: Run Tests (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: ['22', '24']
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@v4
+
       - name: Set up node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: ${{ matrix.node }}
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
         run: npm run test
+
+      - name: Build the package
+        run: npm run build
+
+      # The publish workflow uses the dist folder from the repository.
+      # Thus the dist folder must be the same as the output of the build.
+      - name: Check that the dist folder is up to date
+        run: git diff --exit-code -- dist
+
+      - name: Load the package as CommonJS and as an ES module
+        run: npm run test:package

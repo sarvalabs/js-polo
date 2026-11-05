@@ -1,18 +1,31 @@
-import BN from 'bn.js';
 import { Buffer } from 'buffer';
-import ByteReader from './bytereader';
-import Varint from './varint';
-import LoadReader from './loadreader';
-import { Wire, WireType } from './wiretype';
-import { Raw } from './raw';
-
-// const MaxInt64 = 1 << 63 - 1;
-
+import ByteReader from './bytereader.js';
+import Varint from './varint.js';
+import LoadReader from './loadreader.js';
+import { Wire, WireType } from './wiretype.js';
+import { Raw } from './raw.js';
+import { decodeUTF8 } from './utf8.js';
 
 /**
- * Class representing a ReadBuffer. ReadBuffer is a is a read-only buffer 
+ * Returns the error for an element with a wire type that the target type
+ * does not accept.
+ *
+ * @param {WireType} wire - The wire type of the element.
+ * @param {string} target - The name of the target type.
+ * @returns {Error} The error.
+ */
+export const incompatibleWire = (wire: WireType, target: string): Error => {
+	return new Error(`incompatible wire: a ${target} does not accept a ${Wire.nameOf(wire)} element`);
+};
+
+/**
+ * Class representing a ReadBuffer. ReadBuffer is a is a read-only buffer
  * that is obtained from a single tag and its body.
- * 
+ *
+ * Each read method examines the wire type and the data of the element. It
+ * accepts only the canonical form of a value, and it throws an error for
+ * all other forms.
+ *
  * @class
  * @param {Buffer} data - An buffer that needs to be read.
  * @param {WireType} wire - The wire type of the data in buffer.
@@ -21,23 +34,52 @@ export class ReadBuffer {
 	public wire: WireType;
 	public data: Buffer;
 
+	/**
+	 * Creates a ReadBuffer.
+	 *
+	 * - With a wire type, the data is the data of one element. A LoadReader
+	 *   uses this form for the elements of a load.
+	 * - Without a wire type, the data is a complete wire. The constructor
+	 *   reads the tag of the top-level element. The wire must have at least
+	 *   one byte, the tag must be complete and minimal (rule C1), and the
+	 *   offset of the tag must be 0 (rule C2). The data of the element is
+	 *   all bytes after the tag.
+	 *
+	 * @param {Uint8Array} data - The data of an element, or a complete wire.
+	 * @param {WireType} wiretype - The wire type of the element, if the data
+	 * is the data of one element.
+	 * @throws {Error} If the wire is empty or the top-level tag is not valid.
+	 */
 	constructor(data: Uint8Array, wiretype?: WireType) {
-		if(wiretype) {
+		if(wiretype !== undefined) {
 			this.wire = wiretype;
-			this.data = Buffer.from(data);
-		} else {
-			const byteReader = new ByteReader(Buffer.from(data));
-			// Attempt to consume a varint from the buffer
-			const [tag, consumed] = Varint.consume(byteReader);
-			
-			this.wire = tag & 15;
-			this.data = Buffer.from(data).subarray(consumed,);
+			this.data = Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+			return;
 		}
-	}
 
+		if(!data || data.length === 0) {
+			throw new Error('malformed wire: the wire is empty');
+		}
+
+		// Copy the wire. Thus a change to the input does not change the result.
+		const wire = Buffer.from(data);
+		const [tag, consumed] = Varint.consume(new ByteReader(wire));
+
+		if(tag >= 16) {
+			throw new Error('malformed wire: the offset of the top-level tag is not 0');
+		}
+
+		this.wire = tag;
+		this.data = wire.subarray(consumed);
+	}
 
 	/**
      * Creates and returns a loadreader from the readbuffer.
+	 *
+	 * The data of a compound element starts with a load tag. The offset of
+	 * the load tag is the length of the head. The body is the data after the
+	 * head. The load tag must be complete and minimal (rule C1), and the
+	 * head must not be longer than the remaining data (rule C6).
      *
      * @public
      * @returns {LoadReader} It returns a loadreader from a readbuffer or
@@ -49,54 +91,30 @@ export class ReadBuffer {
 			throw new Error('load convert fail: not a compound wire');
 		}
 
-		const byteReader = new ByteReader(this.data);
-
-		// Attempt to consume a varint from the buffer
-		const [tag] = Varint.consume(byteReader);
+		const [tag, consumed] = Varint.consume(new ByteReader(this.data));
 
 		// Check that the tag has a type of WireLoad
-		if((tag&15) != WireType.WIRE_LOAD) {
+		if(tag % 16 !== WireType.WIRE_LOAD) {
 			throw new Error('load convert fail: missing load tag');
 		}
 
-		// Read the number of bytes specified by the load for the header
-		const head = this.read(byteReader, tag >> 4);
-		const body = this.read(byteReader, byteReader.len());
+		const length = Math.floor(tag / 16);
+
+		if(length > this.data.length - consumed) {
+			throw new Error('malformed load: the head is longer than the remaining data');
+		}
+
+		const head = this.data.subarray(consumed, consumed + length);
+		const body = this.data.subarray(consumed + length);
 
 		return new LoadReader(head, body);
-	}
-
-	/**
-     * Returns a buffer by consuming n number of bytes from the bytereader.
-     *
-     * @private
-	 * @param {ByteReader} br - bytereader to consume data.
-	 * @param {number} n - number of bytes that need to be consumed.
-     * @returns {Buffer} consumes n number of bytes from the 
-	 * bytereader and returns it as a buffer or throws an error 
-	 * if the bytereader does not have n number of bytes.
-     */
-	private read(br: ByteReader, n: number): Buffer {
-		// If n == 0, return an empty buffer
-		if(n == 0) {
-			return Buffer.alloc(0);
-		}
-
-		const buffer = Buffer.alloc(n);
-		const rn = br.read(buffer);
-
-		if(rn != n) {
-			throw new Error('insufficient data in reader');
-		}
-
-		return buffer;
 	}
 
 	/**
      * Returns the read buffer as bytes.
      *
      * @public
-     * @returns {Uint8Array} read buffer as bytes by concatenating 
+     * @returns {Uint8Array} read buffer as bytes by concatenating
 	 * the data members wire and buffer of the read buffer.
      */
 	public bytes(): Uint8Array {
@@ -105,75 +123,133 @@ export class ReadBuffer {
 		]);
 	}
 
+	/**
+	 * Throws an error if the wire type of the element is not the given
+	 * wire type.
+	 *
+	 * @private
+	 * @param {WireType} wire - The wire type that the element must have.
+	 * @param {string} target - The name of the target type.
+	 */
+	private expect(wire: WireType, target: string): void {
+		if(this.wire !== wire) {
+			throw incompatibleWire(this.wire, target);
+		}
+	}
+
+	/**
+	 * Throws an error if the element has data. A Null, a False and a True
+	 * have no data (rule C4).
+	 *
+	 * @private
+	 */
+	private expectNoData(): void {
+		if(this.data.length > 0) {
+			throw new Error(`malformed wire: a ${Wire.nameOf(this.wire)} element has data`);
+		}
+	}
+
+	// Reads a Null element. A Null has no data.
 	public readNull(): null {
+		this.expect(WireType.WIRE_NULL, 'null');
+		this.expectNoData();
+
 		return null;
 	}
 
-	// Reads the data in the read buffer into raw bytes
+	// Reads the data of a Raw element. The decoder does not examine the
+	// data. A Raw target accepts only a Raw element.
 	public readRaw(): Raw {
-		return new Raw(this.data);		
+		this.expect(WireType.WIRE_RAW, 'raw');
+
+		return new Raw(this.data);
 	}
 
-	// Reads the data in the read buffer into a boolean
+	// Reads a False or a True element into a boolean. The element has no data.
 	public readBool(): boolean {
 		switch(this.wire) {
 		case WireType.WIRE_TRUE:
+			this.expectNoData();
 			return true;
-		case WireType.WIRE_NULL:
 		case WireType.WIRE_FALSE:
+			this.expectNoData();
 			return false;
-		default: 
-			throw new Error('Invalid wire type');
+		default:
+			throw incompatibleWire(this.wire, 'bool');
 		}
 	}
 
-	// Reads the data in the read buffer into an string
+	// Reads a Word element into a string. The data must be valid UTF-8.
 	public readString(): string {
-		return this.data.toString();
+		this.expect(WireType.WIRE_WORD, 'string');
+
+		return decodeUTF8(this.data);
 	}
 
-	private readUInt(data: Buffer): number | bigint {
-		if(data.length > 8) {
-			throw new Error('excess data for 64-bit integer');
+	/**
+	 * Reads a PosInt or a NegInt element into an integer (rule C3).
+	 *
+	 * The data is the magnitude in big-endian order. It must not start with
+	 * a zero byte. Zero is a PosInt with no data, and a NegInt must have data
+	 * because negative zero does not exist. The magnitude has no size limit.
+	 *
+	 * @returns {number | bigint} A number if the value is a safe integer,
+	 * else a bigint.
+	 * @throws {Error} If the element is not an integer or is not minimal.
+	 */
+	public readInteger(): number | bigint {
+		if(this.wire !== WireType.WIRE_POSINT && this.wire !== WireType.WIRE_NEGINT) {
+			throw incompatibleWire(this.wire, 'integer');
 		}
 
-		const value = new BN(data, 'be');
+		const negative = this.wire === WireType.WIRE_NEGINT;
+
+		if(this.data.length === 0) {
+			if(negative) {
+				throw new Error('malformed integer: a NegInt has no data (negative zero)');
+			}
+
+			return 0;
+		}
+
+		if(this.data[0] === 0) {
+			throw new Error('malformed integer: the data starts with a zero byte');
+		}
+
+		// Six bytes hold 48 bits. Such a magnitude is always a safe integer.
+		if(this.data.length <= 6) {
+			const value = this.data.readUIntBE(0, this.data.length);
+			return negative ? -value : value;
+		}
+
+		const magnitude = BigInt('0x' + this.data.toString('hex'));
 
 		// Values beyond 2^53-1 cannot be represented exactly as a
 		// number, so they are returned as a bigint instead.
-		if(value.bitLength() > 53) {
-			return BigInt(value.toString());
+		if(magnitude <= BigInt(Number.MAX_SAFE_INTEGER)) {
+			const value = Number(magnitude);
+			return negative ? -value : value;
 		}
 
-		return value.toNumber();
+		return negative ? -magnitude : magnitude;
 	}
 
-	// Reads the data in the read buffer into an integer
-	public readInteger(): number | bigint {
-		switch(this.wire){
-		case WireType.WIRE_NULL:
-		case WireType.WIRE_POSINT:
-		case WireType.WIRE_NEGINT: {
-			const value = this.readUInt(this.data);
-
-			if(this.wire == WireType.WIRE_NEGINT) {
-				return -value;
-			}
-
-			return value;
-		}
-		default:
-			throw new Error('invalid wire type');
-		}
-	}
-
-	// Reads the data in the read buffer into an float
+	// Reads a Float element into a number. A binary64 float has exactly 8
+	// bytes (rule C5). The decoder keeps all bits, also the bits of a NaN.
 	public readFloat(): number {
-		return this.data.readDoubleBE();
+		this.expect(WireType.WIRE_FLOAT, 'float');
+
+		if(this.data.length !== 8) {
+			throw new Error(`malformed float: a binary64 float has 8 bytes, but the data has ${this.data.length} bytes`);
+		}
+
+		return this.data.readDoubleBE(0);
 	}
 
-	// Reads the data in the read buffer into bytes
+	// Reads a Word element into bytes. The data can be any bytes.
 	public readBytes(): Uint8Array {
-		return Uint8Array.from(this.data.subarray(0,));
+		this.expect(WireType.WIRE_WORD, 'bytes');
+
+		return Uint8Array.from(this.data);
 	}
 }
