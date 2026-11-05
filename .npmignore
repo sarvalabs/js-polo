@@ -10,3 +10,5 @@ src/
 jest.config.cjs
 package-lock.json
 tsconfig.json
+scripts/
+tsconfig.*.json

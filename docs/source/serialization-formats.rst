@@ -16,6 +16,7 @@ enumeration provides a list of wire types and their corresponding values.
 - ``WIRE_RAW`` Represents polo encoded bytes. (Value: 5)
 - ``WIRE_WORD`` Represents UTF-8 encoded string/bytes. (Value: 6)
 - ``WIRE_FLOAT`` Represents some floating point data encoded in the IEEE754 standard (floats). (Value: 7)
+- The values 8 to 12 are reserved. The decoder rejects an element with a reserved wire type.
 - ``WIRE_DOC`` Represents doc encoded data (string keyed maps, tagged structs, and Document objects). (Value: 13)
 - ``WIRE_PACK`` Represents pack encoded data (slices, arrays, maps, structs). (Value: 14)
 - ``WIRE_LOAD`` Represents a load tag for compound wire type. (Value: 15)
@@ -33,6 +34,24 @@ A utility class for working with wire types.
     // Example
     Wire.isNull(WIRE_NULL)
     >> true
+
+Only ``WIRE_NULL`` is null. A reserved wire type is not null.
+
+.. autofunction:: isReserved
+
+.. code-block:: javascript
+
+    // Example
+    Wire.isReserved(8)
+    >> true
+
+.. autofunction:: nameOf
+
+.. code-block:: javascript
+
+    // Example
+    Wire.nameOf(WIRE_POSINT)
+    >> "PosInt"
 
 .. autofunction:: isCompound
 

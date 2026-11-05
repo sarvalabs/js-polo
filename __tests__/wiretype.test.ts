@@ -10,14 +10,14 @@ describe('Test Wire Type', () => {
 			const wt = fuzzer.fuzzWire();
 			const result = Wire.isNull(wt);
 
-			switch(true) {
-			case wt > 15 || wt === 0 || (wt >= 8 && wt <= 12):
-				expect(result).toBe(true);
-				break;
-			default:
-				expect(result).toBe(false);
-				break;
-			}
+			// Only WIRE_NULL is null. The decoder rejects a reserved wire type.
+			expect(result).toBe(wt === WireType.WIRE_NULL);
+		}
+	});
+
+	test('Is Reserved', () => {
+		for(let wt = 0; wt < 16; wt++) {
+			expect(Wire.isReserved(wt)).toBe(wt >= 8 && wt <= 12);
 		}
 	});
 

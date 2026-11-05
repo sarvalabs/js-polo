@@ -1,4 +1,4 @@
-import { Depolorizer, Polorizer, WireType } from '../src';
+import { Depolorizer, Polorizer } from '../src';
 import { PackDepolorizer } from '../src/packdepolorizer';
 
 interface Fruit {
@@ -39,7 +39,7 @@ describe('Test Depolorizer', () => {
 	});
 
 	test('Null', () => {
-		let depolorizer = new Depolorizer(new Uint8Array([14, 63, 0, 2, 0]));
+		let depolorizer = new Depolorizer(new Uint8Array([14, 63, 0, 0, 0]));
 
 		depolorizer = depolorizer.depolorizePacked();
 
@@ -51,8 +51,14 @@ describe('Test Depolorizer', () => {
 
 		depolorizer.depolorizeNull();
 		expect(depolorizer.isDone()).toBe(true);
+	});
 
-		// TODO: check and handle errors
+	test('Null rejects other wire types', () => {
+		// The pack holds a Null and a True.
+		const depolorizer = new Depolorizer(new Uint8Array([14, 47, 0, 2])).depolorizePacked();
+
+		expect(depolorizer.depolorizeNull()).toBe(null);
+		expect(() => depolorizer.depolorizeNull()).toThrow('a null does not accept a True element');
 	});
 
 	test('Bool', () => {
@@ -176,13 +182,12 @@ describe('Test Depolorizer', () => {
 		depolorizer = depolorizer.depolorizePacked();
 
 		let inner = depolorizer.depolorizeInner();
-		expect(inner).toEqual(
-			new Depolorizer(new Uint8Array([WireType.WIRE_NULL]))
-		);
+		expect(inner.depolorizeNull()).toBe(null);
+		expect(inner.isDone()).toBe(true);
 
 		inner = depolorizer.depolorizeInner();
-		expect(inner).toEqual(
-			new Depolorizer(new Uint8Array([WireType.WIRE_POSINT, 5]))
-		);
+		expect(inner.depolorizeInteger()).toBe(5);
+		expect(inner.isDone()).toBe(true);
+		expect(depolorizer.isDone()).toBe(true);
 	});
 });

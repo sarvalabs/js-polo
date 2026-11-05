@@ -1,26 +1,72 @@
-import { WriteBuffer } from './writebuffer';
-import { WireType } from './wiretype';
-import { Schema } from '../types/schema';
+import { WriteBuffer } from './writebuffer.js';
+import { WireType } from './wiretype.js';
+import { Schema } from './schema.js';
 import BN from 'bn.js';
-import { Raw } from './raw';
-import { ReadBuffer } from './readbuffer';
+import { Raw } from './raw.js';
+import { ReadBuffer } from './readbuffer.js';
+import { checkKeySchema, compareKeys, sortKey } from './keyorder.js';
+import { compareUTF8 } from './utf8.js';
+import { EncodeOptions } from './options.js';
+import { Document } from './document.js';
 
 /**
- * Polorizer is an encoding buffer that can sequentially polorize objects 
+ * The value of a document entry: the POLO wire of the value. null is a
+ * value with no data. The encoder writes it as a Raw that holds a Null.
+ */
+export type DocumentValue = Raw | Uint8Array | null;
+
+/**
+ * The kinds that accept a Null without `optional`. For these kinds, "no
+ * value" is a valid value, and it is not the same as an empty value.
+ */
+export const NULLABLE_KINDS: readonly string[] = ['null', 'array', 'map', 'bytes', 'raw', 'document'];
+
+/**
+ * Returns true if a Null is a valid value for a schema.
+ *
+ * @param {Schema} schema - The schema.
+ * @returns {boolean} True if the schema accepts a Null.
+ */
+export const acceptsNull = (schema: Schema): boolean => {
+	return schema.optional === true || NULLABLE_KINDS.includes(schema.kind);
+};
+
+/**
+ * Adds the name of a struct field to an error.
+ *
+ * @param {string} field - The name of the field.
+ * @param {unknown} err - The error.
+ * @returns {Error} An error with the name of the field.
+ */
+export const fieldError = (field: string, err: unknown): Error => {
+	const message = err instanceof Error ? err.message : String(err);
+	return new Error(`field "${field}": ${message}`);
+};
+
+/**
+ * Polorizer is an encoding buffer that can sequentially polorize objects
  * into it. It can be collapsed into its bytes with Bytes() or Packed().
- * 
+ *
  * @class
  */
 export class Polorizer {
 	private writeBuffer: WriteBuffer;
+	private options: EncodeOptions;
 
-	constructor() {
+	/**
+	 * Creates a Polorizer.
+	 *
+	 * @param {EncodeOptions} options - Optional. The encode options. The
+	 * polorizers for compound values use the same options.
+	 */
+	constructor(options?: EncodeOptions) {
 		this.writeBuffer = new WriteBuffer();
+		this.options = options ?? {};
 	}
 
 	/**
 	 * Returns the contents of the Polorizer as bytes.
-	 * 
+	 *
 	 * If no objects were polarized, it returns a WIRE_NULL wire.
 	 * If only one object was polarized, it returns the contents directly.
 	 * If more than one object was polarized, it returns the contents in a packed wire.
@@ -40,7 +86,7 @@ export class Polorizer {
 	}
 
 	/**
-	 * Returns the contents of the Polorizer as bytes after packing it and 
+	 * Returns the contents of the Polorizer as bytes after packing it and
 	 * tagging with WIRE_PACK.
 	 *
 	 * @public
@@ -55,22 +101,35 @@ export class Polorizer {
 	/**
 	 * Encodes a value into the Polorizer based on the given schema.
 	 *
-	 * @param {(null|boolean|number|BN|string|Uint8Array|Array<unknown>|Map<unknown, unknown>|object)} value 
-	 *        - The value to be encoded into the Polorizer.
+	 * `null` and `undefined` mean "no value". The encoder writes a Null for
+	 * them if the schema accepts a Null: an optional schema, or the kind
+	 * `null`, `array`, `map`, `bytes`, `raw` or `document`. For all other
+	 * schemas, the encoder throws an error.
+	 *
+	 * @param {unknown} value - The value to be encoded into the Polorizer.
 	 * @param {Schema} schema - The schema that describes the value and its encoding.
-	 * @throws {Error} If the kind of the schema is not one of the supported kinds.
-	 * @description Depending on the kind of the schema, the appropriate 
-	 * encoding method is called to encode the value. The supported kinds are 
-	 * null, bool, integer, float, string, raw, bytes, array, map, and struct.
+	 * @throws {Error} If the kind of the schema is not one of the supported
+	 * kinds, or if the value does not agree with the schema.
+	 * @description Depending on the kind of the schema, the appropriate
+	 * encoding method is called to encode the value. The supported kinds are
+	 * null, bool, integer, float, string, raw, bytes, array, map, struct and
+	 * document.
 	 */
-	public polorize(
-		value: null | boolean | number | BN | string | Uint8Array | 
-		Array<unknown> | Map<unknown, unknown> | object, 
-		schema: Schema
-	): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public polorize(value: any, schema: Schema): void {
+		if(value === null || value === undefined) {
+			if(!acceptsNull(schema)) {
+				throw new Error(`invalid value: a ${schema.kind} cannot be null; ` +
+					'set "optional: true" in the schema for a value that can be absent');
+			}
+
+			this.polorizeNull();
+			return;
+		}
+
 		switch(schema.kind) {
 		case 'null':
-			this.polorizeNull(); 
+			this.polorizeNull();
 			break;
 		case 'bool':
 			this.polorizeBool(value);
@@ -85,7 +144,7 @@ export class Polorizer {
 			this.polorizeString(value);
 			break;
 		case 'raw':
-			this.polorizeRaw(value);
+			this.writeBuffer.writeRaw(value);
 			break;
 		case 'bytes':
 			this.polorizeBytes(value);
@@ -113,9 +172,9 @@ export class Polorizer {
 
 	/**
 	 * Encodes a null value into the Polorizer.
-	 * 
+	 *
 	 * @public
-	 * @description Encodes a WIRE_NULL into the head, consuming a 
+	 * @description Encodes a WIRE_NULL into the head, consuming a
 	 * position on the wire.
 	 */
 	public polorizeNull(): void {
@@ -127,7 +186,7 @@ export class Polorizer {
 	 *
 	 * @param {boolean} value - The boolean value to encode.
 	 * @public
-	 * @description  Encodes the boolean as either WIRE_TRUE or WIRE_FALSE, 
+	 * @description  Encodes the boolean as either WIRE_TRUE or WIRE_FALSE,
 	 * depending on its value.
 	 */
 	public polorizeBool(value: boolean): void {
@@ -138,22 +197,24 @@ export class Polorizer {
 	 * Encodes a signed/unsigned integer or BN value into the Polorizer.
 	 *
 	 * @public
-	 * @param {number | BN} value - The integer or BN value to encode.
-	 * @description Encodes the integer as the binary form of its absolute value 
-	 * with the wire type being WIRE_POSINT or WIRE_NEGINT based on polarity, 
-	 * with zero considered as positive.
+	 * @param {number | bigint | BN | string} value - The integer to encode.
+	 * A number must be a safe integer. A string must hold a decimal integer.
+	 * @description Encodes the integer as the binary form of its absolute value
+	 * with the wire type being WIRE_POSINT or WIRE_NEGINT based on polarity,
+	 * with zero considered as positive. The integer has no size limit.
 	 */
-	public polorizeInteger(value: number | BN): void {
+	public polorizeInteger(value: number | bigint | BN | string): void {
 		this.writeBuffer.writeInt(value);
 	}
 
 	/**
-	 * Encodes a single-precision float value into the Polorizer as WIRE_FLOAT.
+	 * Encodes a float value into the Polorizer as WIRE_FLOAT.
 	 *
 	 * @public
 	 * @param {number} value - The float value to encode.
-	 * @description Encodes the float as its IEEE754 binary form (big-endian) 
-	 * with the wire type being WIRE_FLOAT.
+	 * @description Encodes the float as its IEEE754 binary64 form
+	 * (big-endian) with the wire type being WIRE_FLOAT. All numbers are
+	 * valid floats, also integers, -0 and NaN.
 	 */
 	public polorizeFloat(value: number): void {
 		this.writeBuffer.writeFloat(value);
@@ -164,15 +225,11 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {string} value - The string value to encode.
-	 * @description Encodes the string as its UTF-8 encoded bytes with the 
-	 * wire type being WIRE_WORD.
+	 * @description Encodes the string as its UTF-8 encoded bytes with the
+	 * wire type being WIRE_WORD. The string must be well-formed: a lone
+	 * surrogate has no UTF-8 form.
 	 */
 	public polorizeString(value: string): void {
-		if(!value) {
-			this.writeBuffer.writeString('');
-			return;
-		}
-
 		this.writeBuffer.writeString(value);
 	}
 
@@ -180,17 +237,13 @@ export class Polorizer {
 	 * Encodes a Raw value into the Polorizer.
 	 *
 	 * @public
-	 * @param {RAW} value - The raw value to encode.
-	 * @description Encodes the Raw directly with the wire type being WIRE_RAW. 
-	 * A nil Raw is encoded as WIRE_NULL.
+	 * @param {Raw} value - The raw value to encode.
+	 * @description Encodes the Raw directly with the wire type being WIRE_RAW.
+	 * A null Raw is encoded as a Raw that holds a Null (05 00), as go-polo
+	 * does. Polorize with the kind `raw` encodes a null Raw as a Null (00).
 	 */
-	public polorizeRaw(value: Raw): void {
-		if(!value) {
-			this.polorizeNull();
-			return;
-		}
-
-		this.writeBuffer.writeRaw(value);
+	public polorizeRaw(value: Raw | Uint8Array | null): void {
+		this.writeBuffer.writeRaw(value ?? new Raw([WireType.WIRE_NULL]));
 	}
 
 	/**
@@ -198,10 +251,12 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {Uint8Array} value - The bytes value to encode.
-	 * @description Encodes the bytes as is with the wire type being WireWord.
+	 * @description Encodes the bytes as is with the wire type being
+	 * WireWord. A null value is encoded as a Null. A Null and empty bytes
+	 * are different values.
 	 */
-	public polorizeBytes(value: Uint8Array): void {
-		if(!value) {
+	public polorizeBytes(value: Uint8Array | null): void {
+		if(value === null || value === undefined) {
 			this.polorizeNull();
 			return;
 		}
@@ -214,8 +269,8 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {Polorizer} pack - The Polorizer instance to encode.
-	 * @description The contents are packed into a WIRE_LOAD message and 
-	 * tagged with the WIRE_PACK wire type. If the given Polorizer is nil, 
+	 * @description The contents are packed into a WIRE_LOAD message and
+	 * tagged with the WIRE_PACK wire type. If the given Polorizer is nil,
 	 * a WIRE_NULL is encoded instead.
 	 */
 	public polorizePacked(pack: Polorizer): void {
@@ -232,8 +287,8 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {Polorizer} inner - The Polorizer instance to encode.
-	 * @description Unlike PolorizePacked which will always write it as a 
-	 * packed wire while polorizeInner will write an atomic as is. 
+	 * @description Unlike PolorizePacked which will always write it as a
+	 * packed wire while polorizeInner will write an atomic as is.
 	 * If the given Polorizer is nil, a WireNull is encoded.
 	 */
 	public polorizeInner(inner: Polorizer): void {
@@ -252,21 +307,23 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {Array<unknown>} array - The array to encode.
-	 * @param {Schema} schema - The schema that describes the value and 
+	 * @param {Schema} schema - The schema that describes the value and
 	 * its encoding.
 	 * @description It is encoded as element pack encoded data.
 	 */
 	private polorizeArray(array: Array<unknown>, schema: Schema): void {
-		if(!array) {
-			this.polorizeNull();
-			return;
+		const values: Schema = schema.fields?.values;
+
+		if(!values?.kind) {
+			throw new Error('invalid schema: an array schema must have fields.values');
 		}
 
-		const polorizer = new Polorizer();
-
-		if(schema.fields && schema.fields.values && schema.fields.values.kind) {
-			array.forEach(arr => polorizer.polorize(arr, schema.fields.values));
+		if(!Array.isArray(array)) {
+			throw new Error(`invalid array: expected an array, received ${typeof array}`);
 		}
+
+		const polorizer = new Polorizer(this.options);
+		array.forEach(item => polorizer.polorize(item, values));
 
 		this.polorizePacked(polorizer);
 	}
@@ -276,29 +333,42 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {Map<unknown, unknown>} map - The map to encode.
-	 * @param {Schema} schema - The schema that describes the key, value and 
+	 * @param {Schema} schema - The schema that describes the key, value and
 	 * its encoding.
-	 * @description It is encoded as key-value pack encoded data. Map keys 
-	 * are sorted before being sequentially encoded.
+	 * @description It is encoded as key-value pack encoded data. The keys
+	 * are in the POLO key order of their kind (rule C7). The encoder rejects
+	 * a NaN key and two keys with the same value, for example 5 and 5n.
 	 */
 	private polorizeMap(map: Map<unknown, unknown>, schema: Schema): void {
-		if(!map) {
-			this.polorizeNull();
-			return;
+		const keys: Schema = schema.fields?.keys;
+		const values: Schema = schema.fields?.values;
+
+		if(!keys?.kind || !values?.kind) {
+			throw new Error('invalid schema: a map schema must have fields.keys and fields.values');
 		}
 
-		const polorizer = new Polorizer();
+		checkKeySchema(keys);
 
-		if(schema.fields && schema.fields.keys && schema.fields.values &&
-		schema.fields.keys.kind && schema.fields.values.kind) {
-			const keys = [...map.keys()];
-			keys.sort();
-
-			keys.forEach(key => {
-				polorizer.polorize(key, schema.fields.keys);
-				polorizer.polorize(map.get(key), schema.fields.values);
-			});
+		if(!(map instanceof Map)) {
+			throw new Error(`invalid map: expected a Map, received ${typeof map}`);
 		}
+
+		const entries = [...map.entries()].map(([key, value]) => ({
+			sort: sortKey(keys.kind, key), key, value
+		}));
+
+		entries.sort((a, b) => compareKeys(a.sort, b.sort));
+
+		const polorizer = new Polorizer(this.options);
+
+		entries.forEach((entry, index) => {
+			if(index > 0 && compareKeys(entries[index - 1].sort, entry.sort) === 0) {
+				throw new Error(`invalid map: two keys have the same value (${String(entry.key)})`);
+			}
+
+			polorizer.polorize(entry.key, { ...keys, optional: false });
+			polorizer.polorize(entry.value, values);
+		});
 
 		this.polorizePacked(polorizer);
 	}
@@ -308,20 +378,47 @@ export class Polorizer {
 	 *
 	 * @public
 	 * @param {object} struct - The object to encode.
-	 * @param {Schema} schema - The schema that describes the fields and 
+	 * @param {Schema} schema - The schema that describes the fields and
 	 * its encoding.
-	 * @description It is encoded as field ordered pack encoded data.
+	 * @description It is encoded as field ordered pack encoded data. The
+	 * pack has exactly one element for each field of the schema, in the
+	 * order of the schema. With the option docStructs, it is encoded as a
+	 * document with one key for each field of the schema.
 	 */
 	private polorizeStruct(struct: object, schema: Schema): void {
-		if(!struct) {
-			this.polorizeNull();
+		if(typeof struct !== 'object') {
+			throw new Error(`invalid struct: expected an object, received ${typeof struct}`);
+		}
+
+		const fields = Object.entries(schema.fields ?? {});
+
+		if(this.options.docStructs) {
+			const document = new Map<string, Raw>();
+
+			fields.forEach(([key, field]) => {
+				const polorizer = new Polorizer(this.options);
+
+				try {
+					polorizer.polorize(struct[key], field);
+				} catch(err) {
+					throw fieldError(key, err);
+				}
+
+				document.set(key, new Raw(polorizer.bytes()));
+			});
+
+			this.polorizeDocument(document);
 			return;
 		}
 
-		const polorizer = new Polorizer();
+		const polorizer = new Polorizer(this.options);
 
-		Object.entries(schema.fields).forEach(([key, value]) => {
-			polorizer.polorize(struct[key], value);
+		fields.forEach(([key, field]) => {
+			try {
+				polorizer.polorize(struct[key], field);
+			} catch(err) {
+				throw fieldError(key, err);
+			}
 		});
 
 		this.polorizePacked(polorizer);
@@ -331,26 +428,56 @@ export class Polorizer {
 	 * Encodes a Document into the Polorizer.
 	 *
 	 * @public
-	 * @param {object} document - The document object to encode.
-	 * @description Encodes the Document keys and raw values as POLO 
-	 * doc-encoded data with the wire type being WIRE_DOC.
-	 * If the Document is nil, it is encoded as a WIRE_NULL.
+	 * @param {Document | Map | object} document - The document to encode:
+	 * a Document, a Map, or an object. Each value is the POLO wire of a
+	 * value (a Raw or a Uint8Array), or null.
+	 * @description Encodes the Document keys and raw values as POLO
+	 * doc-encoded data with the wire type being WIRE_DOC. The keys are in
+	 * the order of their UTF-8 bytes (rule C7). A null value is a Raw that
+	 * holds a Null (the data 00). If the Document is nil, it is encoded as a
+	 * WIRE_NULL.
+	 * @throws {Error} If a key is not a well-formed string, or if a value is
+	 * not a Raw, a Uint8Array or null. A plain value, for example 5n, must
+	 * first be encoded. Use documentEncode, or the option docStructs.
 	 */
-	public polorizeDocument(document: object): void {
-		if(!document) {
+	public polorizeDocument(
+		document: Document | Map<string, DocumentValue> | Record<string, DocumentValue> | null
+	): void {
+		if(document === null || document === undefined) {
 			this.polorizeNull();
 			return;
 		}
 
-		const keys = Object.keys(document);
-		keys.sort();
+		let entries: Array<[string, DocumentValue]>;
 
-		const polorizer = new Polorizer();
-		keys.forEach(key => {
+		if(document instanceof Document) {
+			entries = Object.entries(document.getData());
+		} else if(document instanceof Map) {
+			entries = [...document.entries()];
+		} else if(typeof document === 'object') {
+			entries = Object.entries(document);
+		} else {
+			throw new Error(`invalid document: expected a Document, a Map or an object, received ${typeof document}`);
+		}
+
+		entries.sort(([a], [b]) => compareUTF8(a, b));
+
+		const polorizer = new Polorizer(this.options);
+
+		entries.forEach(([key, value]) => {
+			if(typeof key !== 'string') {
+				throw new Error(`invalid document key: expected a string, received ${typeof key}`);
+			}
+
+			if(value !== null && value !== undefined && !(value instanceof Uint8Array)) {
+				throw new Error(`invalid document value for key "${key}": expected the POLO wire of the value ` +
+					`(a Raw or a Uint8Array), received ${typeof value}; encode the value first`);
+			}
+
 			polorizer.polorizeString(key);
-			polorizer.polorizeRaw(document[key]);
+			polorizer.polorizeRaw(value ?? null);
 		});
 
 		this.writeBuffer.write(WireType.WIRE_DOC, polorizer.writeBuffer.load());
 	}
-} 
+}

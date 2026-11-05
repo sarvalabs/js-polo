@@ -1,4 +1,5 @@
-import { Polorizer, Document } from '../src';
+import BN from 'bn.js';
+import { Polorizer, Depolorizer, Document } from '../src';
 import { Raw } from '../src/raw';
 
 describe('Test Polorizer', () => {
@@ -190,6 +191,44 @@ describe('Test Polorizer', () => {
 		]));
 	});
 
+	test('Canonical integers', () => {
+		const encode = (value: number | bigint | BN): Uint8Array => {
+			const polorizer = new Polorizer();
+			polorizer.polorizeInteger(value);
+			return polorizer.bytes();
+		};
+
+		// A bigint has no leading zero bytes. It encodes like the same number.
+		for(const value of [1, 255, 256, 65535, 100000000000, Number.MAX_SAFE_INTEGER]) {
+			expect(encode(BigInt(value))).toEqual(encode(value));
+			expect(encode(-BigInt(value))).toEqual(encode(-value));
+			expect(encode(new BN(value))).toEqual(encode(value));
+		}
+
+		expect(encode(0n)).toEqual(new Uint8Array([3]));
+		expect(encode(-1n)).toEqual(new Uint8Array([4, 1]));
+		expect(encode(100000000000n)).toEqual(new Uint8Array([
+			3, 0x17, 0x48, 0x76, 0xe8, 0x00
+		]));
+		expect(encode(-(2n ** 56n))).toEqual(new Uint8Array([
+			4, 1, 0, 0, 0, 0, 0, 0, 0
+		]));
+
+		// A value of more than 64 bits uses as many bytes as it needs.
+		expect(encode(2n ** 64n)).toEqual(new Uint8Array([
+			3, 1, 0, 0, 0, 0, 0, 0, 0, 0
+		]));
+		expect(encode(2n ** 256n - 1n)).toEqual(new Uint8Array([
+			3, ...new Array(32).fill(255)
+		]));
+
+		// The decoder returns the value that was encoded.
+		for(const value of [1n, 255n, 2n ** 53n + 1n, 2n ** 64n - 1n, -(2n ** 63n)]) {
+			const decoded = new Depolorizer(encode(value)).depolorizeInteger();
+			expect(BigInt(decoded)).toEqual(value);
+		}
+	});
+
 	test('Raw', () => {
 		const polorizer = new Polorizer();
 
@@ -278,3 +317,69 @@ describe('Test Polorizer', () => {
 });
 
 // TODO: Check for null if required
+// An asset invoke with funds (go-moi common.AssetActionPayload). go-moi
+// decodes the funds into map[AssetID]*big.Int. An asset ID is a 32-byte
+// array, so the keys are bytes, in the order of their unsigned byte values.
+// The wires are from go-polo (release-v0.5.0, commit bc1c611).
+describe('Asset invoke with funds', () => {
+	const schema = {
+		kind: 'struct',
+		fields: {
+			asset_id: { kind: 'bytes' },
+			callsite: { kind: 'string' },
+			calldata: { kind: 'bytes' },
+			funds: { kind: 'map', fields: { keys: { kind: 'bytes' }, values: { kind: 'integer' } } }
+		}
+	};
+
+	const KMOI = '1080fffe4cd973c4eb83cdb8870c0de209736270491b7acc99873da100000000';
+	const assetID = (byte20?: number): Uint8Array => {
+		const id = Uint8Array.from(Buffer.from(KMOI, 'hex'));
+		if(byte20 !== undefined) {
+			id[20] = byte20;
+		}
+		return id;
+	};
+
+	const encode = (funds: unknown): string => {
+		const polorizer = new Polorizer();
+		polorizer.polorize({
+			asset_id: assetID(), callsite: 'Transfer', calldata: new Uint8Array([0x0d]), funds
+		}, schema);
+		return Buffer.from(polorizer.bytes()).toString('hex');
+	};
+
+	const head = '0e7f06860486059e05' + KMOI + '5472616e736665720d';
+
+	test('one asset', () => {
+		expect(encode(new Map([[assetID(), 5n]]))).toBe(head + '3f068304' + KMOI + '05');
+	});
+
+	test('two assets are in the order of their bytes', () => {
+		// The key with 0a at byte 20 is first in the Map, but 09 is less than 0a.
+		const funds = new Map([[assetID(0x0a), 6n], [assetID(0x09), 5n]]);
+		const lo = KMOI.slice(0, 40) + '09' + KMOI.slice(42);
+		const hi = KMOI.slice(0, 40) + '0a' + KMOI.slice(42);
+
+		expect(encode(funds)).toBe(head + '7f06830496049308' + lo + '05' + hi + '06');
+	});
+
+	test('no funds is a Null, and empty funds is an empty pack', () => {
+		expect(encode(undefined)).toBe('0e7f06860486059005' + KMOI + '5472616e736665720d');
+		expect(encode(new Map())).toBe(head + '0f');
+	});
+
+	test('two keys with the same bytes are an error', () => {
+		expect(() => encode(new Map([[assetID(), 5n], [assetID(), 6n]]))).toThrow('two keys have the same value');
+	});
+
+	test('a plain object is not a map', () => {
+		expect(() => encode({ [KMOI]: 5n })).toThrow('invalid map: expected a Map');
+	});
+
+	test('the decoder rejects keys that are not in order', () => {
+		const wire = Buffer.from(head + '7f06830496049308' +
+			KMOI.slice(0, 40) + '0a' + KMOI.slice(42) + '06' + KMOI.slice(0, 40) + '09' + KMOI.slice(42) + '05', 'hex');
+		expect(() => new Depolorizer(wire).depolorize(schema)).toThrow('not in strictly ascending order');
+	});
+});

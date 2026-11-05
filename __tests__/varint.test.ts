@@ -129,24 +129,57 @@ describe('consume varint', () => {
 				value: 12314124,
 				consumed: 4
 			},
+			// The example of the POLO Wire Specification.
+			{
+				input: new Uint8Array([0xfe, 0xeb, 0x96, 0xfd, 0xbe, 0x02]),
+				value: 85624993278,
+				consumed: 6
+			},
+			// 2^35. A 32-bit shift gives an incorrect value for this varint.
+			{
+				input: new Uint8Array([128, 128, 128, 128, 128, 1]),
+				value: 34359738368,
+				consumed: 6
+			},
+			// The data stops after a byte with a most significant bit of 1.
 			{
 				input: new Uint8Array([129]),
-				value: 1,
-				consumed: 2
+				expectedErr: new Error('varint is not complete')
 			},
-			// value: 127, consumed: 10
+			{
+				input: new Uint8Array([]),
+				expectedErr: new Error('varint is not complete')
+			},
+			// 83 00 holds 3, but 03 holds the same value with fewer bytes.
+			{
+				input: new Uint8Array([131, 0]),
+				expectedErr: new Error('varint is not minimal')
+			},
+			{
+				input: new Uint8Array([128, 128, 0]),
+				expectedErr: new Error('varint is not minimal')
+			},
+			// The tenth byte is more than 1.
 			{
 				input: new Uint8Array([
 					255, 128, 128, 128, 128, 128, 128, 128, 128, 127
 				]),
-				expectedErr: new Error('varint terminated prematurely')
+				expectedErr: new Error('varint overflows 64-bit integer')
 			},
-			// value: 0, consumed: 11
+			// The varint has more than 10 bytes.
 			{
 				input: new Uint8Array([
 					128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 127
 				]),
-				expectedErr: new Error('varint terminated prematurely')
+				expectedErr: new Error('varint overflows 64-bit integer')
+			},
+			// The maximum: 2^64 - 1 in 10 bytes.
+			{
+				input: new Uint8Array([
+					255, 255, 255, 255, 255, 255, 255, 255, 255, 1
+				]),
+				value: 18446744073709551615,
+				consumed: 10
 			},
 		];
 

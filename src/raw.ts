@@ -1,4 +1,4 @@
-import { WireType } from './wiretype';
+import { WireType } from './wiretype.js';
 
 /**
  * Represents the raw POLO encoded data. Extends Uint8Array to provide 
